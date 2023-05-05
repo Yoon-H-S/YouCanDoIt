@@ -16,18 +16,6 @@ export const Title = styled.div`
     color: #DCA600;
 `; 
 
-// 실제 콘텐츠가 삽입되는 영역
-export const Inside = styled.div`
-    width: 1263px;
-    height: 473px;
-    background-color: white;
-    margin-bottom: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`; 
-
 // 로그인 텍스트
 export const LoginTitle = styled.div`
     font-size: 22px;

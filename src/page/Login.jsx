@@ -4,8 +4,6 @@ import * as S from "../styled/LoginStyled";
 function Login(props) {
     return(
         <S.Wrapper>
-            <S.Title>유캔두잇</S.Title>
-            <S.Inside>
                 <form action="">
                     <S.LoginTitle>로그인</S.LoginTitle>
                     <S.StyledInput>
@@ -29,7 +27,6 @@ function Login(props) {
                     <S.SNSLogin src="login/google.png" />
                     <S.SNSLogin src="login/kakao.png" />
                 </S.SNSWrap>
-            </S.Inside>
         </S.Wrapper>
     );
 }

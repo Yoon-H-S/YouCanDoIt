@@ -5,9 +5,12 @@ import Login from "./Login";
 function Page(props) {
     return(
         <Wrapper>
+            <Logo>유캔두잇</Logo>
             <MainContainer>
                 <Outside>
-                    <Login/>
+                    <Inside>
+                        <Login/>
+                    </Inside>
                 </Outside>
                 <MenuList>
                     <Menu/>
@@ -29,13 +32,26 @@ const Wrapper = styled.div`
     flex-direction: column;
     position: relative;
     left: 25px;
-`; 
+    bottom: 10px;
+`;
+
+const Logo = styled.div`
+    height: 47px;
+    width: 194px;
+    position: relative;
+    left: 1110px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 47px;
+    background-color: #fff066;
+    border-radius: 10px 10px 0 0;
+`;
 
 // 다이어리와 주메뉴 영역
 const MainContainer = styled.div`
     display: flex;
     flex-direction: row;
-    margin-top: 47px;
 `; 
 
 // 다이어리
@@ -43,6 +59,17 @@ const Outside = styled.div`
     width: 1363px;
     height: 603px;
     background-color: #EFEFEF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+// 실제 콘텐츠가 삽입되는 영역
+export const Inside = styled.div`
+    width: 1283px;
+    height: 508px;
+    background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
