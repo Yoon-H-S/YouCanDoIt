@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-// 로그인 틀
+// 기본 틀
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -8,20 +8,13 @@ export const Wrapper = styled.div`
     justify-content: center;
 `; 
 
-// 상단 로고
-export const Title = styled.div`
-    font-size: 30px;
-    font-weight: bold;
-    line-height: 80px;
-    color: #DCA600;
-`; 
-
 // 로그인 텍스트
-export const LoginTitle = styled.div`
+export const Title = styled.div`
     font-size: 22px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
+    cursor: default;
 `; 
 
 // 정보 입력 영역
@@ -43,7 +36,6 @@ export const StyledInput = styled.div`
 
     & > input {
         border: none;
-        outline: none;
         font-size: 12px;
         width: 100%;
         height: 100%;
@@ -58,9 +50,11 @@ export const Linklist = styled.ul`
     font-size: 12px;
     margin: 10px 0;
 
-    & > * {
+    & > li {
         width: 100%;
         text-align: center;
+        color: #5C5C5C;
+        cursor: default;
         :not(:last-child) {
             border-right: 1px solid #5C5C5C;
         }
@@ -75,6 +69,7 @@ export const LoginButton = styled.button`
     border:1px solid #B1B1B1;
     border-radius: 10px;
     margin: 10px 0;
+    cursor: pointer;
 `;
 
 //sns 로그인 라인
@@ -84,16 +79,17 @@ export const Line = styled.div`
     align-items: center;
     color: #AEAEAE;
     font-size: 12px;
-    margin: 8px 0px;
+    margin: 8px 0;
+    cursor: default;
 
     ::before, ::after {
         content: "";
         flex-grow: 1;
         border-top: 1px dashed #B1B1B1;
-        height: 0px;
-        font-size: 0px;
-        line-height: 0px;
-        margin: 0px 8px;
+        height: 0;
+        font-size: 0;
+        line-height: 0;
+        margin: 0 8px;
     }
 `;
 

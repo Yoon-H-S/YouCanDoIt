@@ -1,24 +1,33 @@
 import React from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom"; 
 import styled from "styled-components";
-import Login from "./Login";
+import Login from "./login/Login";
+import FindId from "./login/FindId";
+import FindPw from "./login/FindPw";
 
 function Page(props) {
     return(
-        <Wrapper>
-            <Logo>유캔두잇</Logo>
-            <MainContainer>
-                <Outside>
-                    <Inside>
-                        <Login/>
-                    </Inside>
-                </Outside>
-                <MenuList>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
-                </MenuList>
-            </MainContainer>
-        </Wrapper>
+        <BrowserRouter>
+            <Wrapper>
+                <Logo>유캔두잇</Logo>
+                <MainContainer>
+                    <Outside>
+                        <Inside>
+                            <Routes>
+                                <Route path="login" element={<Login />}/>
+                                <Route path="login/findId" element={<FindId />}/>
+                                <Route path="login/findPw" element={<FindPw />}/>
+                            </Routes>
+                        </Inside>
+                    </Outside>
+                    <MenuList>
+                        <Menu/>
+                        <Menu/>
+                        <Menu/>
+                    </MenuList>
+                </MainContainer>
+            </Wrapper>
+        </BrowserRouter>
     );
 }
 
