@@ -14,9 +14,9 @@ function Page(props) {
                     <Outside>
                         <Inside>
                             <Routes>
-                                <Route path="login" element={<Login />}/>
-                                <Route path="login/findId" element={<FindId />}/>
-                                <Route path="login/findPw" element={<FindPw />}/>
+                                <Route index element={<Login />}/>
+                                <Route path="findId" element={<FindId />}/>
+                                <Route path="findPw" element={<FindPw />}/>
                             </Routes>
                         </Inside>
                     </Outside>

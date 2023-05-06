@@ -10,7 +10,7 @@ function FindId(props) {
     return(
         <S.Wrapper>
             <S.Title>
-                <S.Back onClick={() => navi("/login")}>
+                <S.Back onClick={() => navi("/")}>
                     <img src="/login/GoBack.png"/>
                 </S.Back>
                 아이디 찾기
@@ -18,7 +18,7 @@ function FindId(props) {
             <S.InputArea>
                 <S.FindMenu>
                     <S.SelectedMenu>아이디 찾기</S.SelectedMenu>
-                    <S.NotSelectedMenu  onClick={() => navi("/login/findPw")}>비밀번호 찾기</S.NotSelectedMenu>
+                    <S.NotSelectedMenu  onClick={() => navi("/findPw")}>비밀번호 찾기</S.NotSelectedMenu>
                 </S.FindMenu>
                 <PhoneInput/>
                 <CertInput/>
