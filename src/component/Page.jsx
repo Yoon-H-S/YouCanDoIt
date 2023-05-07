@@ -2,6 +2,7 @@ import React from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom"; 
 import styled from "styled-components";
 import Login from "./login/Login";
+import SignUp from "./login/SignUp";
 import FindId from "./login/FindId";
 import FindPw from "./login/FindPw";
 
@@ -15,6 +16,7 @@ function Page(props) {
                         <Inside>
                             <Routes>
                                 <Route index element={<Login />}/>
+                                <Route path="signUp" element={<SignUp />}/>
                                 <Route path="findId" element={<FindId />}/>
                                 <Route path="findPw" element={<FindPw />}/>
                             </Routes>

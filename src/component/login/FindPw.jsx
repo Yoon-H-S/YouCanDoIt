@@ -1,11 +1,9 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import * as S from "../../styled/login/FindStyled";
-import IdInput from "./IdInput";
-import PhoneInput from "./PhoneInput";
-import CertInput from "./CertInput";
+import * as S from "styled/login/LoginStyled";
+import Inputs from "./input/Inputs";
 
-function FindId(props) {
+function FindPw(props) {
     const navi = useNavigate();
 
     return(
@@ -21,13 +19,13 @@ function FindId(props) {
                     <S.NotSelectedMenu onClick={() => navi("/findId")}>아이디 찾기</S.NotSelectedMenu>
                     <S.SelectedMenu>비밀번호 찾기</S.SelectedMenu>
                 </S.FindMenu>
-                <IdInput/>
-                <PhoneInput/>
-                <CertInput/>
+                <Inputs type="text" name="아이디"/>
+                <Inputs type="phone"/>
+                <Inputs type="cert"/>
             </S.InputArea>
-            <S.FindButton>비밀번호 찾기</S.FindButton>
+            <S.SubmitButton>비밀번호 찾기</S.SubmitButton>
         </S.Wrapper>
     );
 }
 
-export default FindId;
+export default FindPw;
