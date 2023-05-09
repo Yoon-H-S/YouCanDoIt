@@ -1,12 +1,12 @@
-import React from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom"; 
-import styled from "styled-components";
-import Login from "./login/Login";
-import SignUp from "./login/SignUp";
-import FindId from "./login/FindId";
-import FindPw from "./login/FindPw";
+import React from 'react';
+import {BrowserRouter, Routes, Route} from 'react-router-dom'; 
+import styled from 'styled-components';
+import Login from './component/login/Login';
+import SignUp from './component/login/SignUp';
+import FindId from './component/login/FindId';
+import FindPw from './component/login/FindPw';
 
-function Page(props) {
+function App(props) {
     return(
         <BrowserRouter>
             <Wrapper>
@@ -33,7 +33,7 @@ function Page(props) {
     );
 }
 
-export default Page;
+export default App;
 
 // 콘텐츠 영역 틀
 const Wrapper = styled.div`

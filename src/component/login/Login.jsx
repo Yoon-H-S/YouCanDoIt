@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import {useNavigate} from "react-router-dom";
-import {Wrapper, Title} from "styled/login/LoginStyled";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Wrapper, Title } from 'styled/login/LoginStyled';
 
 function Login(props) {
-    const navi = useNavigate();
+    const navigate = useNavigate();
 
     return(
         <Wrapper>
@@ -18,9 +18,15 @@ function Login(props) {
                     <input type="password" name="pw" placeholder="비밀번호를 입력해주세요."/>
                 </StyledInput>
                 <Linklist>
-                    <li onClick={() => navi("./signUp")}>회원가입</li>
-                    <li onClick={() => navi("./findId")}>아이디찾기</li>
-                    <li onClick={() => navi("./findPw")}>비밀번호찾기</li>
+                    <li>
+                        <span onClick={() => navigate('./signUp')}>회원가입</span>
+                    </li>
+                    <li>
+                        <span onClick={() => navigate('./findId')}>아이디찾기</span>
+                    </li>
+                    <li>
+                        <span onClick={() => navigate('./findPw')}>비밀번호찾기</span>
+                    </li>
                 </Linklist>
                 <LoginButton>로그인</LoginButton>
                 <Line>SNS 계정으로 간편하게 로그인하세요.</Line>
@@ -46,13 +52,13 @@ const StyledInput = styled.div`
     display: flex;
     align-items: center;
 
-    & > img {
+    img {
         width: 15px;
         height: 15px;
         margin-right: 20px;
     }
 
-    & > input {
+    input {
         border: none;
         font-size: 12px;
         width: 100%;
@@ -68,13 +74,17 @@ const Linklist = styled.ul`
     font-size: 12px;
     margin-bottom: 16px;
 
-    & > li {
+    li {
         width: 100%;
         text-align: center;
         color: #5C5C5C;
-        cursor: default;
+
         :not(:last-child) {
             border-right: 1px solid #5C5C5C;
+        }
+
+        span {
+            cursor: pointer;
         }
     }
 `;
@@ -100,13 +110,12 @@ const Line = styled.div`
     margin: 8px 0;
     cursor: default;
 
-    ::before, ::after {
+    ::before,
+    ::after {
         content: "";
         flex-grow: 1;
         border-top: 1px dashed #B1B1B1;
         height: 0;
-        font-size: 0;
-        line-height: 0;
         margin: 0 8px;
     }
 `;

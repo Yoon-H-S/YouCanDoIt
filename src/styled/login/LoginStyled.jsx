@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // 기본 틀
 export const Wrapper = styled.div`
