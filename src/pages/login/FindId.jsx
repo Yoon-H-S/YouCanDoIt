@@ -2,8 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import * as S from 'styled/login/LoginStyled';
-import Inputs from './input/Inputs';
+import * as S from 'styles/login/LoginStyled';
+import TextBtnInput from 'components/login/TextBtnInput';
+import PhoneInput from 'components/login/PhoneInput';
 
 function FindId(props) {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function FindId(props) {
     return(
         <S.Wrapper>
             <S.Title>
-                <S.Back onClick={() => navigate('/')}>
+                <S.Back onClick={() => navigate("../")}>
                     <FontAwesomeIcon icon={faChevronLeft}/>
                 </S.Back>
                 아이디 찾기
@@ -21,10 +22,10 @@ function FindId(props) {
                     <S.SelectedMenu>아이디 찾기</S.SelectedMenu>
                     <S.NotSelectedMenu  onClick={() => navigate('/findPw')}>비밀번호 찾기</S.NotSelectedMenu>
                 </S.FindMenu>
-                <Inputs type="phone"/>
-                <Inputs type="cert"/>
+                <PhoneInput />
+                <TextBtnInput name="인증번호" btnName="인증하기" />
             </S.InputArea>
-            <S.SubmitButton>아이디 찾기</S.SubmitButton>
+            <S.SubmitButton onClick={() => navigate("./result")}>아이디 찾기</S.SubmitButton>
         </S.Wrapper>
     );
 }

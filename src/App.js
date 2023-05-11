@@ -1,24 +1,30 @@
 import React from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom'; 
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import styled from 'styled-components';
-import Login from './component/login/Login';
-import SignUp from './component/login/SignUp';
-import FindId from './component/login/FindId';
-import FindPw from './component/login/FindPw';
+import GlobalStyle from 'styles/GlobalStyle';
+import Login from 'pages/login/Login';
+import SignUp from 'pages/login/SignUp';
+import FindId from 'pages/login/FindId';
+import FindPw from 'pages/login/FindPw';
+import FindIdResult from 'pages/login/FindIdResult';
+import PwReset from 'pages/login/PwReset';
 
 function App(props) {
     return(
         <BrowserRouter>
             <Wrapper>
+                <GlobalStyle />
                 <Logo>유캔두잇</Logo>
                 <MainContainer>
                     <Outside>
                         <Inside>
                             <Routes>
-                                <Route index element={<Login />}/>
-                                <Route path="signUp" element={<SignUp />}/>
-                                <Route path="findId" element={<FindId />}/>
-                                <Route path="findPw" element={<FindPw />}/>
+                                <Route index element={<Login />} />
+                                <Route path="/signUp" element={<SignUp />} />
+                                <Route path="/findId" element={<FindId />} />
+                                <Route path="/findId/result" element={<FindIdResult />} />
+                                <Route path="/findPw" element={<FindPw />} />
+                                <Route path="/findPw/reset" element={<PwReset />} />
                             </Routes>
                         </Inside>
                     </Outside>
@@ -46,17 +52,19 @@ const Wrapper = styled.div`
     bottom: 10px;
 `;
 
+// 상단 서비스명
 const Logo = styled.div`
-    height: 47px;
+    height: 55px;
     width: 194px;
     position: relative;
     left: 1110px;
     font-size: 22px;
     font-weight: bold;
     text-align: center;
-    line-height: 47px;
-    background-color: #fff066;
+    line-height: 55px;
+    background-color: #F8BA00;
     border-radius: 10px 10px 0 0;
+    cursor: default;
 `;
 
 // 다이어리와 주메뉴 영역
@@ -101,7 +109,7 @@ const Menu = styled.div`
     font-size: 18px;
     line-height: 50px;
     text-align: center;
-    background-color: #fff066;
+    background-color: var(--primary-color);
     border-radius: 0 10px 10px 0;
     margin: 10px 0;
 `; 
