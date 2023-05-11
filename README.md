@@ -8,11 +8,11 @@
 - App : 메인 컴포넌트
 
 - Login : 로그인 페이지
--   SignUp : 회원가입 페이지
--   FindId : 아이디 찾기 페이지
--       FindIdResult : 아이디 찾기 결과 페이지
--   FindPw : 비밀번호 찾기 페이지
--       PwReset : 비밀번호 재설정 페이지
+    - SignUp : 회원가입 페이지
+    - FindId : 아이디 찾기 페이지
+        - FindIdResult : 아이디 찾기 결과 페이지
+    - FindPw : 비밀번호 찾기 페이지
+        - PwReset : 비밀번호 재설정 페이지
 
 - FileInput : 파일 업로드 컴포넌트
 - PhoneInput : 전화번호 입력 컴포넌트
