@@ -1,13 +1,49 @@
-import React from 'react';
+// 외부 import
+import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+// 내부 import
 import * as S from 'styles/login/LoginStyled';
 import TextInput from 'components/login/TextInput';
 
 function PwReset(props) {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [values, setValues] = useState({
+        password: "",
+        passwordCheck: "",
+    });
+    // 비구조화 할당
+    const {password, passwordCheck} = values;
+
+    // input값이 변경되면 state에 저장
+    const handleChange = (e) => {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const memId = location.state.memId;
+
+    const Reset = () => {
+        if(true) { // 비밀번호 유효성검사 해야함
+            axios.post('/api/member-api/pw-reset', {
+                "memId":memId,
+                "password":password
+            }).then(function (response) {
+                alert("비밀번호가 재설정되었습니다.");
+                navigate("/");
+            }).catch(
+                (error) => console.log(error)
+            );
+        } else {
+            alert("비밀번호가 일치하지 않습니다!");
+        }
+    };
 
     return(
         <S.Wrapper>
@@ -18,12 +54,12 @@ function PwReset(props) {
                 비밀번호 찾기
             </S.Title>
             <S.InputArea>
-                <TextInput type="text" name="아이디" value="aaaa7" isReset={true} readOnly={true} />
-                <TextInput type="password" name="새 비밀번호" isReset={true} />
-                <TextInput type="password" name="새 비밀번호 확인" isReset={true} />
+                <TextInput type="text" name="아이디" value={memId} isReset={true} readOnly={true} />
+                <TextInput type="password" name="새 비밀번호" stateName="password" handleChange={handleChange} isReset={true} />
+                <TextInput type="password" name="새 비밀번호 확인" stateName="passwordCheck" handleChange={handleChange} isReset={true} />
             </S.InputArea>
             <SubMessage>‣ 영문, 숫자, 특수문자를 함께 사용하여 8자 이상 16자 이하로 설정해주세요.</SubMessage>
-            <S.SubmitButton onClick={() => navigate("/")}>비밀번호 재설정</S.SubmitButton>
+            <S.SubmitButton onClick={Reset}>비밀번호 재설정</S.SubmitButton>
         </S.Wrapper>
     );
 }

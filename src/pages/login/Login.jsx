@@ -1,6 +1,8 @@
+// 외부 import
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+// 내부 import
 import { Wrapper, Title } from 'styles/login/LoginStyled';
 import idIcon from 'assets/id.png';
 import pwIcon from 'assets/pw.png';
@@ -23,8 +25,8 @@ function Login(props) {
                 <input type="password" placeholder="비밀번호를 입력해주세요." />
             </StyledInput>
             <RememberId>
-                <input type="checkbox" id="remember_id" />
-                <label htmlFor="remember_id">아이디 저장</label>
+                <input type="checkbox" id="rememberId" />
+                <label htmlFor="rememberId">아이디 저장</label>
             </RememberId>
             <LoginButton>로그인</LoginButton>
             <Linklist>

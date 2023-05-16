@@ -1,12 +1,26 @@
+// 외부 import
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+// 내부 import
 import * as S from 'styles/login/LoginStyled';
 
 function FindIdResult(props) {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const memId = location.state.memId;
+    var joinDate = location.state.joinDate;
+
+    const Reset = () => {
+        navigate("/findpw/reset", {
+            state: {
+                memId: memId
+            }
+        });
+    };
 
     return(
         <S.Wrapper>
@@ -21,18 +35,18 @@ function FindIdResult(props) {
                 <InfoArea>
                     <div>
                         <InfoContent width={125}>아이디</InfoContent>
-                        <InfoContent width={189}>aaaa7</InfoContent>
+                        <InfoContent width={189}>{memId}</InfoContent>
                     </div>
                     <div>
                         <InfoContent width={125}>가입일</InfoContent>
-                        <InfoContent width={189}>2023.05.10</InfoContent>
+                        <InfoContent width={189}>{joinDate}</InfoContent>
                     </div>
                 </InfoArea>
                 <SubMessage>‣ SNS로 로그인 하신 경우, 각 SNS 간편 로그인을 이용해주세요.</SubMessage>
             </MessageArea>
             <ButtonArea>
                 <SmallButton onClick={() => navigate("/")} color="var(--primary-color)">로그인</SmallButton>
-                <SmallButton  onClick={() => navigate("/findPw/reset")}>비밀번호 재설정</SmallButton>
+                <SmallButton  onClick={Reset}>비밀번호 재설정</SmallButton>
             </ButtonArea>
         </S.Wrapper>
     );
