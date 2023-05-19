@@ -108,5 +108,10 @@ export const Wrapper = styled.div`
         color: white;
         margin-left: 20px;
         cursor: pointer;
+
+        :disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
     }
 `;

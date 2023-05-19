@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 // 내부 import
+import Page from 'pages/login/LoginPage';
 import * as S from 'styles/login/LoginStyled';
 
 function FindIdResult(props) {
@@ -15,7 +16,7 @@ function FindIdResult(props) {
     var joinDate = location.state.joinDate;
 
     const Reset = () => {
-        navigate("/findpw/reset", {
+        navigate("/login/findpw/reset", {
             state: {
                 memId: memId
             }
@@ -23,7 +24,7 @@ function FindIdResult(props) {
     };
 
     return(
-        <S.Wrapper>
+        <Page>
             <S.Title>
                 <S.Back onClick={() => navigate(-1)}>
                     <FontAwesomeIcon icon={faChevronLeft}/>
@@ -45,10 +46,10 @@ function FindIdResult(props) {
                 <SubMessage>‣ SNS로 로그인 하신 경우, 각 SNS 간편 로그인을 이용해주세요.</SubMessage>
             </MessageArea>
             <ButtonArea>
-                <SmallButton onClick={() => navigate("/")} color="var(--primary-color)">로그인</SmallButton>
+                <SmallButton onClick={() => navigate("/login")} color="var(--primary-color)">로그인</SmallButton>
                 <SmallButton  onClick={Reset}>비밀번호 재설정</SmallButton>
             </ButtonArea>
-        </S.Wrapper>
+        </Page>
     );
 }
 

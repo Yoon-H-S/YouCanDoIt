@@ -1,9 +1,11 @@
 // 외부 import
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 // 내부 import
-import { Wrapper, Title } from 'styles/login/LoginStyled';
+import Page from 'pages/login/LoginPage';
+import { Title } from 'styles/login/LoginStyled';
 import idIcon from 'assets/id.png';
 import pwIcon from 'assets/pw.png';
 import naverIcon from 'assets/naver.png';
@@ -12,23 +14,65 @@ import kakaoIcon from 'assets/kakao.png';
 
 function Login(props) {
     const navigate = useNavigate();
+    const [memId, setMemId] = useState(localStorage.getItem("memId"));
+    const [password, setPassword] = useState();
+    const [isRememberId, setIsRememberId] = useState(localStorage.getItem("memId") ? true : false);
+
+    const idChange = (e) => {
+        setMemId(e.target.value);
+    };
+
+    const pwChange = (e) => {
+        setPassword(e.target.value);
+    }
+
+    const checkChange = () => {
+        setIsRememberId(!isRememberId);
+    }
+
+    const handleOnKeyPress = e => {
+        if (e.key === 'Enter')
+            SignIn();
+    };
+
+    const SignIn = () => {
+        if(memId && password) {
+            axios.post('/api/member-api/login', {
+                "memId":memId,
+                "password":password
+            }).then(function (response) {
+                if(response.data === "") {
+                    alert("아이디 혹은 비밀번호가 잘못 되었습니다.");
+                } else {
+                    isRememberId ? localStorage.setItem("memId", memId) : localStorage.clear();
+                    sessionStorage.setItem("loginName", response.data);
+                    navigate("/");
+                }
+                
+            }).catch(
+                (error) => console.log(error)
+            );
+        } else {
+            alert("아이디와 비밀번호를 입력해주세요!");
+        }
+    };
 
     return(
-        <Wrapper>
+        <Page>
             <Title>로그인</Title>
             <StyledInput>
-                <img src={idIcon} alt="id"/>
-                <input type="text" placeholder="아이디를 입력해주세요." />
+                <img src={idIcon} alt="idImg"/>
+                <input type="text" placeholder="아이디를 입력해주세요." value={memId} onChange={idChange} onKeyPress={handleOnKeyPress} />
             </StyledInput>
             <StyledInput>
-                <img src={pwIcon} alt="pw"/>
-                <input type="password" placeholder="비밀번호를 입력해주세요." />
+                <img src={pwIcon} alt="pwImg"/>
+                <input type="password" placeholder="비밀번호를 입력해주세요." onChange={pwChange} onKeyPress={handleOnKeyPress} />
             </StyledInput>
             <RememberId>
-                <input type="checkbox" id="rememberId" />
+                <input type="checkbox" id="rememberId" onChange={checkChange} checked={isRememberId} />
                 <label htmlFor="rememberId">아이디 저장</label>
             </RememberId>
-            <LoginButton>로그인</LoginButton>
+            <LoginButton onClick={SignIn}>로그인</LoginButton>
             <Linklist>
                 <li>
                     <span onClick={() => navigate('./signUp')}>회원가입</span>
@@ -48,7 +92,7 @@ function Login(props) {
                 <SNSLogin src={googleIcon} />
                 <SNSLogin src={kakaoIcon} />
             </SNSWrap>
-        </Wrapper>
+        </Page>
     );
 }
 
@@ -96,6 +140,7 @@ const RememberId = styled.div`
     label {
         display: flex;
         font-size: 14px;
+        width: 100px;
         height: 22px;
         position: relative;
         top: -5px;

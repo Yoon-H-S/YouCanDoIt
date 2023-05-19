@@ -14,7 +14,7 @@ function PhoneInput(props) {
 
     // 부모에게 state값 전달
     useEffect(() => {
-        props.phoneChange(first + second + third);
+        props.phoneChange(first + "-" + second + "-" + third);
     }, [values])
 
     // input값이 변경되면 state에 저장
@@ -35,14 +35,14 @@ function PhoneInput(props) {
         <Wrapper required={props.required}>
             <span>전화번호</span>
             <div>
-                <select name="first" onChange={onChange}>
+                <select name="first" onChange={onChange} aria-readonly={props.readOnly}>
                     <option value="010">010</option>
                     <option value="011">011</option>
                 </select>
-                -<input type="number" name="second" maxLength={4} onInput={onInput} onChange={onChange} />
-                -<input type="number" name="third" maxLength={4} onInput={onInput} onChange={onChange} />
+                -<input type="number" name="second" maxLength={4} onInput={onInput} onChange={onChange} readOnly={props.readOnly} />
+                -<input type="number" name="third" maxLength={4} onInput={onInput} onChange={onChange} readOnly={props.readOnly} />
             </div>
-            <button>인증번호 발송</button>
+            <button onClick={props.click}>인증번호 발송</button>
         </Wrapper>
     );
 }

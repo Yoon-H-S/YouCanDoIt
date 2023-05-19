@@ -8,7 +8,7 @@ function TextBtnInput(props) {
         <Wrapper required={props.required}>
             <span>{props.name}</span>
             <input type="text" name={props.stateName} onChange={props.handleChange} />
-            <button onClick={props.click}>{props.btnName}</button>
+            <button onClick={props.click} disabled={props.disabled}>{props.btnName}</button>
         </Wrapper>
     );
 }

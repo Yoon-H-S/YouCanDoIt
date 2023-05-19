@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 // 내부 import
+import Page from 'pages/login/LoginPage';
 import * as S from 'styles/login/LoginStyled';
 import TextInput from 'components/login/TextInput';
 
@@ -30,23 +31,27 @@ function PwReset(props) {
     const memId = location.state.memId;
 
     const Reset = () => {
-        if(true) { // 비밀번호 유효성검사 해야함
-            axios.post('/api/member-api/pw-reset', {
-                "memId":memId,
-                "password":password
-            }).then(function (response) {
-                alert("비밀번호가 재설정되었습니다.");
-                navigate("/");
-            }).catch(
-                (error) => console.log(error)
-            );
+        if(password && passwordCheck) {
+            if(password === passwordCheck) {
+                axios.post('/api/member-api/pw-reset', {
+                    "memId":memId,
+                    "password":password
+                }).then(function (response) {
+                    alert("비밀번호가 재설정되었습니다.");
+                    navigate("/login");
+                }).catch(
+                    (error) => console.log(error)
+                );
+            } else {
+                alert("비밀번호가 일치하지 않습니다!");
+            }
         } else {
-            alert("비밀번호가 일치하지 않습니다!");
+            alert("모든 항목을 입력해주세요!");
         }
     };
 
     return(
-        <S.Wrapper>
+        <Page>
             <S.Title>
                 <S.Back onClick={() => navigate(-1)}>
                     <FontAwesomeIcon icon={faChevronLeft}/>
@@ -60,7 +65,7 @@ function PwReset(props) {
             </S.InputArea>
             <SubMessage>‣ 영문, 숫자, 특수문자를 함께 사용하여 8자 이상 16자 이하로 설정해주세요.</SubMessage>
             <S.SubmitButton onClick={Reset}>비밀번호 재설정</S.SubmitButton>
-        </S.Wrapper>
+        </Page>
     );
 }
 

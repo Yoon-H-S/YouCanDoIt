@@ -1,13 +1,5 @@
 import styled from 'styled-components';
 
-// 기본 틀
-export const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
 // 상단 텍스트
 export const Title = styled.div`
     width: 434px;
