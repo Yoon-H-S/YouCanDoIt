@@ -8,6 +8,8 @@ import FindId from 'pages/login/FindId';
 import FindPw from 'pages/login/FindPw';
 import FindIdResult from 'pages/login/FindIdResult';
 import PwReset from 'pages/login/PwReset';
+import Redirection from 'pages/login/Redirection';
+import SnsSignUp from 'pages/login/SnsSignUp';
 
 import Page from 'pages/Page';
 
@@ -24,6 +26,8 @@ function App(props) {
                     <Route path="/login/findId/result" element={<FindIdResult />} />
                     <Route path="/login/findPw" element={<FindPw />} />
                     <Route path="/login/findPw/reset" element={<PwReset />} />
+                    <Route path='/callback/:registrationId' element={<Redirection />} />
+                    <Route path="/login/snsSignUp" element={<SnsSignUp />} />
                 </Routes>
             </Wrapper>
         </BrowserRouter>

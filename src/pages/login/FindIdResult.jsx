@@ -13,7 +13,7 @@ function FindIdResult(props) {
     const location = useLocation();
 
     const memId = location.state.memId;
-    var joinDate = location.state.joinDate;
+    const joinDate = location.state.joinDate;
 
     const Reset = () => {
         navigate("/login/findpw/reset", {

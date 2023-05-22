@@ -16,6 +16,9 @@
         + FindIdResult : 아이디 찾기 결과 페이지
     + FindPw : 비밀번호 찾기 페이지
         + PwReset : 비밀번호 재설정 페이지
+    + SnsSignUp : SNS회원가입 페이지
+
+* Redirection : SNS API 코드를 백엔드로 전송하는 컴포넌트
 
 - FileInput : 파일 업로드 컴포넌트
 - PhoneInput : 전화번호 입력 컴포넌트
@@ -26,14 +29,12 @@
 * InputStyled : Input 컴포넌트들의 스타일
 * LoginStyled : Login 페이지와 하위 페이지에서 사용되는 스타일
 
-### "로그인, 회원가입 ver 3" 변경사항
-1. 로그인 구현
-2. 전화번호 인증 구현
-3. 비밀번호 일치 유효성검사 구현
-4. 아이디 저장 구현
-5. 유효성검사(아이디 길이, 닉네임 길이, 비밀번호 형식) 미구현
-6. SNS로그인 미구현
-7. App.js에서 웹사이트 기본 틀 Page.jsx로 분리
-8. 로그인 여부로 페이지 이동을 위한 Page.jsx에서 LoginPage.jsx 분리(useEffect가 다르다.)
-9. index컴포넌트를 임시로 Page컴포넌트로 적용
+### "로그인, 회원가입 ver 4" 변경사항
+1. SNS로그인 구현
+2. SNS API 코드를 받아 백엔드로 전송하는 Redirection컴포넌트 작성
+3. SNS회원가입하는 SnsSignUp컴포넌트 작성
+4. SNS로그인과 자체회원 로그인 구분
+
+- 유효성검사(아이디 길이, 닉네임 길이, 비밀번호 형식) 미구현
+- index=Page컴포넌트(임시)
 

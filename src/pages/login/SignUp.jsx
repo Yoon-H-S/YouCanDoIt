@@ -123,6 +123,7 @@ function SignUp(props) {
                     "password":password, 
                     "nickname":nickname, 
                     "phoneNumber":phoneNumber,
+                    "memClass":"1"
                 }).then(function (response) {
                     if(profilePicture) {
                         const formData = new FormData();

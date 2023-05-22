@@ -14,7 +14,7 @@ import kakaoIcon from 'assets/kakao.png';
 
 function Login(props) {
     const navigate = useNavigate();
-    const [memId, setMemId] = useState(localStorage.getItem("memId"));
+    const [memId, setMemId] = useState(localStorage.getItem("memId") ? localStorage.getItem("memId") : "");
     const [password, setPassword] = useState();
     const [isRememberId, setIsRememberId] = useState(localStorage.getItem("memId") ? true : false);
 
@@ -39,7 +39,8 @@ function Login(props) {
         if(memId && password) {
             axios.post('/api/member-api/login', {
                 "memId":memId,
-                "password":password
+                "password":password,
+                "memClass":"1"
             }).then(function (response) {
                 if(response.data === "") {
                     alert("아이디 혹은 비밀번호가 잘못 되었습니다.");
@@ -56,6 +57,25 @@ function Login(props) {
             alert("아이디와 비밀번호를 입력해주세요!");
         }
     };
+
+    const NaverLogin = () => {
+        window.location.href = "https://nid.naver.com/oauth2.0/authorize?" +
+            "client_id=9njVYwPF18upeN3u0uRv&response_type=code&state=ycdi&" +
+            "redirect_uri=http://ycdi.cafe24.com/callback/naver";
+    }
+
+    const GoogleLogin = () => {
+        window.location.href = "https://accounts.google.com/o/oauth2/auth?" +
+            "client_id=582510091131-4ghgiaddn1jegvujtt02tho76rnhteji.apps.googleusercontent.com&" +
+            "redirect_uri=http://ycdi.cafe24.com/callback/google&response_type=code&" +
+            "scope=https://www.googleapis.com/auth/userinfo.email";
+    }
+
+    const KakaoLogin = () => {
+        window.location.href = "https://kauth.kakao.com/oauth/authorize?" +
+            "client_id=4187ebbd43c8a7f193e998b3b79f3b8d&" +
+            "redirect_uri=http://ycdi.cafe24.com/callback/kakao&response_type=code";
+    }
 
     return(
         <Page>
@@ -88,9 +108,9 @@ function Login(props) {
                 <span>SNS 계정으로 간편하게 로그인하세요.</span>
             </Line>
             <SNSWrap>
-                <SNSLogin src={naverIcon} />
-                <SNSLogin src={googleIcon} />
-                <SNSLogin src={kakaoIcon} />
+                <SNSLogin src={naverIcon}  onClick={NaverLogin}/>
+                <SNSLogin src={googleIcon} onClick={GoogleLogin}/>
+                <SNSLogin src={kakaoIcon} onClick={KakaoLogin}/>
             </SNSWrap>
         </Page>
     );
