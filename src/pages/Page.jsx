@@ -96,7 +96,7 @@ const Outside = styled.div`
 export const Inside = styled.div`
     width: 1283px;
     height: 508px;
-    background-color: white;
+    background-color: #D9D9D9;
     display: flex;
     flex-direction: column;
     align-items: center;
