@@ -19,7 +19,13 @@ function Page(props) {
     }, []);
 
     const Logout = () => {
-
+        axios.get('/api/member-api/logout')
+        .then(function (response) {
+            sessionStorage.clear();
+            navigate("/login");
+        }).catch(
+            (error) => console.log(error)
+        );
     }
 
     return(
@@ -27,15 +33,18 @@ function Page(props) {
             <Logo>유캔두잇</Logo>
             <MainContainer>
                 <Outside>
-                    <TopService onClick={Logout}>{sessionStorage.getItem("loginName")}</TopService>
+                    <UserService>
+                        {sessionStorage.getItem("loginName")}
+                        <span onClick={Logout}>로그아웃</span>
+                    </UserService>
                     <Inside>
                         {props.children}
                     </Inside>
                 </Outside>
                 <MenuList>
-                    <Menu></Menu>
-                    <Menu></Menu>
-                    <Menu></Menu>
+                    <Menu>챌린지</Menu>
+                    <Menu>스케줄러</Menu>
+                    <Menu>친구</Menu>
                 </MenuList>
             </MainContainer>
         </Wrapper>
@@ -114,8 +123,17 @@ const Menu = styled.div`
 `;
 
 // 닉네임, 로그아웃, 리마인더가 표시되는 영역
-const TopService = styled.div`
+const UserService = styled.div`
     position:absolute;
     width: 1283px;
-    top: 10px;
+    top: 11px;
+    font-size: 16px;
+    font-weight: bold;
+
+    span {
+        margin-left: 25px;
+        font-size: 13px;
+        font-weight: 400;
+        cursor: pointer;
+    }
 `;
