@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import Reminder from 'assets/reminder.png'
 
 function Page(props) {
     const navigate = useNavigate();
@@ -30,12 +31,15 @@ function Page(props) {
 
     return(
         <Wrapper>
-            <Logo>유캔두잇</Logo>
+            <Logo onClick={() => navigate("/")}>유캔두잇</Logo>
             <MainContainer>
                 <Outside>
                     <UserService>
-                        {sessionStorage.getItem("loginName")}
-                        <span onClick={Logout}>로그아웃</span>
+                        <div>
+                            {sessionStorage.getItem("loginName")}
+                            <span onClick={Logout}>로그아웃</span>
+                        </div>
+                        <img src={Reminder} />
                     </UserService>
                     <Inside>
                         {props.children}
@@ -98,7 +102,6 @@ export const Inside = styled.div`
     height: 508px;
     background-color: #D9D9D9;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 `; 
@@ -125,15 +128,30 @@ const Menu = styled.div`
 // 닉네임, 로그아웃, 리마인더가 표시되는 영역
 const UserService = styled.div`
     position:absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 1283px;
+    height: 24px;
     top: 11px;
     font-size: 16px;
     font-weight: bold;
 
-    span {
+    div {
+        display: flex;
+        align-items: center;
+
+        span {
         margin-left: 25px;
         font-size: 13px;
         font-weight: 400;
         cursor: pointer;
+        }
+    }
+
+    img {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
     }
 `;

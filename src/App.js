@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import styled from 'styled-components';
+
 import GlobalStyle from 'styles/GlobalStyle';
 import Login from 'pages/login/Login';
 import SignUp from 'pages/login/SignUp';
@@ -10,8 +11,8 @@ import FindIdResult from 'pages/login/FindIdResult';
 import PwReset from 'pages/login/PwReset';
 import Redirection from 'pages/login/Redirection';
 import SnsSignUp from 'pages/login/SnsSignUp';
-
-import Page from 'pages/Page';
+import Main from 'pages/main/Main';
+import GroupInvite from 'pages/main/GroupInvite';
 
 function App(props) {
     return(
@@ -19,7 +20,7 @@ function App(props) {
             <GlobalStyle />
             <Wrapper>
                 <Routes>
-                    <Route index element={<Page />} />
+                    <Route index element={<Main />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/login/signUp" element={<SignUp />} />
                     <Route path="/login/findId" element={<FindId />} />
@@ -28,6 +29,7 @@ function App(props) {
                     <Route path="/login/findPw/reset" element={<PwReset />} />
                     <Route path='/callback/:registrationId' element={<Redirection />} />
                     <Route path="/login/snsSignUp" element={<SnsSignUp />} />
+                    <Route path="/groupInvite" element={<GroupInvite />} />
                 </Routes>
             </Wrapper>
         </BrowserRouter>

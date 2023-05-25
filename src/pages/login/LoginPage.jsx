@@ -27,7 +27,6 @@ function LoginPage(props) {
             <Logo>유캔두잇</Logo>
             <MainContainer>
                 <Outside>
-                    <TopService onClick={Logout}>{sessionStorage.getItem("loginName")}</TopService>
                     <Inside>
                         {props.children}
                     </Inside>
