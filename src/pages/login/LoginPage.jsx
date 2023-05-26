@@ -18,10 +18,6 @@ function LoginPage(props) {
         );
     }, []);
 
-    const Logout = () => {
-
-    }
-
     return(
         <Wrapper>
             <Logo>유캔두잇</Logo>
@@ -110,11 +106,4 @@ const Menu = styled.div`
     background-color: var(--primary-color);
     border-radius: 0 10px 10px 0;
     margin: 10px 0;
-`;
-
-// 닉네임, 로그아웃, 리마인더가 표시되는 영역
-const TopService = styled.div`
-    position:absolute;
-    width: 1283px;
-    top: 10px;
 `;

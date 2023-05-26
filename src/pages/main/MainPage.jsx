@@ -6,7 +6,6 @@ import Schedule from 'assets/testImg/schedule.png';
 import Calender from 'assets/testImg/calender.png';
 
 function Main(props) {
-
     return(
         <Page>
             <LeftContent>

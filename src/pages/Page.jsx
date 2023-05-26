@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import Reminder from 'assets/reminder.png'
+import { useNavigate, useLocation } from 'react-router-dom';
+
+import Reminder from 'assets/reminder.png';
+
 
 function Page(props) {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [path, setPath] = useState(0);
     // 페이지가 마운트 되었을 때
     useEffect(() => {
         axios.get('/api/member-api/is-login')
@@ -17,6 +21,10 @@ function Page(props) {
         }).catch(
             (error) => console.log(error)
         );
+
+        if(location.pathname.startsWith("/friend")) {
+            setPath(3);
+        }
     }, []);
 
     const Logout = () => {
@@ -27,7 +35,7 @@ function Page(props) {
         }).catch(
             (error) => console.log(error)
         );
-    }
+    }    
 
     return(
         <Wrapper>
@@ -46,9 +54,9 @@ function Page(props) {
                     </Inside>
                 </Outside>
                 <MenuList>
-                    <Menu>챌린지</Menu>
-                    <Menu>스케줄러</Menu>
-                    <Menu>친구</Menu>
+                    <Menu id={1} path={path}>챌린지</Menu>
+                    <Menu id={2} path={path}>스케줄러</Menu>
+                    <Menu id={3} path={path} onClick={() => navigate("/friend")}>친구</Menu>
                 </MenuList>
             </MainContainer>
         </Wrapper>
@@ -123,6 +131,18 @@ const Menu = styled.div`
     background-color: var(--primary-color);
     border-radius: 0 10px 10px 0;
     margin: 10px 0;
+    cursor: pointer;
+
+    ${(props) => (
+        props.id === props.path ? `
+            position: relative;
+            left: -20px;
+            width: 107px;
+            background-color: #DCA600;
+            font-weight: bold;
+            color: white;
+        ` : ``
+    )}
 `;
 
 // 닉네임, 로그아웃, 리마인더가 표시되는 영역
