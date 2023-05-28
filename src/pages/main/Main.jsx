@@ -20,7 +20,7 @@ function Main(props) {
             <Paging>
                 {(myRankX <= 0) ?
                     <Blank /> :
-                    <FontAwesomeIcon icon={faChevronLeft} size="xl" style={{color: "#cdcdcd", cursor: "pointer"}} onClick={() => setMyRankX(myRankX - 259)} />
+                    <FontAwesomeIcon icon={faChevronLeft} size="xl" onClick={() => setMyRankX(myRankX - 259)} />
                 }
                 <MyRankWrapper>
                     <span>나의 랭킹</span>
@@ -73,13 +73,13 @@ function Main(props) {
                 </MyRankWrapper>
                 {(myRankX/259 >= 1) ?
                     <Blank /> :
-                    <FontAwesomeIcon icon={faChevronRight} size="xl" style={{color: "#cdcdcd", cursor: "pointer"}} onClick={() => setMyRankX(myRankX + 259)} />
+                    <FontAwesomeIcon icon={faChevronRight} size="xl" onClick={() => setMyRankX(myRankX + 259)} />
                 }
             </Paging>
             <Paging>
                 {(inviteX <= 0) ?
                     <Blank /> : 
-                    <FontAwesomeIcon icon={faChevronLeft} size="xl" style={{color: "#cdcdcd", cursor: "pointer"}} onClick={() => setInviteX(inviteX - 259)} />
+                    <FontAwesomeIcon icon={faChevronLeft} size="xl" onClick={() => setInviteX(inviteX - 259)} />
                 }
                 <InviteWrapper>
                     <span>그룹 초대</span>
@@ -116,7 +116,7 @@ function Main(props) {
                 </InviteWrapper>
                 {(inviteX/259 >= 1) ?
                     <Blank /> : 
-                    <FontAwesomeIcon icon={faChevronRight} size="xl" style={{color: "#cdcdcd", cursor: "pointer"}} onClick={() => setInviteX(inviteX + 259)} />
+                    <FontAwesomeIcon icon={faChevronRight} size="xl" onClick={() => setInviteX(inviteX + 259)} />
                 }
             </Paging>
         </MainPage>
@@ -131,6 +131,11 @@ const Paging = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    & > svg {
+        color: #cdcdcd;
+        cursor: pointer
+    }
 `;
 
 // 화살표 대신 여백
@@ -166,7 +171,7 @@ const MyRankList = styled.div`
     overflow: hidden;
 `;
 
-// 각 그룹 초대 컨테이너
+// 각 그룹의 나의 랭킹 컨테이너
 const MyRank = styled.div`
     position: relative;
     right: ${(props) => props.x}px;

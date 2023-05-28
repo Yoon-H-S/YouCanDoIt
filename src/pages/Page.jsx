@@ -47,7 +47,7 @@ function Page(props) {
                             {sessionStorage.getItem("loginName")}
                             <span onClick={Logout}>로그아웃</span>
                         </div>
-                        <img src={Reminder} />
+                        <img src={Reminder} alt="" />
                     </UserService>
                     <Inside>
                         {props.children}
@@ -116,13 +116,16 @@ export const Inside = styled.div`
 
 // 주메뉴
 const MenuList = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
-    margin-top: 40px;
+    margin-top: 50px;
 `; 
 
 // 각 메뉴 개체
 const Menu = styled.div`
+    position: absolute;
+    top: ${(props) => props.id*70-70}px;
     width: 87px;
     height: 50px;
     font-size: 18px;
@@ -130,18 +133,16 @@ const Menu = styled.div`
     text-align: center;
     background-color: var(--primary-color);
     border-radius: 0 10px 10px 0;
-    margin: 10px 0;
     cursor: pointer;
 
     ${(props) => (
-        props.id === props.path ? `
-            position: relative;
+        props.id === props.path && `
             left: -20px;
             width: 107px;
             background-color: #DCA600;
             font-weight: bold;
             color: white;
-        ` : ``
+        `
     )}
 `;
 

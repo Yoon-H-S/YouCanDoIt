@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import MainPage from 'pages/main/MainPage';
 import GroupImg from 'assets/testImg/groupbig.png';
@@ -18,17 +18,10 @@ function GroupInvite(props) {
                     <span>그룹 초대</span>
                     <Inviter><span>김시은</span> 님이 초대하셨습니다.</Inviter>
                 </Title>
-                {isOpen ?
-                    <Participant onClick={() => setIsOpen(false)}>
-                        <span>접기</span>
-                        <FontAwesomeIcon icon={faChevronUp} size="2xs" style={{color: "black",}} />
-                    </Participant>
-                : 
-                    <Participant onClick={() => setIsOpen(true)}>
-                        <span>참가자</span>
-                        <FontAwesomeIcon icon={faChevronDown} size="2xs" style={{color: "black",}} />
-                    </Participant>
-                }
+                <Participant onClick={() => setIsOpen(!isOpen)}>
+                    <span>{isOpen ? "접기" : "펼치기"}</span>
+                    <FontAwesomeIcon icon={faChevronUp} rotation={isOpen ? 0 : 180} size="2xs" style={{color: "black",}} />
+                </Participant>
                 <ParticipantList isOpen={isOpen}>
                     <ListInner isOpen={isOpen}>
                         <Person>
