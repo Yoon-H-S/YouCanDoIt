@@ -1,12 +1,33 @@
 import React, { useState } from 'react';
 import Page from 'pages/Page';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 
+import FriendList from './FriendList';
 import GroupList from './GroupList';
+import FriendProfile from './FriendProfile';
 import GroupProfile from './GroupProfile';
 
 function FriendPage(props) {
+    const loginId = sessionStorage.getItem("loginId");
     const [menuNum, setMenuNum] = useState(1);
+    const [subMenuNum, setSubMenuNum] = useState(0);
+    const [memId, setMemId] = useState();
+    const [groupNumber, setGroupNumber] = useState();
+
+    const GNChange = (e) => {
+        setGroupNumber(e.currentTarget.id);
+        setSubMenuNum(2);
+    }
+
+    const IDChange = (e) => {
+        if(loginId !== e.currentTarget.id) {
+            setMemId(e.currentTarget.id);
+            setSubMenuNum(1);
+        }
+    }
+
     return(
         <Page>
             <LeftContent>
@@ -18,11 +39,23 @@ function FriendPage(props) {
                         <li onClick={() => setMenuNum(3)}>친구추가</li>
                     </SubMenu>
                 </SubMenuBar>
-                <GroupList />
+                {{
+                    1 : <FriendList handleChange={IDChange} />,
+                    2 : <GroupList handleChange={GNChange} />,
+                    3 : <span>친구추가</span>
+                }[menuNum]}
             </LeftContent>
             <MiddleLine />
             <RightContent>
-                <GroupProfile />
+                {{
+                    0 : <NoneClick>
+                            <div>'<span>친구</span> 또는 <span>그룹</span>'을 선택하여<br />정보를 확인해주세요.</div>
+                            <FontAwesomeIcon icon={faLeftLong} size="xl" />
+                        </NoneClick>,
+                    1 : <FriendProfile memId={memId} handleChange={GNChange} />,
+                    2 : <GroupProfile groupNumber={groupNumber} handleChange={IDChange} />
+                }[subMenuNum]}
+                
             </RightContent>
         </Page>
     );
@@ -94,4 +127,28 @@ const RightContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+`;
+
+// 우측 페이지 영역 아무것도 선택하지 않았을 때
+const NoneClick = styled.div`
+    width: 239px;
+    height: 374px;
+    border: 1px solid #B1B1B1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & > div {
+        text-align: center;
+        font-size: 15px;
+        color: #A4A4A4;
+        margin-bottom: 6px;
+
+        & > span {
+            font-weight: bold;
+            color: #838383;
+        }
+    }
 `;

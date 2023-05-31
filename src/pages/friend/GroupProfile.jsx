@@ -1,80 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
-import Profile1 from 'assets/testImg/profile1.png';
-import Profile2 from 'assets/testImg/profile2.png';
-import Profile3 from 'assets/testImg/profile3.png';
-import groupImg from 'assets/testImg/groupbig.png';
-
 function GroupProfile(props) {
+    const groupNumber = props.groupNumber;
+    const [groupProfile, setGroupProfile] = useState([]);
     const [isInfo, setIsInfo] = useState(false);
 
-    return(
-        <Wrapper>
-            <Background />
-            <ProfilePicture>
-                <img src={Profile1} alt="" />
-                <img src={Profile2} alt="" />
-                <img src={Profile3} alt="" />
-            </ProfilePicture>
-            <Name>갓생살조</Name>
-            <MemberContainer height={50+(26*7)} isInfo={isInfo}>
-                <ToggleBar onClick={() => setIsInfo(!isInfo)}>
-                    <span>그룹 멤버</span>
-                    <FontAwesomeIcon icon={faChevronUp} rotation={isInfo ? 180 : 0} size="2xs" style={{color: "black",}} />
-                </ToggleBar>
-                <MemberList>
-                    <Member>
-                        <img src={Profile1} alt="" />
-                        <span>김시은</span>
-                    </Member>
-                    <Member>
-                        <img src={Profile2} alt="" />
-                        <span>강지연</span>
-                    </Member>
-                    <Member>
-                        <img src={Profile3} alt="" />
-                        <span>김혜나</span>
-                    </Member>
-                    <Member>
-                        <img src={Profile1} alt="" />
-                        <span>이혜리</span>
-                    </Member>
-                    <Member>
-                        <img src={Profile2} alt="" />
-                        <span>박보검</span>
-                    </Member>
-                    <Member>
-                        <img src={Profile3} alt="" />
-                        <span>이지은</span>
-                    </Member>
-                    <Member>
-                        <img src={Profile1} alt="" />
-                        <span>이동혁</span>
-                    </Member>
-                </MemberList>
-            </MemberContainer>
-            <InfoContainer isInfo={isInfo}>
-                <ToggleBar onClick={() => setIsInfo(!isInfo)}>
-                    <span>상세 내용</span>
-                    <FontAwesomeIcon icon={faChevronUp} rotation={isInfo ? 0 : 180} size="2xs" style={{color: "black",}} />
-                </ToggleBar>
-                <Info>
-                    <Image>
-                        <img src={groupImg} alt="" />
-                    </Image>
-                    <Subject>
-                        <span>(한 달) 매일 만보 이상 걷기</span>
-                        <div>매일</div>
-                    </Subject>
-                    <Period>4월 7일 ~ 5월 7일</Period>
-                    <Content>건강 챙기기 프로젝트!<br />하루에 10,000보씩 한 달 동안 매일매일 걸어보자 꾸준히 하면 건강 챙길 수 있다!</Content>
-                </Info>
-            </InfoContainer>
-        </Wrapper>
-    );
+    useEffect(() => {
+        axios.get('/api/group-api/group-profile', {
+            params : {
+                groupNumber:groupNumber
+            }
+        }).then(function (response) {
+            setGroupProfile(response.data);
+            setIsInfo(false);
+        }).catch(
+            (error) => console.log(error)
+        );
+    },[groupNumber]);
+
+    if(groupProfile.length > 0) {
+        return(
+            <Wrapper>
+                <Background />
+                <ProfilePicture headCount={groupProfile[0]["groupHeadcount"]}>
+                    {groupProfile[2].map((src, index) => {
+                        return <img src={src} alt="" key={index} />
+                    })}
+                </ProfilePicture>
+                <Name>{groupProfile[0]["groupName"]}</Name>
+                <MemberContainer isInfo={isInfo}>
+                    <ToggleBar onClick={() => setIsInfo(!isInfo)}>
+                        <span>그룹 멤버</span>
+                        <FontAwesomeIcon icon={faChevronUp} rotation={isInfo ? 180 : 0} size="2xs" style={{color: "black",}} />
+                    </ToggleBar>
+                    <MemberList>
+                        {groupProfile[1].map((value, index) => {
+                            return(
+                                <Member key={index} id={value["memId"]} onClick={props.handleChange}>
+                                    <img src={value["profilePicture"]} alt="" />
+                                    <span>{value["nickname"]}</span>
+                                </Member>
+                            );
+                        })}
+                    </MemberList>
+                </MemberContainer>
+                <InfoContainer isInfo={isInfo}>
+                    <ToggleBar onClick={() => setIsInfo(!isInfo)}>
+                        <span>상세 내용</span>
+                        <FontAwesomeIcon icon={faChevronUp} rotation={isInfo ? 0 : 180} size="2xs" style={{color: "black",}} />
+                    </ToggleBar>
+                    <Info>
+                        <Image>
+                            <img src={groupProfile[0]["groupImage"]} alt="" />
+                        </Image>
+                        <Subject>
+                            <span>{groupProfile[0]["groupSubject"]}</span>
+                            <div>매일</div>
+                        </Subject>
+                        <Period>
+                            {groupProfile[0]["groupStartdate"].slice(5,7)}월 {groupProfile[0]["groupStartdate"].slice(8,10)}일 ~&nbsp;
+                            {groupProfile[0]["groupEnddate"].slice(5,7)}월 {groupProfile[0]["groupEnddate"].slice(8,10)}일
+                        </Period>
+                        <Content>{groupProfile[0]["groupContents"]}</Content>
+                    </Info>
+                </InfoContainer>
+            </Wrapper>
+        );
+    }
+    
 }
 
 export default GroupProfile;
@@ -87,12 +84,6 @@ const Wrapper = styled.div`
     align-items: center;
     width: 100%;
     height: 422px;
-    overflow-y: scroll;
-
-    /*스크롤바의 너비*/
-    ::-webkit-scrollbar {
-        width: 0px;
-    }
 `;
 
 // 파란 배경 영역
@@ -113,23 +104,43 @@ const ProfilePicture = styled.div`
 
     & > img {
         position: absolute;
-        width: 26px;
-        height: 26px;
         border: 1px solid #B1B1B1;
         border-radius: 20px;
 
-        :nth-child(1) {
-            left: 9.5px;
-        }
+        ${(props) => (
+            props.headCount === 1 ? `
+                width: 40px;
+                height: 40px;
+            ` : props.headCount === 2 ? `
+                width: 32px;
+                height: 32px;
 
-        :nth-child(2) {
-            bottom: 0px;
-        }
+                :nth-child(1) {
+                    left: 0px;
+                }
 
-        :nth-child(3) {
-            bottom: 0px;
-            right: 0px;
-        }
+                :nth-child(2) {
+                    bottom: 0px;
+                    right: 0px;
+                }
+            ` : `
+                width: 26px;
+                height: 26px;
+
+                :nth-child(1) {
+                    left: 10px;
+                }
+
+                :nth-child(2) {
+                    bottom: 0px;
+                }
+
+                :nth-child(3) {
+                    bottom: 0px;
+                    right: 0px;
+                }
+            `
+        )}
     }
 `;
 
@@ -145,7 +156,7 @@ const Name = styled.div`
 // 그룹 멤버
 const MemberContainer = styled.div`
     width: 239px;
-    height: ${(props) => props.height}px;
+    height: 168px;
     border: 1px solid #B1B1B1;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -178,13 +189,22 @@ const ToggleBar = styled.div`
 
 // 멤버 리스트
 const MemberList = styled.div`
-    margin: 12px 19px;
+    width: 100%;
+    height: 134px;
+    padding: 12px 19px;
+    overflow-y: scroll;
+
+    /*스크롤바의 너비*/
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
 `;
 
 // 각 멤버
 const Member = styled.div`
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     & > img {
         width: 18px;
@@ -208,7 +228,7 @@ const Member = styled.div`
 // 그룹 상세 내용
 const InfoContainer = styled.div`
     width: 239px;
-    max-height: 250px;
+    height: 168px;
     border: 1px solid #B1B1B1;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -217,14 +237,22 @@ const InfoContainer = styled.div`
 
     ${(props) => (
         !props.isInfo && `
-            max-height: 34px;
+            height: 34px;
         `
     )}
 `;
 
 // 그룹 정보가 표시되는 영역
 const Info = styled.div`
-    margin: 10px 15px;
+    width: 100%;
+    height: 134px;
+    padding: 10px 14px;
+    overflow-y: scroll;
+
+    /*스크롤바의 너비*/
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
 `;
 
 // 그룹의 챌린지 이미지
@@ -243,6 +271,7 @@ const Image = styled.div`
     }
 `;
 
+// 주제
 const Subject = styled.div`
     display: flex;
     align-items: center;
@@ -268,21 +297,25 @@ const Subject = styled.div`
     }
 `;
 
+// 기간
 const Period = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 87px;
+    width: max-content;
     height: 18px;
     background-color: #FFCB65;
     border-radius: 5px;
     margin: 7px 0;
+    padding: 0 6px;
     font-size: 10px;
 `;
 
+// 내용
 const Content = styled.div`
     width: 209px;
     font-size: 10px;
     font-weight: 300;
     color: #575757;
+    white-space: pre-line;
 `;

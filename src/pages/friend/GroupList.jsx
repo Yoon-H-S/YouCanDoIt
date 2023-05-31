@@ -1,109 +1,74 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-import Profile1 from 'assets/testImg/profile1.png';
-import Profile2 from 'assets/testImg/profile2.png';
-import Profile3 from 'assets/testImg/profile3.png';
-
 function GroupList(props) {
+    const [list, setList] = useState([]);
+    const [imgList, setImgList] = useState([]);
+    const [search, setSearch] = useState("");
+
+    useEffect(() => {
+        var data = [];
+        axios.get('/api/group-api/group-list' + search)
+        .then(function (response) {
+            data = response.data;
+            if(response.data.length > 0) {
+                var imgNumber = [];
+                response.data.map((value) => {
+                    imgNumber = [...imgNumber, value["groupNumber"]];
+                });
+                axios.get('/api/group-api/group-profile-picture', {
+                    params : {
+                        groupNumber:imgNumber
+                    },
+                    paramsSerializer: (paramObj) => {
+                        const params = new URLSearchParams()
+                        for (const key in paramObj) {
+                            params.append(key, paramObj[key])
+                        }
+                        return params.toString()
+                    }
+                }).then(function (response) {
+                    setImgList(response.data);
+                }).catch(
+                    (error) => console.log(error)
+                ).then(function() {
+                    setList(data);
+                });
+            } else {
+                setList(data);
+            }
+        }).catch(
+            (error) => console.log(error)
+        );
+    },[search]);
+
+    const handleChange = (e) => {
+        setSearch((e.target.value.length > 0) ? ("/" + e.target.value) : e.target.value);
+    }
+
     return(
         <Wrapper>
             <Search>
-                <input type="text" placeholder="검색하기" />
+                <input type="text" placeholder="검색하기" onChange={handleChange} />
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
             </Search>
-            <GroupCount>모든 그룹 - 10</GroupCount>
+            <GroupCount>모든 그룹 - {list.length}</GroupCount>
             <List>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>갓생살조</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>아침형 그룹</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>G_T_F</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>건강 챙기자</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>Y.C.D.I</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>너.뭐.못</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>Best_W</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>WWW</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>Happy_W</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>구구콘</span>
-                </Group>
-                <Group>
-                    <ProfilePicture>
-                        <img src={Profile1} alt="" />
-                        <img src={Profile2} alt="" />
-                        <img src={Profile3} alt="" />
-                    </ProfilePicture>
-                    <span>그룹 10</span>
-                </Group>
+                {list.length > 0 && list.map((value, index) => {
+                    return(
+                        <Group key={index} id={value["groupNumber"]} onClick={props.handleChange}>
+                            <ProfilePicture headCount={value["groupHeadcount"]}>
+                                {imgList.length > 0 && imgList[index].map((src, index) => {
+                                    return <img src={src} alt="" key={index} />
+                                })}
+                            </ProfilePicture>
+                            <span>{value["groupName"]}</span>
+                        </Group>
+                    );
+                })}
             </List>
         </Wrapper>
     );
@@ -179,6 +144,7 @@ const Group = styled.div`
     width: 750px;
     height: 55px;
     border-bottom: 1px dashed #B1B1B1;
+    cursor: pointer;
 
     & > span {
         font-size: 15px;
@@ -196,22 +162,42 @@ const ProfilePicture = styled.div`
 
     & > img {
         position: absolute;
-        width: 20px;
-        height: 20px;
         border: 1px solid #B1B1B1;
         border-radius: 20px;
 
-        :nth-child(1) {
-            left: 7.5px;
-        }
+        ${(props) => (
+            props.headCount === 1 ? `
+                width: 35px;
+                height: 35px;
+            ` : props.headCount === 2 ? `
+                width: 25px;
+                height: 25px;
 
-        :nth-child(2) {
-            bottom: 0px;
-        }
+                :nth-child(1) {
+                    left: 0px;
+                }
 
-        :nth-child(3) {
-            bottom: 0px;
-            right: 0px;
-        }
+                :nth-child(2) {
+                    bottom: 0px;
+                    right: 0px;
+                }
+            ` : `
+                width: 20px;
+                height: 20px;
+
+                :nth-child(1) {
+                    left: 8px;
+                }
+
+                :nth-child(2) {
+                    bottom: 0px;
+                }
+
+                :nth-child(3) {
+                    bottom: 0px;
+                    right: 0px;
+                }
+            `
+        )}
     }
 `;
