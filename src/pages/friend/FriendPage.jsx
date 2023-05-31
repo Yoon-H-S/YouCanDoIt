@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Page from 'pages/Page';
 import styled from 'styled-components';
 
+import FriendList from './FriendList';
+import FriendProfile from './FriendProfile'
+
 import GroupList from './GroupList';
 import GroupProfile from './GroupProfile';
 
@@ -18,10 +21,12 @@ function FriendPage(props) {
                         <li onClick={() => setMenuNum(3)}>친구추가</li>
                     </SubMenu>
                 </SubMenuBar>
+                {/* <FriendList /> */}
                 <GroupList />
             </LeftContent>
             <MiddleLine />
             <RightContent>
+                {/* <FriendProfile /> */}
                 <GroupProfile />
             </RightContent>
         </Page>
