@@ -10,7 +10,8 @@ function LoginPage(props) {
         axios.get('/api/member-api/is-login')
         .then(function (response) {
             if(!(response.data === "")) {
-                sessionStorage.setItem("loginName", response.data);
+                sessionStorage.setItem("loginName", response.data["nickname"]);
+                sessionStorage.setItem("loginId", response.data["memId"]);
                 navigate("/");
             }  
         }).catch(

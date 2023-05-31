@@ -31,6 +31,11 @@ const GlobalStyle = createGlobalStyle`
         outline: none;
     }
 
+    /* 이미지의 비율 고정 */
+    img {
+        object-fit: cover;
+    }
+
     /* number타입의 버튼 제거 */
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Schedule from 'assets/testImg/schedule.png';
 import Calender from 'assets/testImg/calender.png';
 
-function Main(props) {
+function MainPage(props) {
     return(
         <Page>
             <LeftContent>
@@ -20,7 +20,7 @@ function Main(props) {
     );
 }
 
-export default Main;
+export default MainPage;
 
 // 좌측 페이지 영역
 const LeftContent = styled.div`

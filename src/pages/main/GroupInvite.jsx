@@ -1,106 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import MainPage from 'pages/main/MainPage';
-import GroupImg from 'assets/testImg/groupbig.png';
 import PersonImg from 'assets/id.png';
 import FootImg from 'assets/foot.png';
 
 function GroupInvite(props) {
     const [isOpen, setIsOpen] = useState(false);
+    const [groupProfile, setGroupProfile] = useState([]);
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    return(
-        <MainPage>
-            <Header>
-                <Title>
-                    <span>그룹 초대</span>
-                    <Inviter><span>김시은</span> 님이 초대하셨습니다.</Inviter>
-                </Title>
-                <Participant onClick={() => setIsOpen(!isOpen)}>
-                    <span>{isOpen ? "접기" : "펼치기"}</span>
-                    <FontAwesomeIcon icon={faChevronUp} rotation={isOpen ? 0 : 180} size="2xs" style={{color: "black",}} />
-                </Participant>
-                <ParticipantList isOpen={isOpen}>
-                    <ListInner isOpen={isOpen}>
-                        <Person>
-                            <div>
-                                <img src={PersonImg} alt="" />
-                                <span>김시은</span>
-                            </div>
-                        </Person>
-                        <Person>
-                            <div>
-                                <img src={PersonImg} alt="" />
-                                <span>김혜나</span>
-                            </div>
-                        </Person>
-                        <Person>
-                            <div>
-                                <img src={PersonImg} alt="" />
-                                <span>JJ</span>
-                            </div>
-                        </Person>
-                        <Person>
-                            <div>
-                                <img src={PersonImg} alt="" />
-                                <span>린</span>
-                            </div>
-                        </Person>
-                        <Person>
-                            <div>
-                                <img src={PersonImg} alt="" />
-                                <span>한아</span>
-                            </div>
-                        </Person>
-                        <Person>
-                            <div>
-                                <img src={PersonImg} alt="" />
-                                <span>이지은</span>
-                            </div>
-                        </Person>
-                        <Person wait={true}>
-                            <div>
-                                <img src={FootImg} alt="" />
-                                <span>김시은</span>
-                            </div>
-                            <span>대기중</span>
-                        </Person>
-                        <Person wait={true}>
-                            <div>
-                                <img src={FootImg} alt="" />
-                                <span>박보검</span>
-                            </div>
-                            <span>대기중</span>
-                        </Person>
-                    </ListInner>
-                </ParticipantList>
-            </Header>
-            <GroupImage>
-                <img src={GroupImg} alt=""/>
-            </GroupImage>
-            <GroupInfo>
-                <div>
-                    <Subject>(한 달) 매일 만보 이상 걷기</Subject>
-                    <Name>갓생살조</Name>
-                    <FontAwesomeIcon icon={faUser} style={{color: "#adadad",}} />
-                    <HeadCount>18명</HeadCount>
-                </div>
-                <div>
-                    <Day>매일</Day>
-                    <Period>4월 7일 ~ 5월 7일</Period>
-                </div>
-            </GroupInfo>
-            <Contents>
-                <span>건강 챙기기 프로젝트!<br />하루에 10,000보씩 한 달 동안 매일매일 걸어보자 꾸준히 하면 건강 챙길 수 있다!</span>
-                <div>
-                    <RejectBtn>거절</RejectBtn>
-                    <AcceptBtn>수락</AcceptBtn>
-                </div>
-            </Contents>
-        </MainPage>
-    );
+    useEffect(() => {
+        axios.get('/api/group-api/group-invite', {
+            params : {
+                groupNumber: location.state.groupNumber
+            }
+        }).then(function (response) {
+            setGroupProfile(response.data);
+        }).catch(
+            (error) => console.log(error)
+        );
+    }, []);
+
+    const inviteResponse = (e) => {
+        axios.get('/api/group-api/invite-response', {
+            params : {
+                groupNumber: location.state.groupNumber,
+                response: e.target.id
+            }
+        }).then(function (response) {
+            if(e.target.id === "true") {
+                alert("그룹초대를 수락하였습니다.");
+            } else {
+                alert("그룹초대를 거절하였습니다.");
+            }
+            navigate("/");
+        }).catch(
+            (error) => console.log(error)
+        );
+    }
+    
+    if(groupProfile.length > 0) {
+        return(
+            <MainPage>
+                <Header>
+                    <Title>
+                        <span>그룹 초대</span>
+                        <Inviter><span>{groupProfile[1][0][0]}</span> 님이 초대하셨습니다.</Inviter>
+                    </Title>
+                    <Participant onClick={() => setIsOpen(!isOpen)}>
+                        <span>{isOpen ? "접기" : "펼치기"}</span>
+                        <FontAwesomeIcon icon={faChevronUp} rotation={isOpen ? 0 : 180} size="2xs" />
+                    </Participant>
+                    <ParticipantList isOpen={isOpen}>
+                        <ListInner isOpen={isOpen}>
+                            {groupProfile[1].map((value, index) => {
+                                return(
+                                    <Person key={index}>
+                                        <div>
+                                            <img src={value[1] === "1" || value[1] === "2" ? PersonImg : FootImg} alt="" />
+                                            <span>{value[0]}</span>
+                                        </div>
+                                    </Person>
+                                );
+                            })}
+                        </ListInner>
+                    </ParticipantList>
+                </Header>
+                <GroupImage>
+                    <img src={groupProfile[0]["groupImage"]} alt=""/>
+                </GroupImage>
+                <GroupInfo>
+                    <div>
+                        <Subject>{groupProfile[0]["groupSubject"]}</Subject>
+                        <Name>{groupProfile[0]["groupName"]}</Name>
+                        <FontAwesomeIcon icon={faUser} style={{color: "#adadad"}} />
+                        <HeadCount>{groupProfile[1].length}명</HeadCount>
+                    </div>
+                    <div>
+                        <Day>매일</Day>
+                        <Period>
+                            {groupProfile[0]["groupStartdate"].slice(5,7)}월 {groupProfile[0]["groupStartdate"].slice(8,10)}일 ~&nbsp;
+                            {groupProfile[0]["groupEnddate"].slice(5,7)}월 {groupProfile[0]["groupEnddate"].slice(8,10)}일
+                        </Period>
+                    </div>
+                </GroupInfo>
+                <Contents>
+                    <span>{groupProfile[0]["groupContents"]}</span>
+                    <div>
+                        <RejectBtn id="false" onClick={inviteResponse}>거절</RejectBtn>
+                        <AcceptBtn id="true" onClick={inviteResponse}>수락</AcceptBtn>
+                    </div>
+                </Contents>
+            </MainPage>
+        );
+    }
 }
 
 export default GroupInvite;
@@ -185,18 +184,7 @@ const ListInner = styled.div`
 
     /*스크롤바의 너비*/
     ::-webkit-scrollbar {
-        width: 4px; 
-    }
-
-    /*스크롤바의 색상*/
-    ::-webkit-scrollbar-thumb {
-        background-color: var(--primary-color);
-        border-radius: 7px;
-    }
-
-    /*스크롤바 트랙 색상*/
-    ::-webkit-scrollbar-track {
-        background-color: #E1E1E1; 
+        width: 0px; 
     }
 
     // 참가자 목록이 열렸을 때
@@ -247,6 +235,11 @@ const GroupImage = styled.div`
     align-items: center;
     justify-content: center;
     overflow: hidden;
+
+    & > img {
+        width: 100%;
+        height: 100%;
+    }
 `;
 
 // 그룹 주제, 그룹명, 참가자수, 기간이 포함되는 영역
@@ -274,8 +267,9 @@ const Subject = styled.div`
 
 // 그룹명
 const Name = styled.div`
-    width: 70px;
+    width: max-content;
     height: 30px;
+    padding: 0 12px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -306,8 +300,9 @@ const Day = styled.div`
 
 // 기간
 const Period = styled.div`
-    width: 125px;
+    width: max-content;
     height: 30px;
+    padding: 0 12px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -324,9 +319,18 @@ const Contents = styled.div`
     justify-content: space-between;
     
     & > span {
+        width: 80%;
+        height: 48px;
         font-size: 16px;
         font-weight: 300;
         color: #575757;
+        white-space: pre-line;
+        overflow-y: scroll;
+
+        /*스크롤바의 너비*/
+        ::-webkit-scrollbar {
+            width: 0px; 
+        }
     }
 
     & > div {

@@ -46,7 +46,8 @@ function Login(props) {
                     alert("아이디 혹은 비밀번호가 잘못 되었습니다.");
                 } else {
                     isRememberId ? localStorage.setItem("memId", memId) : localStorage.clear();
-                    sessionStorage.setItem("loginName", response.data);
+                    sessionStorage.setItem("loginName", response.data["nickname"]);
+                    sessionStorage.setItem("loginId", response.data["memId"]);
                     navigate("/");
                 }
                 
