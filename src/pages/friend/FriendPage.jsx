@@ -55,7 +55,6 @@ function FriendPage(props) {
                     1 : <FriendProfile memId={memId} handleChange={GNChange} />,
                     2 : <GroupProfile groupNumber={groupNumber} handleChange={IDChange} />
                 }[subMenuNum]}
-                
             </RightContent>
         </Page>
     );

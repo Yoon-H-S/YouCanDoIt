@@ -21,8 +21,10 @@ function Page(props) {
         }).catch(
             (error) => console.log(error)
         );
-
-        if(location.pathname.startsWith("/friend")) {
+        
+        if(location.pathname.startsWith("/challenge")) {
+            setPath(1);
+        } else if(location.pathname.startsWith("/friend")) {
             setPath(3);
         }
     }, []);
@@ -54,7 +56,7 @@ function Page(props) {
                     </Inside>
                 </Outside>
                 <MenuList>
-                    <Menu id={1} path={path}>챌린지</Menu>
+                    <Menu id={1} path={path} onClick={() => navigate("/challenge")}>챌린지</Menu>
                     <Menu id={2} path={path}>스케줄러</Menu>
                     <Menu id={3} path={path} onClick={() => navigate("/friend")}>친구</Menu>
                 </MenuList>

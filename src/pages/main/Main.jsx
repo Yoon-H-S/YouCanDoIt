@@ -6,18 +6,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 import MainPage from 'pages/main/MainPage'
-import MyRanking from 'assets/testImg/myrank.png';
 
 function Main(props) {
     const navigate = useNavigate();
     const [myRankX, setMyRankX] = useState(0);
     const [inviteX, setInviteX] = useState(0);
+    const [rankList, setRankList] = useState([]);
     const [inviteList, setInviteList] = useState([]);
 
     useEffect(() => {
         axios.get('/api/group-api/main-invite')
         .then(function (response) {
             setInviteList(response.data);
+        }).catch(
+            (error) => console.log(error)
+        );
+        axios.get('/api/group-api/my-ranking')
+        .then(function (response) {
+            setRankList(response.data);
         }).catch(
             (error) => console.log(error)
         );
@@ -33,17 +39,21 @@ function Main(props) {
                 <MyRankWrapper>
                     <span>나의 랭킹</span>
                     <MyRankList>
-                        <MyRank x={myRankX}>
-                            <MyRankImage>
-                                <img src={MyRanking} alt="" />
-                                <div>15</div>
-                                <span>D - 3</span>
-                            </MyRankImage>
-                            <MyRankInfo>
-                                <span>챌린지 제목</span>
-                                <div>너.뭐.못</div>
-                            </MyRankInfo>
-                        </MyRank>
+                        {rankList.length > 0 ? rankList.map((value, index) => {
+                            return(
+                                <MyRank x={myRankX} key={index}>
+                                    <MyRankImage rank={value[4]}>
+                                        <img src={value[2]} alt="" />
+                                        <div>{value[4]}</div>
+                                        <span>D - {value[3]}</span>
+                                    </MyRankImage>
+                                    <MyRankInfo>
+                                        <span>{value[1]}</span>
+                                        <div>{value[0]}</div>
+                                    </MyRankInfo>
+                                </MyRank>
+                            );
+                        }) : <None>진행중인 챌린지가 없습니다.</None>}
                     </MyRankList>
                 </MyRankWrapper>
                 {(myRankX + 3 >= 1) ?
@@ -59,7 +69,7 @@ function Main(props) {
                 <InviteWrapper>
                     <span>그룹 초대</span>
                     <InviteList>
-                        {inviteList.length > 0 && inviteList.map((value, index) => {
+                        {inviteList.length > 0 ? inviteList.map((value, index) => {
                             return(
                                 <Invite x={inviteX} key={index} onClick={() => (
                                     navigate("/groupInvite", {
@@ -75,7 +85,7 @@ function Main(props) {
                                     <InviteSubject>{value["groupSubject"]}</InviteSubject>
                                 </Invite>
                             );
-                        })}
+                        }) : <None>받은 그룹초대가 없습니다.</None>}
                     </InviteList>
                 </InviteWrapper>
                 {(inviteX + 3 >= 1) ?
@@ -105,6 +115,16 @@ const Paging = styled.div`
 // 화살표 대신 여백
 const Blank = styled.div`
     width: 15px;
+`;
+
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 122px;
+    font-size: 15px;
+    color: #A4A4A4;
 `;
 
 // 나의 랭킹 영역
@@ -156,6 +176,11 @@ const MyRankImage = styled.div`
     border-radius: 10px;
     margin-bottom: 10px;
 
+    & > img {
+        width: 100%;
+        height: 100%;
+    }
+
     // 이미지 좌측 상단 자신의 랭킹
     & > div {
         position: absolute;
@@ -166,10 +191,11 @@ const MyRankImage = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius:10px;
+        border-radius: 10px;
         background-color: #FFF066;
         font-size: 10px;
         font-weight: bold;
+        color: ${(props) => (props.rank <= 3 ? "red" : "black" )};
     }
 
     // 남은 기간
@@ -177,24 +203,31 @@ const MyRankImage = styled.div`
         position: absolute;
         font-size: 25px;
         font-weight: 500;
+        text-shadow: 0px 0px 3px white;
         opacity: 0.5;
     }
 `;
 
 // 그룹 주제, 그룹명
 const MyRankInfo = styled.div`
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     & > span {
+        width: 110px;
+        overflow: hidden;
+        white-space: nowrap; // 줄바꿈 방지
+        text-overflow: ellipsis; // 오버플로우가 발생하면 ...처리
         font-size: 12px;
         font-weight: 500;
     }
 
     & > div {
-        width: 60px;
+        width: max-content;
         height: 25px;
+        padding: 0 12px;
         background-color: #FFCB65;
         border-radius: 5px;
         display: flex;
