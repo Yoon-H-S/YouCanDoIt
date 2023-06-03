@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import Page from 'pages/Page';
 import styled from 'styled-components';
 
+import RankingDetails from './RankingDetails';
+
 function ChallengePage(props) {
     return(
         <Page>
             <LeftContent>
-
+                <RankingDetails />
             </LeftContent>
             <MiddleLine />
             <RightContent>
