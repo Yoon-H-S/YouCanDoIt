@@ -189,6 +189,16 @@ function CreateGroup(props) {
 								<input type="checkbox" />
 								<label>김혜나</label>
 							</Checkbox>
+							<Button
+								title="확인"
+								width="39px"
+								height="20px"
+								color="#0077e4"
+								type="button"
+								onClick={() => {
+									setVisible(!visible);
+								}}
+							/>
 						</CheckboxGroup>
 					)}
 				</Form>
