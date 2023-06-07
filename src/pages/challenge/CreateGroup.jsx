@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useNavigate } from 'react-router-dom';
 
 import { ko } from 'date-fns/esm/locale';
 import * as S from 'styles/DatePickerStyle';
@@ -15,6 +16,9 @@ function CreateGroup(props) {
 	const [endDate, setEndDate] = useState(new Date());
 	const [maxResult, setMaxResult] = useState(17950);
 	const [visible, setVisible] = useState(false);
+
+	const navigate = useNavigate();
+
 	return (
 		<Wrapper>
 			<Title>
@@ -207,6 +211,7 @@ function CreateGroup(props) {
 					width="87px"
 					height="28px"
 					color="#0077e4"
+					onClick={() => {}}
 				/>
 			</FormArea>
 		</Wrapper>
