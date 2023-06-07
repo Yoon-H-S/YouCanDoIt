@@ -9,6 +9,7 @@ function ChallengePage(props) {
 	return (
 		<Page>
 			<LeftContent>
+				{/* <RankingMain /> */}
 				<RankingDetails />
 			</LeftContent>
 			<MiddleLine />
