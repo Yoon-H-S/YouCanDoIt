@@ -13,6 +13,7 @@ import Redirection from 'pages/login/Redirection';
 import SnsSignUp from 'pages/login/SnsSignUp';
 import Main from 'pages/main/Main';
 import GroupInvite from 'pages/main/GroupInvite';
+// import ChallengePage from 'pages/challenge/ChallengePage';
 import FriendPage from 'pages/friend/FriendPage';
 
 function App(props) {
@@ -31,6 +32,7 @@ function App(props) {
                     <Route path='/callback/:registrationId' element={<Redirection />} />
                     <Route path="/login/snsSignUp" element={<SnsSignUp />} />
                     <Route path="/groupInvite" element={<GroupInvite />} />
+                    {/* <Route path="/challenge" element={<ChallengePage />} /> */}
                     <Route path="/friend" element={<FriendPage />} />
                 </Routes>
             </Wrapper>
