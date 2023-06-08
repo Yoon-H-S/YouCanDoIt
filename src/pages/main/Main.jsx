@@ -21,7 +21,7 @@ function Main(props) {
         }).catch(
             (error) => console.log(error)
         );
-        axios.get('/api/group-api/my-ranking')
+        axios.get('/api/challenge-api/my-ranking')
         .then(function (response) {
             setRankList(response.data);
         }).catch(
@@ -56,7 +56,7 @@ function Main(props) {
                         }) : <None>진행중인 챌린지가 없습니다.</None>}
                     </MyRankList>
                 </MyRankWrapper>
-                {(myRankX + 3 >= 1) ?
+                {(myRankX + 3 >= rankList.length) ?
                     <Blank /> :
                     <FontAwesomeIcon icon={faChevronRight} size="xl" onClick={() => setMyRankX(myRankX + 1)} />
                 }
@@ -88,7 +88,7 @@ function Main(props) {
                         }) : <None>받은 그룹초대가 없습니다.</None>}
                     </InviteList>
                 </InviteWrapper>
-                {(inviteX + 3 >= 1) ?
+                {(inviteX + 3 >= inviteList.length) ?
                     <Blank /> : 
                     <FontAwesomeIcon icon={faChevronRight} size="xl" onClick={() => setInviteX(inviteX + 1)} />
                 }
@@ -203,8 +203,8 @@ const MyRankImage = styled.div`
         position: absolute;
         font-size: 25px;
         font-weight: 500;
-        text-shadow: 0px 0px 3px white;
-        opacity: 0.5;
+        text-shadow: 0px 0px 2px white;
+        opacity: 0.7;
     }
 `;
 

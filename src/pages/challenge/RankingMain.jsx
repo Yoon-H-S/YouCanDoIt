@@ -1,18 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Button from 'components/ui/Button';
 
 function RankingMain(props) {
-    const [ visible, setVisible ] = useState(false);
+    const {isDaily} = props;
+    const [rankingList, setRankingList] = useState([]);
+
+    useEffect(() => {
+        if(isDaily) {
+            axios.get('/api/challenge-api/daily-ranking')
+            .then(function (response) {
+                setRankingList(response.data);
+            }).catch(
+                (error) => console.log(error)
+            );
+        } else {
+            axios.get('/api/challenge-api/godlife-ranking')
+            .then(function (response) {
+                setRankingList(response.data);
+            }).catch(
+                (error) => console.log(error)
+            );
+        }
+    },[isDaily])
+
     return (
         <Wrapper>
             <RankTitle>
                 <span> 챌린지 랭킹 </span>
             </RankTitle>
             <RankType>
-                <OfficialRank> 갓생 챌린지 </OfficialRank>
-                <UnOfficialRank> D.I.Y 챌린지 </UnOfficialRank>
-                <EndRank> 종료된 챌린지 </EndRank>
+                <RankMenu select={true}> 갓생 챌린지 </RankMenu>
+                <RankMenu> D.I.Y 챌린지 </RankMenu>
+                <RankMenu> 종료된 챌린지 </RankMenu>
             </RankType>
             <RankDetail>
                 <Official>
@@ -20,107 +41,46 @@ function RankingMain(props) {
                         <Button
                             width="66px"
                             height="23px"
-                            color="#0077E4"
+                            color={isDaily ? "#0077E4" : ""}
                             title="일일 랭킹"
+                            onClick = {() => {
+                                props.dailyChange(true);
+                            }}
                         />
                         <Button
                             width="66px"
                             height="23px"
+                            color={!isDaily ? "#0077E4" : ""}
                             title="누적 랭킹"
                             onClick = {() => {
-                                setVisible(!visible);
+                                props.dailyChange(false);
                             }}
                         />
                     </TwoRank>
-                    {visible && (
-                        <RankingList>
-                            <OneList>
-                                <One>
-                                    <Title> 하루 5,000보 걷기 </Title>
+                    <RankingList>
+                    {rankingList.length > 0 && rankingList.map((value, index) => {
+                        return(
+                            <RankingWrap key={index}>
+                                {(index !== 0 && index % 3 === 0) && <OneList />}
+                                <One id={value[0]} onClick={props.handleChange}>
+                                    <Title> {value[1]} </Title>
                                     <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
+                                        {value[2].map((result, index) => {
+                                            return(
+                                                <GraphOne key={index} width={value[2][0][1] !== 0 ? result[1]/value[2][0][1] : 1}>
+                                                    <img src={result[0]} alt="" />
+                                                </GraphOne>
+                                            );
+                                        })}
                                     </Graph>
                                 </One>
-                                <Two>
-                                    <Title> 7,000보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </Two>
-                                <Three>
-                                    <Title> 20,000보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </Three>
-                            </OneList>
-                            <TwoList>
-                                <One>
-                                    <Title> 만보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </One>
-                                <Two>
-                                    <Title> 18,000보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </Two>
-                                <Three>
-                                    <Title> 이만보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </Three>
-                            </TwoList>
-                            <OneList>
-                                <One>
-                                    <Title> 하루 5,000보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </One>
-                                <Two>
-                                    <Title> 7,000보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </Two>
-                                <Three>
-                                    <Title> 20,000보 걷기 </Title>
-                                    <Graph>
-                                        <GraphOne />
-                                        <GraphTwo />
-                                        <GraphThree />
-                                    </Graph>
-                                </Three>
-                            </OneList>
-                        </RankingList>
-                    )}
+                            </RankingWrap>
+                        );
+                    })}
+                    <OneList />    
+                    </RankingList>
+                    
                 </Official>
-                <UnOfficial>
-
-                </UnOfficial>
-                <End>
-
-                </End>
             </RankDetail>
         </Wrapper>
     );
@@ -163,44 +123,26 @@ const RankType = styled.div`
     height: 42px;
     border: 1px solid #B1B1B1;
     border-radius: 10px 10px 0 0;
+    overflow: hidden;
 `;
 
-// 갓생 챌린지
-const OfficialRank = styled.div`
+// 챌린지 랭킹 메뉴
+const RankMenu = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 155.3px;
+    width: 33.3%;
     height: 40px;
     font-size: 12px;
-    border-right: 1px solid #B1B1B1;
-    border-radius: 10px 0 0 0;
-    background-color: #FFF6A7;
     cursor: pointer;
-`;
 
-// D.I.Y 챌린지
-const UnOfficialRank = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 155.3px;
-    height: 40px;
-    font-size: 12px;
-    border-right: 1px solid #B1B1B1;
-    cursor: pointer;
-`;
+    :not(:last-child) {
+        border-right: 1px solid #B1B1B1;
+    }
 
-// 종료된 챌린지
-const EndRank = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 155.3px;
-    height: 40px;
-    font-size: 12px;
-    border-radius: 0 10px 0 0;
-    cursor: pointer;
+    ${(props) => (props.select && `
+        background-color: #FFF6A7;
+    `)}
 `;
 
 // 랭킹
@@ -210,6 +152,7 @@ const RankDetail = styled.div`
     width: 468px;
     height: 272px;
     border: 1px solid #B1B1B1;
+    border-top: none;
     border-radius: 0 0 10px 10px;
 `;
 
@@ -227,7 +170,7 @@ const Official = styled.div`
 // 두 개의 갓생 챌린지 랭킹 버튼 틀
 const TwoRank = styled.div`
     display:flex;
-    margin: 10px 25.5px 0 0;
+    margin: 10px 25.5px 10px 0;
     float: right;
 
     & > Button{
@@ -239,24 +182,25 @@ const TwoRank = styled.div`
 // 랭킹 리스트
 const RankingList = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     width: 415px;
-    height: 220px;
     margin-left: 25px;
 `;
 
 // 세 개의 랭킹 틀
 const OneList = styled.div`
     display: flex;
-    padding: 10px 0 10px 0;
+    width: 415px;
+    height: 0px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
     border-bottom: 1px dashed #B1B1B1;
 `;
 
-// 또 다른 세 개의 랭킹 틀
-const TwoList = styled.div`
-    display: flex;
-    padding: 10px 0 10px 0;
-    border-bottom: 1px dashed #B1B1B1;
+const RankingWrap = styled.div`
+    :not(:nth-child(3n)) {
+        margin-right: 8px;
+    }
 `;
 
 // 랭킹 1
@@ -265,24 +209,7 @@ const One = styled.div`
     height: 100px;
     border-radius: 5px;
     background-color: #FFF9BF;
-    margin-right: 8px;
-`;
-
-// 랭킹 2
-const Two = styled.div`
-    width: 133px;
-    height: 100px;
-    border-radius: 5px;
-    background-color: #FFF9BF;
-    margin-right: 8px;
-`;
-
-// 랭킹 3
-const Three = styled.div`
-    width: 133px;
-    height: 100px;
-    border-radius: 5px;
-    background-color: #FFF9BF;
+    cursor: pointer;
 `;
 
 // 랭킹 제목
@@ -300,31 +227,26 @@ const Graph = styled.div`
 
 // 그래프 1
 const GraphOne = styled.div`
-    width: 100px;
+    display: flex;
+    align-items: center;
+    width: ${(props) => props.width * 100}px;
+    min-width: 15px;
     height: 15px;
     background-color: #4F3B00;
     margin-bottom: 1px;
+
+    & > img {
+        margin-left: 5px;
+        width: 5px;
+        height: 5px;
+        border: 0.1px solid #595959;
+    }
 `;
 
-// 그래프 2
-const GraphTwo = styled.div`
-    width: 76px;
-    height: 15px;
-    background-color: #4F3B00;
-    margin-bottom: 1px;
-`;
+// // D.I.Y 챌린지 랭킹 틀
+// const UnOfficial = styled.div`
+// `;
 
-// 그래프 3
-const GraphThree = styled.div`
-    width: 63px;
-    height: 15px;
-    background-color: #4F3B00;
-`;
-
-// D.I.Y 챌린지 랭킹 틀
-const UnOfficial = styled.div`
-`;
-
-// 종료된 챌린지 랭킹 틀
-const End = styled.div`
-`;
+// // 종료된 챌린지 랭킹 틀
+// const End = styled.div`
+// `;

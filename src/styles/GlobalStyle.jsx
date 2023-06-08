@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     /* 선택시 아웃라인 스타일 제거 */
-    input, select {
+    input, select, textarea {
         outline: none;
     }
 

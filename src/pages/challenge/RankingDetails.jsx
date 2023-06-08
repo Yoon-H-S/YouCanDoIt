@@ -1,135 +1,125 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import "react-datepicker/dist/react-datepicker.css";
 
 import * as S from 'styles/DatePickerStyle';
 
 function RankingDetails(props) {
+    const {groupNumber, isDaily, close} = props;
     const [selectDate, setSelectDate] = useState(new Date());
-    const [maxResult, setMaxResult] = useState(17950);
+    const [maxResult, setMaxResult] = useState(0);
+    const [groupInfo, setGroupInfo] = useState(null);
+    const [groupRanking, setGroupRanking] = useState([]);
 
-    return(
-        <Wrapper>
-            <Title>
-                <FontAwesomeIcon icon={faChevronLeft}/>
-                <span>하루 5,000보 이상 걷기</span>
-            </Title>
-            <RankingArea>
-                <GroupBar>
-                    <GroupName>Happy_W 랭킹</GroupName>
-                    <S.Calender>
-                        <S.CustomDatePicker
-                            showIcon
-                            showPopperArrow={false}
-                            fixedHeight
-                            dateFormat="yyyy - MM - dd"
-                            // minDate={new Date('2023-05-01')}
-                            // maxDate={new Date('2023-06-10')}
-                            locale={ko}
-                            closeOnScroll={true}
-                            selected={selectDate}
-                            onChange={(date) => setSelectDate(date)}
-                            renderCustomHeader={({
-                                date,
-                                decreaseMonth,
-                                increaseMonth,
-                                prevMonthButtonDisabled,
-                                nextMonthButtonDisabled
-                            }) => (
-                                <S.CustomHeader>
-                                    <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                                        {"<"}
-                                    </button>
+    useEffect(() => {
+        if(isDaily) {
+            const year = selectDate.getFullYear();
+            const month = selectDate.getMonth() + 1;
+            const date = selectDate.getDate();
+            const sendDate = year + "-" + month + "-" + date;
+            axios.get('/api/challenge-api/daily-ranking-detail', {
+                params: {
+                    groupNumber: groupNumber,
+                    date: sendDate
+                }
+            }).then(function (response) {
+                setGroupInfo(response.data[0]);
+                setGroupRanking(response.data[1]);
+                setMaxResult(response.data[1][0][2]);
+            }).catch(
+                (error) => console.log(error)
+            );
+        } else {
+            axios.get('/api/challenge-api/godlife-ranking-detail', {
+                params: {
+                    groupNumber: groupNumber
+                }
+            }).then(function (response) {
+                console.log(response.data);
+                setGroupInfo(response.data[0]);
+                setGroupRanking(response.data[1]);
+                setMaxResult(response.data[1][0][2]);
+            }).catch(
+                (error) => console.log(error)
+            );
+        }
+        
+    },[groupNumber, selectDate]);
+
+    if(groupInfo !== null) {
+        return(
+            <Wrapper>
+                <Title>
+                    <FontAwesomeIcon icon={faChevronLeft} onClick={close}/>
+                    <span>{groupInfo["groupSubject"]}</span>
+                </Title>
+                <RankingArea>
+                    <GroupBar>
+                        <GroupName>{groupInfo["groupName"]} 랭킹</GroupName>
+                        {isDaily && 
+                            <S.Calender>
+                                <S.CustomDatePicker
+                                    showIcon
+                                    showPopperArrow={false}
+                                    fixedHeight
+                                    dateFormat="yyyy - MM - dd"
+                                    minDate={new Date(groupInfo["groupStartdate"])}
+                                    maxDate={new Date()}
+                                    locale={ko}
+                                    closeOnScroll={true}
+                                    selected={selectDate}
+                                    onChange={(date) => setSelectDate(date)}
+                                    renderCustomHeader={({
+                                        date,
+                                        decreaseMonth,
+                                        increaseMonth,
+                                        prevMonthButtonDisabled,
+                                        nextMonthButtonDisabled
+                                    }) => (
+                                        <S.CustomHeader>
+                                            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                                                {"<"}
+                                            </button>
+                                            <div>
+                                                {date.getFullYear()}년 {date.getMonth()+1}월
+                                            </div>
+                                            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                                                {">"}
+                                            </button>
+                                        </S.CustomHeader>
+                                    )}
+                                />
+                            </S.Calender>
+                        }
+                    </GroupBar>
+                    <RankingList>
+                        {groupRanking.length > 0 && groupRanking.map((value, index) => {
+                            return(
+                                <Rank key={index} result={value[2]/maxResult} rank={value[3]}>
                                     <div>
-                                        {date.getFullYear()}년 {date.getMonth()+1}월
+                                        <img src={value[1]} alt="" />
+                                        <span>{value[0]}</span>
                                     </div>
-                                    <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                                        {">"}
-                                    </button>
-                                </S.CustomHeader>
-                            )}
-                        />
-                    </S.Calender>
-                </GroupBar>
-                <RankingList>
-                    <Rank result={17950/maxResult} rank={1}>
-                        <div>
-                            <img src={"/profilePicture/profile10.png"} alt="" />
-                            <span>김시은</span>
-                        </div>
-                        <span>17950</span>
-                    </Rank>
-                    <Rank result={15057/maxResult} rank={2}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>김혜나</span>
-                        </div>
-                        <span>15057</span>
-                    </Rank>
-                    <Rank result={14199/maxResult} rank={3}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>강지연</span>
-                        </div>
-                        <span>14199</span>
-                    </Rank>
-                    <Rank result={13893/maxResult} rank={4}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>김우석</span>
-                        </div>
-                        <span>13893</span>
-                    </Rank>
-                    <Rank result={13024/maxResult} rank={5}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>손나은</span>
-                        </div>
-                        <span>13024</span>
-                    </Rank>
-                    <Rank result={12087/maxResult} rank={6}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>JJ</span>
-                        </div>
-                        <span>12087</span>
-                    </Rank>
-                    <Rank result={11735/maxResult} rank={7}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>박보검</span>
-                        </div>
-                        <span>11735</span>
-                    </Rank>
-                    <Rank result={10906/maxResult} rank={8}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>박민석</span>
-                        </div>
-                        <span>10906</span>
-                    </Rank>
-                    <Rank result={15/maxResult} rank={9}>
-                        <div>
-                            <img src={"/profilePicture/profile9.png"} alt="" />
-                            <span>차병호</span>
-                        </div>
-                        <span>15</span>
-                    </Rank>
-                </RankingList>
-            </RankingArea>
-        </Wrapper>
-    );
+                                    <span>{value[2]}</span>
+                                </Rank>
+                            );
+                        })}
+                    </RankingList>
+                </RankingArea>
+            </Wrapper>
+        );
+    }
 }
 
 export default RankingDetails;
 
 // 랭킹 상세페이지의 틀
 const Wrapper = styled.div`
-    position: relative;
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -160,6 +150,7 @@ const Title = styled.div`
         position: absolute;
         left: 45px;
         color: white;
+        cursor: pointer;
     }
 `;
 

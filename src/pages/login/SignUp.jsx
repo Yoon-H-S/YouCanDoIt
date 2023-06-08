@@ -112,9 +112,11 @@ function SignUp(props) {
 
     // 가입하기(스프링부트에 post값 전달)
     const Send = () => {
-        if(memId && password && passwordCheck && nickname && phoneNumber && isCertify) {
+        if(memId && password && passwordCheck && nickname && phoneNumber) {
             if(isDuplicate) {
                 alert("아이디 중복 확인을 해주세요!");
+            } else if(password !== passwordCheck) {
+                alert("비밀번호가 일치하지 않습니다!");
             } else if(!isCertify) {
                 alert("전화번호 인증을 해주세요!");
             } else {
@@ -131,12 +133,16 @@ function SignUp(props) {
                         formData.append("file", profilePicture);
                         axios.post('/api/member-api/insert-profile',
                             formData
-                        ).catch(
+                        ).then(function (response) {
+                            alert("회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.");
+                            navigate("/login");
+                        }).catch(
                             (error) => console.log(error)
                         );
+                    } else {
+                        alert("회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.");
+                        navigate("/login");
                     }
-                    alert("회원가입이 완료되었습니다.\n로그인 페이지로 이동합니다.");
-                    navigate("/login");
                 }).catch(
                     (error) => console.log(error)
                 );

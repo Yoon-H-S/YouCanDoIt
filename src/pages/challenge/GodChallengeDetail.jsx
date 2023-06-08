@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -6,42 +8,62 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Button from 'components/ui/Button';
 
 function GodChallengeDetail(props) {
-	return (
-		<Wrapper>
-			<Title>
-				<FontAwesomeIcon icon={faChevronLeft} />
-				<span>갓생 챌린지</span>
-			</Title>
-			<GodDetail>
-				<Picture />
-				<GodTitle> (N주) N보 걷기 </GodTitle>
-				<GodContent> 습관 기르기 프로젝트! <br /> N주 동안 걷고 습관 기르자. <br /> 습과 기르면서 N보 이상 걸으면서 운동하면 건강도 관리하고 일석이조 <br /> 지인과 함께 챌린지 그룹을 만들고 랭킹에 참여하세요! </GodContent>
-				<Keword>
-					<OneKey> 매일 </OneKey>
-					<TwoKey> N주 동안 </TwoKey>
-					<ThreeKey> 꾸준히 </ThreeKey>
-				</Keword>
-				<Button
-					width = "63px"
-					height = "23px"
-					title = "생성하기"
-					color = "#0077E4"
-				/>
-			</GodDetail>
-		</Wrapper>
-	);
+	const [godChallenge, setGodChallenge] = useState(null);
+
+	useEffect(() => {
+		axios.get('/api/challenge-api/godlife-challenge-detail', {
+			params: {
+				subject:props.subject
+			}
+		}).then(function (response) {
+			setGodChallenge(response.data);
+        }).catch(
+            (error) => console.log(error)
+        );
+	},[]);
+
+	if(godChallenge !== null) {
+		return (
+			<Wrapper>
+				<Title>
+					<FontAwesomeIcon icon={faChevronLeft} onClick={props.close} />
+					<span>갓생 챌린지</span>
+				</Title>
+				<GodDetail>
+					<Picture>
+						<img src={godChallenge["challengeImage"]} alt="" />
+					</Picture>
+					<GodTitle> {godChallenge["challengeSubject"]} </GodTitle>
+					<GodContent> {godChallenge["challengeContents"]} </GodContent>
+					<Keword>
+						<OneKey> 매일 </OneKey>
+						<TwoKey> N주 동안 </TwoKey>
+						<ThreeKey> 꾸준히 </ThreeKey>
+					</Keword>
+					<Button
+						width = "63px"
+						height = "23px"
+						title = "생성하기"
+						color = "#0077E4"
+						onClick = {props.handleChange}
+					/>
+				</GodDetail>
+			</Wrapper>
+		);
+	}
 }
 
 export default GodChallengeDetail;
 
 // 갓생 챌린지 - 그룹 생성하기 틀
 const Wrapper = styled.div`
-	position: relative;
+	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
 	height: 100%;
+	background-color: white;
 `;
 
 // 그룹 생성하기 타이틀 영역
@@ -52,7 +74,7 @@ const Title = styled.div`
 	justify-content: center;
 	width: 100%;
 	height: 65px;
-	z-index: 2;
+	/* z-index: 2; */
 
 	& > span {
 		font-size: 16px;
@@ -84,11 +106,20 @@ const GodDetail = styled.div`
 `;
 
 const Picture = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 465.5px;
 	height: 120px;
 	border: 1px solid #B1B1B1;
 	border-radius: 10px;
 	margin-bottom: 15px;
+	overflow: hidden;
+
+	& > img {
+		width: 100%;
+		height: 100%;
+	}
 `;
 
 const GodTitle = styled.div`
@@ -102,6 +133,7 @@ const GodContent = styled.div`
 	font-size: 12px;
 	padding: 10px 10px;
 	border-bottom: 1px solid #B1B1B1;
+	white-space: pre-line;
 `;
 
 const Keword = styled.div`

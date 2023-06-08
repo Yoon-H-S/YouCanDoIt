@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useNavigate } from 'react-router-dom';
 
 import { ko } from 'date-fns/esm/locale';
 import * as S from 'styles/DatePickerStyle';
@@ -11,40 +11,147 @@ import * as S from 'styles/DatePickerStyle';
 import Button from 'components/ui/Button';
 
 function CreateGroup(props) {
-	const [selectDate, setSelectDate] = useState(new Date());
-	const [startDate, setStartDate] = useState(new Date());
-	const [endDate, setEndDate] = useState(new Date());
-	const [maxResult, setMaxResult] = useState(17950);
-	const [visible, setVisible] = useState(false);
+	const today = new Date(); // 오늘 날짜
+	const [startDate, setStartDate] = useState(new Date(today.setDate(today.getDate() + 1))); // 그룹 시작날짜(기본값은 내일)
+	const [endDate, setEndDate] = useState(startDate); // 그룹 끝나는 날짜(기본값은 시작날짜)
+	const [visible, setVisible] = useState(false); // 친구 초대 목록
+	const [imagePreview, setImagePreview] = useState(null); // 이미지 업로드 시 미리보기
+	const [imgFile, setImgFile] = useState(null); // 그룹이미지
+	const [friends, setFriends] = useState([]); // 친구 목록
+	const [withFriends, setWithFriends] = useState([]); // 함께할 친구목록
+	const [values, setValues] = useState({
+        groupName: "", // 그룹이름
+        groupSubject: "", // 그룹주제
+        groupContents: "", // 그룹내용
+		category: "" // 카테고리
+    });
+    // 비구조화 할당
+    const {groupName, groupSubject, groupContents, category} = values;
 
-	const navigate = useNavigate();
+	// 갓생챌린지 정보, 친구목록 불러오기
+	useEffect(() => {
+        axios.get('/api/challenge-api/with-friend')
+		.then(function (response) {
+			setFriends(response.data);
+        }).catch(
+            (error) => console.log(error)
+        );
+		axios.get('/api/challenge-api/godlife-challenge-detail', {
+			params: {
+				subject:props.subject
+			}
+		}).then(function (response) {
+			console.log(response.data);
+			setValues({
+				...values,
+				["groupSubject"]: response.data["challengeSubject"],
+				["groupContents"]: response.data["challengeContents"],
+				["category"]: response.data["challengeCategory"],
+			});
+        }).catch(
+            (error) => console.log(error)
+        );
+    },[]);
+
+	// input값이 변경되면 state에 저장
+	const handleChange = (e) => {
+		setValues({
+			...values,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	// 파일값 저장
+	const fileChange = (e) => {
+		const file = e.target.files[0];
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onloadend = () => {
+			setImagePreview(reader.result);
+		};
+		setImgFile(file);
+	};
+
+	// 함께할 친구 초대
+	const checkChange = (e) => {
+		const id = e.target.value;
+		if(e.target.checked) {
+			setWithFriends([...withFriends, id]);
+		} else {
+			setWithFriends(withFriends.filter((mem) => mem !== id));
+		}
+	}
+
+	// 가입하기(스프링부트에 post값 전달)
+    const Create = () => {
+		console.log(withFriends);
+        axios.post('/api/challenge-api/challenge-create', {
+			"groupNumber":0,
+			"groupName":groupName,
+            "groupSubject":groupSubject,
+            "groupContents":groupContents, 
+            "groupStartdate":startDate, 
+            "groupEnddate":endDate,
+            "groupClass":"1"
+		}, {
+			params : {
+                members:withFriends
+            },
+            paramsSerializer: (paramObj) => {
+                const params = new URLSearchParams()
+                for (const key in paramObj) {
+                    params.append(key, paramObj[key])
+                }
+                return params.toString()
+            }
+        }).then(function (response) {
+            if(imgFile) {
+                const formData = new FormData();
+                formData.append("groupNumber", response.data);
+                formData.append("file", imgFile);
+                axios.post('/api/challenge-api/insert-group-image',
+                    formData
+                ).then(function (response) {
+                    alert("그룹생성이 완료되었습니다.");
+                }).catch(
+                    (error) => console.log(error)
+                );
+            } else {
+                alert("그룹생성이 완료되었습니다.");
+            }
+        }).catch(
+            (error) => console.log(error)
+        );
+    };
 
 	return (
 		<Wrapper>
 			<Title>
-				<FontAwesomeIcon icon={faChevronLeft} />
+				<FontAwesomeIcon icon={faChevronLeft} onClick={props.close} />
 				<span>갓생 챌린지 - 그룹 생성하기</span>
 			</Title>
 			<FormArea>
 				<Form>
 					<Picture>
-						<span>사진 첨부하기</span>
+						<label htmlFor="file">사진 첨부하기</label>
+						<input type="file" id="file" onChange ={fileChange} />
+						{imagePreview && <img src={imagePreview} alt="" />}
 					</Picture>
 					<Inputs>
 						<InputRow>
-							<label htmlFor="">그룹 이름:</label>
-							<input type="text" />
+							<label>그룹 이름:</label>
+							<input type="text" name="groupName" onChange={handleChange} />
 						</InputRow>
 						<InputRow>
-							<label htmlFor="">주제:</label>
-							<input type="text" />
+							<label>주제:</label>
+							<input type="text" name="groupSubject" value={groupSubject} onChange={handleChange} />
 						</InputRow>
 						<InputRow>
-							<label htmlFor="">내용:</label>
-							<textarea></textarea>
+							<label>내용:</label>
+							<textarea name="groupContents" value={groupContents} onChange={handleChange}></textarea>
 						</InputRow>
 						<InputRow>
-							<label htmlFor="">함께할 친구:</label>
+							<label>함께할 친구:</label>
 							<Button
 								title="추가"
 								width="45px"
@@ -58,28 +165,27 @@ function CreateGroup(props) {
 							/>
 						</InputRow>
 						<InputRow>
-							<label htmlFor="">카테고리:</label>
+							<label>카테고리:</label>
 							<Button
-								title="건강"
-								width="59px"
+								title={category}
+								width="70px"
 								height="24px"
 								type="button"
 							/>
 						</InputRow>
 						<InputRow>
-							<label htmlFor="">기간 설정:</label>
+							<label>기간 설정:</label>
 							<S.Calender>
 								<S.CustomDatePicker
 									showIcon
 									showPopperArrow={false}
 									fixedHeight
 									dateFormat="yyyy - MM - dd"
-									// minDate={new Date('2023-05-01')}
-									// maxDate={new Date('2023-06-10')}
+									minDate={today}
 									locale={ko}
 									closeOnScroll={true}
 									selected={startDate}
-									onChange={(date) => setStartDate(date)}
+									onChange={(date) => (setStartDate(date),setEndDate(date))}
 									selectsStart
 									startDate={startDate}
 									endDate={endDate}
@@ -110,15 +216,14 @@ function CreateGroup(props) {
 									)}
 								/>
 							</S.Calender>
-							<span class="tilde">~</span>
+							<span className="tilde">~</span>
 							<S.Calender>
 								<S.CustomDatePicker
 									showIcon
 									showPopperArrow={false}
 									fixedHeight
 									dateFormat="yyyy - MM - dd"
-									// minDate={new Date('2023-05-01')}
-									// maxDate={new Date('2023-06-10')}
+									minDate={startDate}
 									locale={ko}
 									closeOnScroll={true}
 									selected={endDate}
@@ -157,42 +262,19 @@ function CreateGroup(props) {
 					</Inputs>
 					{visible && (
 						<CheckboxGroup>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김시은</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
-							<Checkbox>
-								<input type="checkbox" />
-								<label>김혜나</label>
-							</Checkbox>
+							{friends.length > 0 && friends.map((value, index) => {
+								return(
+									<Checkbox key={index} >
+										<input 
+											type="checkbox" 
+											value={value["memId"]} 
+											onChange={checkChange} 
+											checked={withFriends.includes(value["memId"])} 
+										/>
+										<label>{value["nickname"]}</label>
+									</Checkbox>
+								);
+							})}
 							<Button
 								title="확인"
 								width="39px"
@@ -211,7 +293,7 @@ function CreateGroup(props) {
 					width="87px"
 					height="28px"
 					color="#0077e4"
-					onClick={() => {}}
+					onClick={Create}
 				/>
 			</FormArea>
 		</Wrapper>
@@ -222,13 +304,14 @@ export default CreateGroup;
 
 // 갓생 챌린지 - 그룹 생성하기 틀
 const Wrapper = styled.div`
-	position: relative;
+	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	background-color: white;
 `;
 
 // 그룹 생성하기 타이틀 영역
@@ -257,7 +340,7 @@ const Title = styled.div`
 `;
 
 // 그룹 생성하기 폼 스크롤 되는 영역
-const FormArea = styled.form`
+const FormArea = styled.div`
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -273,14 +356,15 @@ const FormArea = styled.form`
 `;
 
 // 폼
-const Form = styled.form`
+const Form = styled.div`
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 465px;
 	height: 400px;
-	padding: 15px 20px;
+	padding: 0 20px 15px 20px;
+	overflow: hidden;
 	border: 1px solid #b1b1b1;
 	border-radius: 10px;
 	margin-bottom: 10px;
@@ -289,13 +373,24 @@ const Form = styled.form`
 
 // 사진 첨부하기 영역
 const Picture = styled.div`
+	position: relative;
 	width: 465px;
-	height: 120px;
+	height: 135px;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	font-size: 12px;
+
+	& > #file {
+		display: none;
+	}
+
+	& > img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
 `;
 
 // 입력 폼
@@ -329,10 +424,15 @@ const InputRow = styled.div`
 		font-size: 12px;
 	}
 	& > textarea {
+		font-size: 11px;
 		width: 348px;
 		height: 50px;
 		resize: none;
 		border: 1px solid #b1b1b1;
+		
+		::-webkit-scrollbar {
+			width: 0px;
+		}
 	}
 
 	& > .tilde {
