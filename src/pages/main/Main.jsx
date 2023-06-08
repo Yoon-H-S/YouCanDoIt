@@ -195,7 +195,7 @@ const MyRankImage = styled.div`
         background-color: #FFF066;
         font-size: 10px;
         font-weight: bold;
-        color: ${(props) => (props.rank <= 3 ? "red" : "black" )};
+        color: ${(props) => ((props.rank <= 3 && props.rank !== 0) ? "red" : "black" )};
     }
 
     // 남은 기간

@@ -41,7 +41,6 @@ function CreateGroup(props) {
 				subject:props.subject
 			}
 		}).then(function (response) {
-			console.log(response.data);
 			setValues({
 				...values,
 				["groupSubject"]: response.data["challengeSubject"],
@@ -187,7 +186,11 @@ function CreateGroup(props) {
 									locale={ko}
 									closeOnScroll={true}
 									selected={startDate}
-									onChange={(date) => (setStartDate(date),setEndDate(date))}
+									onChange={(date) => (
+										date >= endDate 
+										? (setStartDate(date), setEndDate(date))
+										: setStartDate(date)
+									)}
 									selectsStart
 									startDate={startDate}
 									endDate={endDate}

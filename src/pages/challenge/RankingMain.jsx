@@ -61,7 +61,6 @@ function RankingMain(props) {
                     {rankingList.length > 0 && rankingList.map((value, index) => {
                         return(
                             <RankingWrap key={index}>
-                                {(index !== 0 && index % 3 === 0) && <OneList />}
                                 <One id={value[0]} onClick={props.handleChange}>
                                     <Title> {value[1]} </Title>
                                     <Graph>
@@ -74,12 +73,11 @@ function RankingMain(props) {
                                         })}
                                     </Graph>
                                 </One>
+                                {(index % 3 === 0) && <OneList />}
                             </RankingWrap>
                         );
-                    })}
-                    <OneList />    
+                    })}  
                     </RankingList>
-                    
                 </Official>
             </RankDetail>
         </Wrapper>
@@ -189,6 +187,8 @@ const RankingList = styled.div`
 
 // 세 개의 랭킹 틀
 const OneList = styled.div`
+    position: absolute;
+    bottom: -20px;
     display: flex;
     width: 415px;
     height: 0px;
@@ -198,6 +198,8 @@ const OneList = styled.div`
 `;
 
 const RankingWrap = styled.div`
+    position: relative;
+    margin-bottom: 20px;
     :not(:nth-child(3n)) {
         margin-right: 8px;
     }
