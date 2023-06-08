@@ -8,6 +8,7 @@ import FriendList from './FriendList';
 import GroupList from './GroupList';
 import FriendProfile from './FriendProfile';
 import GroupProfile from './GroupProfile';
+import FriendSearch from './FriendSearch';
 
 function FriendPage(props) {
     const loginId = sessionStorage.getItem("loginId");
@@ -42,7 +43,7 @@ function FriendPage(props) {
                 {{
                     1 : <FriendList handleChange={IDChange} />,
                     2 : <GroupList handleChange={GNChange} />,
-                    3 : <span>친구추가</span>
+                    3 : <FriendSearch />
                 }[menuNum]}
             </LeftContent>
             <MiddleLine />

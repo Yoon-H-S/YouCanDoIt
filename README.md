@@ -1,9 +1,3 @@
-### "챌린지페이지 ver 0.2" 변경사항
-1. 캘린더 사용을 위해 react-datepicker 패키지 설치
-2. 챌린지 랭킹 상세페이지 작성
-3. DatePicker의 스타일을 정의하는 DatePickerStyle.jsx 작성
-
-
 #### 디렉토리 설명
 - assets : 이미지 파일들이 저장되는 디렉토리
 - component : 재사용 가능성이 있는 컴포넌트들이 저장되는 디렉토리
