@@ -234,12 +234,11 @@ const Wrapper = styled.div`
 // 그룹 생성하기 타이틀 영역
 const Title = styled.div`
 	position: relative;
-	top: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	height: 50px;
+	height: 65px;
 	z-index: 2;
 
 	& > span {
@@ -264,7 +263,7 @@ const FormArea = styled.form`
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
-	height: 372px;
+	height: 357px;
 	padding: 10px 20px;
 	z-index: 1;
 	overflow-y: scroll;
