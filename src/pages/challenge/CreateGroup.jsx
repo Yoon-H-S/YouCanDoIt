@@ -113,11 +113,13 @@ function CreateGroup(props) {
                     formData
                 ).then(function (response) {
                     alert("그룹생성이 완료되었습니다.");
+					window.location.reload();
                 }).catch(
                     (error) => console.log(error)
                 );
             } else {
                 alert("그룹생성이 완료되었습니다.");
+				window.location.reload();
             }
         }).catch(
             (error) => console.log(error)
