@@ -17,6 +17,9 @@ function Page(props) {
             if(response.data === "") {
                 sessionStorage.clear();
                 navigate("/login");
+            } else if(sessionStorage.getItem("loginName") === "") {
+                sessionStorage.setItem("loginName", response.data["nickname"]);
+                sessionStorage.setItem("loginId", response.data["memId"]);
             }
         }).catch(
             (error) => console.log(error)
