@@ -58,7 +58,7 @@ function RankingMain(props) {
                         />
                     </TwoRank>
                     <RankingList>
-                    {rankingList.length > 0 && rankingList.map((value, index) => {
+                    {rankingList.length > 0 ? rankingList.map((value, index) => {
                         return(
                             <RankingWrap key={index}>
                                 <One id={value[0]} onClick={props.handleChange}>
@@ -76,7 +76,9 @@ function RankingMain(props) {
                                 {(index % 3 === 0) && <OneList />}
                             </RankingWrap>
                         );
-                    })}  
+                    }) : 
+                        <None>진행중인 갓생 챌린지가 없습니다.</None>
+                    }  
                     </RankingList>
                 </Official>
             </RankDetail>
@@ -175,6 +177,18 @@ const TwoRank = styled.div`
         margin-right:5px;
         cursor: pointer;
     }
+`;
+
+// 진행중인 챌린지가 없을 때
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 200px;
+    font-size: 15px;
+    color: #A4A4A4;
 `;
 
 // 랭킹 리스트

@@ -46,7 +46,7 @@ function FriendList(props) {
             </MyProfile>
             <FriendCount> 모든 친구 - {list.length}명 </FriendCount>
             <List>
-                {list.length > 0 && list.map((value, index) => {
+                {list.length > 0 ? list.map((value, index) => {
                     return(
                         <Friend key={index} id={value["memId"]} onClick={props.handleChange}>
                             <FriendProfilePicture>
@@ -55,7 +55,9 @@ function FriendList(props) {
                             <span> {value["nickname"]} </span>
                         </Friend>
                     );
-                })}
+                }) : 
+                    <None>아직 친구가 없습니다. 친구를 추가해주세요.</None>
+                }
             </List>
         </Wrapper>
     );
@@ -160,6 +162,17 @@ const Friend = styled.div`
         font-size: 14px;
         margin-left: 22px;
     }
+`;
+
+// 친구가 없을 때
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    color: #A4A4A4;
 `;
 
 // 내 프로필 사진 및 친구 프로필 사진

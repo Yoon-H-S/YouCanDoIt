@@ -57,7 +57,7 @@ function GroupList(props) {
             </Search>
             <GroupCount>모든 그룹 - {list.length}</GroupCount>
             <List>
-                {list.length > 0 && list.map((value, index) => {
+                {list.length > 0 ? list.map((value, index) => {
                     return(
                         <Group key={index} id={value["groupNumber"]} onClick={props.handleChange}>
                             <ProfilePicture headCount={value["groupHeadcount"]}>
@@ -68,7 +68,9 @@ function GroupList(props) {
                             <span>{value["groupName"]}</span>
                         </Group>
                     );
-                })}
+                }) : 
+                    <None>아직 속한 그룹이 없습니다.<br />그룹을 생성하거나 그룹초대를 수락해주세요.</None>
+                }
             </List>
         </Wrapper>
     );
@@ -151,6 +153,18 @@ const Group = styled.div`
         font-weight: 500;
         margin-left: 22px;
     }
+`;
+
+// 그룹이 없을 때
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    color: #A4A4A4;
 `;
 
 // 그룹의 프로필사진

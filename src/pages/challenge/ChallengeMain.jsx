@@ -32,7 +32,7 @@ function ChallengeMain(props) {
                 <BookChallenge>
                     <span> 예약된 챌린지 </span>
                     <BookList>
-                        {bookChallengeList.length > 0 && bookChallengeList.map((value, index) => {
+                        {bookChallengeList.length > 0 ? bookChallengeList.map((value, index) => {
                             return(
                                 <Book key={index} x={bookX}>
                                     <Bimage>
@@ -48,7 +48,9 @@ function ChallengeMain(props) {
                                     </BookDetail>
                                 </Book>
                             );
-                        })}
+                        }) : 
+                            <None>예약된 챌린지가 없습니다.</None>
+                        }
                     </BookList>
                     {(bookX === 0) ?
                         <Blank /> :
@@ -230,6 +232,18 @@ const GroupName = styled.div`
 // 화살표 대신 여백
 const Blank = styled.div`
     width: 15px;
+`;
+
+// 예약된 챌린지가 없을 때
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    color: #A4A4A4;
 `;
 
 // 갓생 챌린지
