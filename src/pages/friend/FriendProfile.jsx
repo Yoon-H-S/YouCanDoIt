@@ -30,14 +30,15 @@ function GroupProfile(props) {
                         <span> 같이 있는 그룹 </span>
                     </AllGroupList>
                     <GroupList>
-                        {friendProfile[1].length > 0 && friendProfile[1].map((value, index) => {
+                        {friendProfile[1].length > 0 ? friendProfile[1].map((value, index) => {
                             return(
                                 <Group key={index} id={value[0]} onClick={props.handleChange}>
                                     <span> • {value[1]} </span>
                                 </Group>
                             );
-                        })}
-                        
+                        }) : 
+                            <None>친구와 같이 있는 그룹이 없습니다.<br />그룹을 생성해 친구를 초대하세요!</None>
+                        }
                     </GroupList>
                 </Groupparticipate>
             </Wrapper>
@@ -110,8 +111,8 @@ const AllGroupList = styled.div`
 // 참여 그룹 리스트
 const GroupList = styled.div`
     width: 100%;
-    height: 158px;
-    margin: 13px 26px;
+    height: 176px;
+    padding: 13px 26px;
     overflow-y: scroll;
 
     ::-webkit-scrollbar {
@@ -142,4 +143,16 @@ const Group = styled.div`
     :not(:last-child) {
         margin-bottom: 8px;
     }
+`;
+
+// 친구가 같이 속한 그룹이 없을 때
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-size: 13px;
+    color: #A4A4A4;
 `;
