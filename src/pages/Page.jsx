@@ -16,7 +16,7 @@ function Page(props) {
         .then(function (response) {
             if(response.data === "") {
                 sessionStorage.clear();
-                navigate("/login");
+                navigate("/login", {replace: true}); // history를 남기지 않는다.
             } else if(sessionStorage.getItem("loginName") === "") {
                 sessionStorage.setItem("loginName", response.data["nickname"]);
                 sessionStorage.setItem("loginId", response.data["memId"]);

@@ -12,7 +12,7 @@ function LoginPage(props) {
             if(!(response.data === "")) {
                 sessionStorage.setItem("loginName", response.data["nickname"]);
                 sessionStorage.setItem("loginId", response.data["memId"]);
-                navigate("/");
+                navigate("/", {replace: true});
             }  
         }).catch(
             (error) => console.log(error)
