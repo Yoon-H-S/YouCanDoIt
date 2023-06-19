@@ -226,13 +226,15 @@ const MyRankInfo = styled.div`
 
     & > div {
         width: max-content;
+        max-width: 75px;
+        overflow: hidden;
+        white-space: nowrap; // 줄바꿈 방지
+        text-overflow: ellipsis; // 오버플로우가 발생하면 ...처리
         height: 25px;
-        padding: 0 12px;
+        padding: 5px 12px;
         background-color: #FFCB65;
         border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        text-align: center;
         font-size: 10px;
     }
 `;
