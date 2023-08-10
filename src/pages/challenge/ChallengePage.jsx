@@ -7,17 +7,19 @@ import RankingDetails from './RankingDetails';
 import CreateGroup from './CreateGroup';
 import ChallengeMain from './ChallengeMain';
 import GodChallengeDetail from './GodChallengeDetail';
+import DiyGallery from './DiyGallery';
+import DiyGalleryDetails from './DiyGalleryDetails';
 
 function ChallengePage(props) {
 	const [groupNumber, setGroupNumber] = useState(0); // 상세랭킹의 그룹넘버
-    const [isDaily, setIsDaily] = useState(true); // 일일랭킹 or 누적랭킹
+    const [rankingType, setRankingType] = useState(1); // 랭킹종류. 1: 갓생일일, 2: 갓생누적, 3: DIY, 4: 종료
 	const [isDetails, setIsDetails] = useState(false); // 상세랭킹을 띄우기 위한 정보
 	const [isGodChallenge, setIsGodChallenge] = useState(false); // 갓생챌린지 상세보기를 띄우기 위한 정보
-	const [godChallengeSubject, setGodChallengeSubject] = useState(); // 갓생챌린지 상세보기의 주제
+	const [challengeType, setChallengeType] = useState(); // 0이라면 DIY챌린지 생성, 문자열이라면 갓생챌린지 상세보기의 주제
 	const [isCreateGroup, setIsCreateGroup] = useState(false); // 그룹생성을 띄우기 위한 정보
 
-	const dailyChange = (daily) => {
-		setIsDaily(daily);
+	const typeChange = (type) => {
+		setRankingType(type);
 	}
 
     const GNChange = (e) => {
@@ -30,13 +32,18 @@ function ChallengePage(props) {
 		setIsDetails(false);
 	}
 
-	const GCSChange = (e) => {
-		setGodChallengeSubject(e.currentTarget.id);
-		setIsGodChallenge(true);
+	const ChallengeTypeChange = (e) => {
+		setChallengeType(e.currentTarget.id);
+		if(e.currentTarget.id === "0") {
+			setIsCreateGroup(true);
+			console.log("dsd");
+		} else {
+			setIsGodChallenge(true);
+		}
 	}
 
 	const godChallengeClose = () => {
-		setGodChallengeSubject(null);
+		setChallengeType(null);
 		setIsGodChallenge(false);
 	}
 
@@ -51,14 +58,16 @@ function ChallengePage(props) {
 	return (
 		<Page>
 			<LeftContent>
-				<RankingMain handleChange={GNChange} isDaily={isDaily} dailyChange={dailyChange} />
-				{isDetails && <RankingDetails groupNumber={groupNumber} isDaily={isDaily} close={detailClose} />}
+				<RankingMain handleChange={GNChange} rankingType={rankingType} typeChange={typeChange} />
+				{/* {isDetails && <RankingDetails groupNumber={groupNumber} rankingType={rankingType} close={detailClose} />} */}
+				{/* <DiyGallery /> */}
+				{/* <DiyGalleryDetails /> */}
 			</LeftContent>
 			<MiddleLine />
 			<RightContent>
-				<ChallengeMain handleChange={GCSChange} />
-				{isGodChallenge && <GodChallengeDetail handleChange={CGChange} subject={godChallengeSubject} close={godChallengeClose} />}
-				{isCreateGroup && <CreateGroup subject={godChallengeSubject} close={createGroupClose} />}
+				<ChallengeMain handleChange={ChallengeTypeChange} />
+				{isGodChallenge && <GodChallengeDetail handleChange={CGChange} challengeType={challengeType} close={godChallengeClose} />}
+				{isCreateGroup && <CreateGroup challengeType={challengeType} close={createGroupClose} />}
 			</RightContent>
 		</Page>
 	);

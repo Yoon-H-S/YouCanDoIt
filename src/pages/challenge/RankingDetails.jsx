@@ -2,24 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faImage } from '@fortawesome/free-solid-svg-icons';
 import { ko } from 'date-fns/esm/locale';
 import "react-datepicker/dist/react-datepicker.css";
 
 import * as S from 'styles/DatePickerStyle';
 
 function RankingDetails(props) {
-    const {groupNumber, isDaily, close} = props;
+    const {groupNumber, rankingType, close} = props;
     const [selectDate, setSelectDate] = useState(new Date());
     const [maxResult, setMaxResult] = useState(0);
     const [groupInfo, setGroupInfo] = useState(null);
     const [groupRanking, setGroupRanking] = useState([]);
 
     useEffect(() => {
-        if(isDaily) {
-            const year = selectDate.getFullYear();
-            const month = selectDate.getMonth() + 1;
-            const date = selectDate.getDate();
+        if(rankingType === 1) {
+            const year = selectDate.getFullYear(); // 현재 년도 구하기
+            const month = selectDate.getMonth() + 1; // 현재 달 구하기
+            const date = selectDate.getDate(); // 현재 날짜 구하기
             const sendDate = year + "-" + month + "-" + date;
             axios.get('/api/challenge-api/daily-ranking-detail', {
                 params: {
@@ -27,9 +27,9 @@ function RankingDetails(props) {
                     date: sendDate
                 }
             }).then(function (response) {
-                setGroupInfo(response.data[0]);
-                setGroupRanking(response.data[1]);
-                setMaxResult(response.data[1][0][2]);
+                setGroupInfo(response.data[0]); // 그룹정보
+                setGroupRanking(response.data[1]); // 랭킹정보
+                setMaxResult(response.data[1][0][2]); // 1등의 값
             }).catch(
                 (error) => console.log(error)
             );
@@ -39,10 +39,9 @@ function RankingDetails(props) {
                     groupNumber: groupNumber
                 }
             }).then(function (response) {
-                console.log(response.data);
-                setGroupInfo(response.data[0]);
-                setGroupRanking(response.data[1]);
-                setMaxResult(response.data[1][0][2]);
+                setGroupInfo(response.data[0]); // 그룹정보
+                setGroupRanking(response.data[1]); // 랭킹정보
+                setMaxResult(response.data[1][0][2]); // 1등의 값
             }).catch(
                 (error) => console.log(error)
             );
@@ -54,13 +53,14 @@ function RankingDetails(props) {
         return(
             <Wrapper>
                 <Title>
-                    <FontAwesomeIcon icon={faChevronLeft} onClick={close}/>
+                    <FontAwesomeIcon className='back' icon={faChevronLeft} onClick={close}/>
                     <span>{groupInfo["groupSubject"]}</span>
+                    {rankingType === 3 && <FontAwesomeIcon className='gallery' icon={faImage} />}
                 </Title>
                 <RankingArea>
                     <GroupBar>
-                        <GroupName>{groupInfo["groupName"]} 랭킹</GroupName>
-                        {isDaily && 
+                        <GroupName>{groupInfo["groupName"]}</GroupName>
+                        {rankingType === 1 && 
                             <S.Calender>
                                 <S.CustomDatePicker
                                     showIcon
@@ -146,9 +146,16 @@ const Title = styled.div`
         cursor: default;
     }
 
-    & > svg {
+    & > .back {
         position: absolute;
         left: 45px;
+        color: white;
+        cursor: pointer;
+    }
+
+    & > .gallery {
+        position: absolute;
+        right: 45px;
         color: white;
         cursor: pointer;
     }

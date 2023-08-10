@@ -4,26 +4,33 @@ import styled from 'styled-components';
 import Button from 'components/ui/Button';
 
 function RankingMain(props) {
-    const {isDaily} = props;
+    const {rankingType, typeChange} = props;
     const [rankingList, setRankingList] = useState([]);
 
     useEffect(() => {
-        if(isDaily) {
-            axios.get('/api/challenge-api/daily-ranking')
-            .then(function (response) {
-                setRankingList(response.data);
-            }).catch(
-                (error) => console.log(error)
-            );
-        } else {
-            axios.get('/api/challenge-api/godlife-ranking')
-            .then(function (response) {
-                setRankingList(response.data);
-            }).catch(
-                (error) => console.log(error)
-            );
+        switch(rankingType) {
+            case 1:
+                var url = '/api/challenge-api/daily-ranking';
+                break;
+            case 2:
+                var url = '/api/challenge-api/godlife-ranking';
+                break;
+            case 3:
+                // diy챌린지 api주소
+                // break;
+            case 4:
+                // 종료된챌린지 api주소
+                // break;
+            default:
+                var url = '/api/challenge-api/godlife-ranking'; // 임시
         }
-    },[isDaily])
+        axios.get(url)
+        .then(function (response) {
+            setRankingList(response.data);
+        }).catch(
+            (error) => console.log(error)
+        );
+    },[rankingType])
 
     return (
         <Wrapper>
@@ -31,29 +38,31 @@ function RankingMain(props) {
                 <span> 챌린지 랭킹 </span>
             </RankTitle>
             <RankType>
-                <RankMenu select={true}> 갓생 챌린지 </RankMenu>
-                <RankMenu> D.I.Y 챌린지 </RankMenu>
-                <RankMenu> 종료된 챌린지 </RankMenu>
+                <RankMenu select={(rankingType === 1 || rankingType === 2)} onClick={() => typeChange(1)}> 갓생 챌린지 </RankMenu>
+                <RankMenu select={(rankingType === 3)} onClick={() => typeChange(3)}> D.I.Y 챌린지 </RankMenu>
+                <RankMenu select={(rankingType === 4)} onClick={() => typeChange(4)}> 종료된 챌린지 </RankMenu>
             </RankType>
             <RankDetail>
-                <Official>
+                <InnerScroll>
                     <TwoRank>
+                        {(rankingType === 1 || rankingType === 2) &&
+                            <Button
+                                width="66px"
+                                height="23px"
+                                color={rankingType === 1 ? "#0077E4" : ""}
+                                title="일일 랭킹"
+                                onClick = {() => {
+                                    typeChange(1);
+                                }}
+                            />
+                        }
                         <Button
                             width="66px"
                             height="23px"
-                            color={isDaily ? "#0077E4" : ""}
-                            title="일일 랭킹"
-                            onClick = {() => {
-                                props.dailyChange(true);
-                            }}
-                        />
-                        <Button
-                            width="66px"
-                            height="23px"
-                            color={!isDaily ? "#0077E4" : ""}
+                            color={!(rankingType === 1) ? "#0077E4" : ""}
                             title="누적 랭킹"
                             onClick = {() => {
-                                props.dailyChange(false);
+                                typeChange(2);
                             }}
                         />
                     </TwoRank>
@@ -77,10 +86,10 @@ function RankingMain(props) {
                             </RankingWrap>
                         );
                     }) : 
-                        <None>진행중인 갓생 챌린지가 없습니다.</None>
+                        <None>진행중인 챌린지가 없습니다.</None>
                     }  
                     </RankingList>
-                </Official>
+                </InnerScroll>
             </RankDetail>
         </Wrapper>
     );
@@ -156,8 +165,8 @@ const RankDetail = styled.div`
     border-radius: 0 0 10px 10px;
 `;
 
-// 갓생 챌린지 랭킹 틀
-const Official = styled.div`
+// 챌린지 랭킹 틀
+const InnerScroll = styled.div`
     width: 468px;
     height: 262px;
     overflow-y: scroll;
@@ -167,7 +176,7 @@ const Official = styled.div`
     }
 `;
 
-// 두 개의 갓생 챌린지 랭킹 버튼 틀
+// 챌린지 랭킹 버튼 틀
 const TwoRank = styled.div`
     display:flex;
     margin: 10px 25.5px 10px 0;

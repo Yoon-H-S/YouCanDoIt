@@ -36,20 +36,22 @@ function CreateGroup(props) {
         }).catch(
             (error) => console.log(error)
         );
-		axios.get('/api/challenge-api/godlife-challenge-detail', {
-			params: {
-				subject:props.subject
-			}
-		}).then(function (response) {
-			setValues({
-				...values,
-				["groupSubject"]: response.data["challengeSubject"],
-				["groupContents"]: response.data["challengeContents"],
-				["category"]: response.data["challengeCategory"],
-			});
-        }).catch(
-            (error) => console.log(error)
-        );
+		if(props.challengeType !== "0") {
+			axios.get('/api/challenge-api/godlife-challenge-detail', {
+				params: {
+					subject:props.challengeType
+				}
+			}).then(function (response) {
+				setValues({
+					...values,
+					["groupSubject"]: response.data["challengeSubject"],
+					["groupContents"]: response.data["challengeContents"],
+					["category"]: response.data["challengeCategory"],
+				});
+			}).catch(
+				(error) => console.log(error)
+			);
+		}
     },[]);
 
 	// input값이 변경되면 state에 저장
@@ -81,7 +83,7 @@ function CreateGroup(props) {
 		}
 	}
 
-	// 가입하기(스프링부트에 post값 전달)
+	// 그룹생성
     const Create = () => {
 		console.log(withFriends);
         axios.post('/api/challenge-api/challenge-create', {
@@ -129,7 +131,7 @@ function CreateGroup(props) {
 		<Wrapper>
 			<Title>
 				<FontAwesomeIcon icon={faChevronLeft} onClick={props.close} />
-				<span>갓생 챌린지 - 그룹 생성하기</span>
+				<span>{props.challengeType !== "0" ? "갓생" : "D.I.Y"} 챌린지 - 그룹 생성하기</span>
 			</Title>
 			<FormArea>
 				<Form>
@@ -165,15 +167,17 @@ function CreateGroup(props) {
 								}}
 							/>
 						</InputRow>
-						<InputRow>
-							<label>카테고리:</label>
-							<Button
-								title={category}
-								width="70px"
-								height="24px"
-								type="button"
-							/>
-						</InputRow>
+						{props.challengeType !== "0" && 
+							<InputRow>
+								<label>카테고리:</label>
+								<Button
+									title={category}
+									width="70px"
+									height="24px"
+									type="button"
+								/>
+							</InputRow>
+						}
 						<InputRow>
 							<label>기간 설정:</label>
 							<S.Calender>
@@ -367,7 +371,7 @@ const Form = styled.div`
 	flex-direction: column;
 	align-items: center;
 	width: 465px;
-	height: 400px;
+	/* height: 400px; */
 	padding: 0 20px 15px 20px;
 	overflow: hidden;
 	border: 1px solid #b1b1b1;
@@ -406,7 +410,7 @@ const Inputs = styled.div`
 	flex-direction: column;
 	align-items: center;
 	border-top: 1px solid #b1b1b1;
-	padding: 13px 0;
+	padding: 13px 0 0 0;
 `;
 
 const InputRow = styled.div`
@@ -442,6 +446,10 @@ const InputRow = styled.div`
 
 	& > .tilde {
 		margin: 0 7px;
+	}
+
+	:last-child {
+		margin-bottom: 0px;
 	}
 `;
 

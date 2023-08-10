@@ -85,9 +85,9 @@ function ChallengeMain(props) {
                 <UnofficialChallenge>
                     <Unofficial>
                         <span> D.I.Y 챌린지 생성하기 </span>
-                        <FontAwesomeIcon icon={faPlus} />
+                        <FontAwesomeIcon icon={faPlus} id={0} onClick={props.handleChange} />
                     </Unofficial>
-                    <Unoimage>
+                    <Unoimage id={0} onClick={props.handleChange}>
                         <img src={Diy} alt="" />
                         <Filter />
                         <span>새로운 D.I.Y 챌린지를 생성해주세요.</span>
