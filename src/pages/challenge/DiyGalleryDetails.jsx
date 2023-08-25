@@ -1,75 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import thumbsDown from 'assets/thumbs-down.png';
-import im from 'assets/testImg/calender.png';
 
 function DiyGalleryDetails(props) {
+    const {imageInfo, opposite} = props;
 
     return(
-        <Wrapper>
-            <Title>
-                <FontAwesomeIcon className='back' icon={faChevronLeft}/>
-                <span>손나은</span>
-            </Title>
-            <Image opposite={true}>
-                <img src={im} />
+        <>
+            <SelectImage opposite={imageInfo[1]}>
+                <img src={imageInfo[0]["certifyImage"]} />
                 <div className='thumbsDown'>
-                    <div><img src={thumbsDown} /></div>
-                    <span>반대합니다. (0)</span>
+                    <div onClick={opposite}><img src={thumbsDown} /></div>
+                    <span>{imageInfo[1] ? "반대하였습니다." : "반대합니다."} (<span>{imageInfo[0]["oppositeCount"]}</span>)</span>
                 </div>
-                <span className='date'>2023 - 03 - 27</span>
-            </Image>
-        </Wrapper>
+                <span className='date'>{imageInfo[0]["certifyDate"]}</span>
+            </SelectImage>
+        </>
     );
 }
 
 export default DiyGalleryDetails;
 
-const Wrapper = styled.div`
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: #FFF9BF;
-`;
-
-const Title = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 50px;
-    background-color: #DCA600;
-    z-index: 2;
-
-    & > span {
-        font-size: 16px;
-        font-weight: 500;
-        color: white;
-        cursor: default;
-    }
-
-    & > .back {
-        position: absolute;
-        left: 45px;
-        color: white;
-        cursor: pointer;
-    }
-`;
-
-const Image = styled.div`
+const SelectImage = styled.div`
     position: relative;
     width: 465.5px;
     height: 299px;
-    margin-top: 40px;
+    margin-top: 12px;
 
     & > img {
         width: 100%;
@@ -90,9 +48,9 @@ const Image = styled.div`
             justify-content: center;
             width: 20px;
             height: 20px;
-            border: 1px solid #B1B1B1;
             background-color: ${(props) => (props.opposite ? 'black' : 'white')};
             border-radius: 20px;
+            cursor: ${(props) => (props.opposite ? 'default' : 'pointer')};
 
             & > img {
                 width: 50%;
@@ -103,6 +61,10 @@ const Image = styled.div`
         & > span {
             margin-left: 7px;
             font-size: 10px;
+
+            & > span {
+                color: ${(props) => (props.opposite ? 'red' : 'black')};
+            }
         }
     }
 

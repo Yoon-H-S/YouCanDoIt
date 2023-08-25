@@ -4,26 +4,11 @@ import styled from 'styled-components';
 import Button from 'components/ui/Button';
 
 function RankingMain(props) {
-    const {rankingType, typeChange} = props;
+    const {rankingType, typeChange, handleChange} = props;
     const [rankingList, setRankingList] = useState([]);
 
     useEffect(() => {
-        switch(rankingType) {
-            case 1:
-                var url = '/api/challenge-api/daily-ranking';
-                break;
-            case 2:
-                var url = '/api/challenge-api/godlife-ranking';
-                break;
-            case 3:
-                // diy챌린지 api주소
-                // break;
-            case 4:
-                // 종료된챌린지 api주소
-                // break;
-            default:
-                var url = '/api/challenge-api/godlife-ranking'; // 임시
-        }
+        var url = '/api/challenge-api/challenge-ranking/' + rankingType;
         axios.get(url)
         .then(function (response) {
             setRankingList(response.data);
@@ -70,7 +55,7 @@ function RankingMain(props) {
                     {rankingList.length > 0 ? rankingList.map((value, index) => {
                         return(
                             <RankingWrap key={index}>
-                                <One id={value[0]} onClick={props.handleChange}>
+                                <One onClick={() => handleChange(value[0])}>
                                     <Title> {value[1]} </Title>
                                     <Graph>
                                         {value[2].map((result, index) => {

@@ -7,6 +7,7 @@ import { faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-s
 import Diy from 'assets/diy.jpg';
 
 function ChallengeMain(props) {
+    const {handleChange} = props;
     const [bookX, setBookX] = useState(0);
     const [bookChallengeList, setBookChallengeList] = useState([]);
     const [godChallengeList, setGodChallengeList] = useState([]);
@@ -66,7 +67,7 @@ function ChallengeMain(props) {
                     <OfficialList>
                         {godChallengeList.length > 0 && godChallengeList.map((value, index) => {
                             return(
-                                <Oneofficial key={index} id={value["challengeSubject"]} onClick={props.handleChange}>
+                                <Oneofficial key={index} onClick={() => handleChange(value["challengeSubject"])}>
                                     <Oimage>
                                         <img src={value["challengeImage"]} alt="" />
                                         <Filter />
@@ -85,9 +86,9 @@ function ChallengeMain(props) {
                 <UnofficialChallenge>
                     <Unofficial>
                         <span> D.I.Y 챌린지 생성하기 </span>
-                        <FontAwesomeIcon icon={faPlus} id={0} onClick={props.handleChange} />
+                        <FontAwesomeIcon icon={faPlus} onClick={() => handleChange(null)} />
                     </Unofficial>
-                    <Unoimage id={0} onClick={props.handleChange}>
+                    <Unoimage onClick={() => handleChange(null)}>
                         <img src={Diy} alt="" />
                         <Filter />
                         <span>새로운 D.I.Y 챌린지를 생성해주세요.</span>
@@ -369,6 +370,10 @@ const Unofficial = styled.div`
         font-weight: bold;
         border-bottom: 3px solid #DCA600;
     }
+
+    & > svg {
+        cursor: pointer;
+    }
 `;
 
 // D.I.Y 챌린지 생성하기 이미지
@@ -382,6 +387,7 @@ const Unoimage = styled.div`
     border: 1px solid #B1B1B1;
     border-radius: 5px;
     margin-top: 15px;
+    cursor: pointer;
 
     & > img {
         position: absolute;
