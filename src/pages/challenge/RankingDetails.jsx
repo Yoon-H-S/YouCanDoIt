@@ -2,114 +2,178 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { ko } from 'date-fns/esm/locale';
+import { faChevronLeft, faImage } from '@fortawesome/free-solid-svg-icons';
+
 import "react-datepicker/dist/react-datepicker.css";
 
-import * as S from 'styles/DatePickerStyle';
+import SelectedCalender from './SelectedCalender';
+import DiyGalleryList from './DiyGalleryList';
+import DiyGalleryDetails from './DiyGalleryDetails';
 
 function RankingDetails(props) {
-    const {groupNumber, isDaily, close} = props;
-    const [selectDate, setSelectDate] = useState(new Date());
+    const {groupNumber, rankingType, close} = props;
+    const [detailsType, setDetailsType] = useState(1); // 1: 랭킹상세, 2: 그룹 갤러리, 3: 개인 갤러리
+
+    // 랭킹 공통부분
     const [maxResult, setMaxResult] = useState(0);
     const [groupInfo, setGroupInfo] = useState(null);
     const [groupRanking, setGroupRanking] = useState([]);
 
+    // 갓생챌린지 관련
+    const [selectDate, setSelectDate] = useState(new Date()); // 갓생챌린지 일일랭킹 날짜선택
+
+    // 갤러리 관련
+    const [galleryInfo, setGalleryInfo] = useState([]); // 갤러리의 정보
+	const [galleryMem, setGalleryMem] = useState({
+        "memId": "",
+        "nickname": "",
+    }); // Diy 갤러리의 주인(없다면 null)
+    const [isSelect, setIsSelect] = useState(false); // 갤러리 상세보기 여부
+    const [imageIndex, setImageIndex] = useState(); // 상세보기 사진의 index
+
+    const {memId, nickname} = galleryMem;
+
     useEffect(() => {
-        if(isDaily) {
-            const year = selectDate.getFullYear();
-            const month = selectDate.getMonth() + 1;
-            const date = selectDate.getDate();
-            const sendDate = year + "-" + month + "-" + date;
-            axios.get('/api/challenge-api/daily-ranking-detail', {
-                params: {
-                    groupNumber: groupNumber,
-                    date: sendDate
-                }
-            }).then(function (response) {
-                setGroupInfo(response.data[0]);
-                setGroupRanking(response.data[1]);
-                setMaxResult(response.data[1][0][2]);
-            }).catch(
-                (error) => console.log(error)
-            );
+        var sendDate = null;
+        if(rankingType === 1) {
+            const year = selectDate.getFullYear(); // 현재 년도 구하기
+            const month = selectDate.getMonth() + 1; // 현재 달 구하기
+            const date = selectDate.getDate(); // 현재 날짜 구하기
+            sendDate = year + "-" + month + "-" + date;
+        }
+        axios.get('/api/challenge-api/ranking-detail/' + rankingType, {
+            params: {
+                groupNumber: groupNumber,
+                date: sendDate
+            }
+        }).then(function (response) {
+            setGroupInfo(response.data[0]); // 그룹정보
+            setGroupRanking(response.data[1]); // 랭킹정보
+            setMaxResult(response.data[1][0][2]); // 1등의 값
+        }).catch(
+            (error) => console.log(error)
+        );
+    },[groupNumber, selectDate]);
+
+    /** 뒤로가기 동작 변경 */
+    const closeChange = () => {
+        if(detailsType === 1) { // 상세랭킹 화면이라면
+            close();
         } else {
-            axios.get('/api/challenge-api/godlife-ranking-detail', {
-                params: {
-                    groupNumber: groupNumber
-                }
+            if(!isSelect) // 갤러리 화면이라면
+                setDetailsType(1);
+            else // 갤러리 상세 화면이라면
+                setIsSelect(false);
+        }
+    }
+
+    /** 갓생챌린지 일일랭킹 날짜 변경 */
+    const dateChange = (date) => {
+        setSelectDate(date);
+    }
+
+    /** DIY 챌린지 갤러리 열기 */
+	const detailsTypeChange = (memId, nickname) => {
+        axios.get('/api/challenge-api/diy-gallery', {
+            params: {
+                groupNumber: groupInfo["groupNumber"],
+                memId: memId
+            }
+        }).then(function (response) {
+            setGalleryInfo(response.data);
+            if(!isSelect) {
+                setDetailsType(memId === null ? 2 : 3);
+                setGalleryMem({
+                    ...galleryMem,
+                    "memId": memId,
+                    "nickname": nickname,
+                });
+            }
+        }).catch(
+            (error) => console.log(error)
+        );
+	}
+
+    /** 갤러리 상세 열기 */
+    const imageSelect = (index) => {
+        setImageIndex(index);
+        setIsSelect(true);
+    }
+
+    /** 인증사진 반대 */
+    const opposite = () => {
+        if(!galleryInfo[imageIndex][1]) {
+            axios.post('/api/challenge-api/diy-opposite', {
+                "certifyDate": galleryInfo[imageIndex][0]["certifyDate"],
+                "groupNumber": galleryInfo[imageIndex][0]["groupNumber"],
+                "memId": galleryInfo[imageIndex][0]["memId"]
             }).then(function (response) {
-                console.log(response.data);
-                setGroupInfo(response.data[0]);
-                setGroupRanking(response.data[1]);
-                setMaxResult(response.data[1][0][2]);
+                if(response.data > 7) {
+                    alert("반대기간이 지났습니다.");
+                } else if(response.data > 0) {
+                    alert("반대하였습니다.");
+                    detailsTypeChange(memId, nickname);
+                }
             }).catch(
                 (error) => console.log(error)
             );
         }
-        
-    },[groupNumber, selectDate]);
+    }
 
     if(groupInfo !== null) {
         return(
             <Wrapper>
                 <Title>
-                    <FontAwesomeIcon icon={faChevronLeft} onClick={close}/>
-                    <span>{groupInfo["groupSubject"]}</span>
+                    <FontAwesomeIcon className='back' icon={faChevronLeft} onClick={closeChange}/>
+                    {{
+                        1 : <>
+                                <span>{groupInfo["groupSubject"]}</span>
+                                {groupInfo["groupClass"] === "2" && <FontAwesomeIcon className='gallery' icon={faImage} onClick={() => detailsTypeChange(null, null)} />}
+                            </>,
+                        2 : <span>갤러리 <span>(최신순)</span></span>,
+                        3 : <span>{nickname}</span>
+                    }[detailsType]}
                 </Title>
-                <RankingArea>
-                    <GroupBar>
-                        <GroupName>{groupInfo["groupName"]} 랭킹</GroupName>
-                        {isDaily && 
-                            <S.Calender>
-                                <S.CustomDatePicker
-                                    showIcon
-                                    showPopperArrow={false}
-                                    fixedHeight
-                                    dateFormat="yyyy - MM - dd"
-                                    minDate={new Date(groupInfo["groupStartdate"])}
-                                    maxDate={new Date()}
-                                    locale={ko}
-                                    closeOnScroll={true}
-                                    selected={selectDate}
-                                    onChange={(date) => setSelectDate(date)}
-                                    renderCustomHeader={({
-                                        date,
-                                        decreaseMonth,
-                                        increaseMonth,
-                                        prevMonthButtonDisabled,
-                                        nextMonthButtonDisabled
-                                    }) => (
-                                        <S.CustomHeader>
-                                            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                                                {"<"}
-                                            </button>
-                                            <div>
-                                                {date.getFullYear()}년 {date.getMonth()+1}월
-                                            </div>
-                                            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                                                {">"}
-                                            </button>
-                                        </S.CustomHeader>
-                                    )}
-                                />
-                            </S.Calender>
+                <InfoArea>
+                    {!isSelect ? 
+                        <>
+                            <GroupBar>
+                                <GroupName>{groupInfo["groupName"]}</GroupName>
+                                {rankingType === 1 && 
+                                    <SelectedCalender 
+                                        startDate={new Date(groupInfo["groupStartdate"])} 
+                                        selectDate={selectDate} 
+                                        dateChange={dateChange} 
+                                        type={1} 
+                                    />
+                                }
+                            </GroupBar>
+                            {{
+                                1 : <RankingList>
+                                        {groupRanking.length > 0 && groupRanking.map((value, index) => {
+                                            return(
+                                                <Rank 
+                                                    key={index} 
+                                                    result={value[2]/maxResult} 
+                                                    rank={value[3]} 
+                                                    onClick={() => groupInfo["groupClass"] === "2" && detailsTypeChange(value[4], value[0])}
+                                                >
+                                                    <div>
+                                                        <img src={value[1]} alt="" />
+                                                        <span>{value[0]}</span>
+                                                    </div>
+                                                    <span>{value[2]}</span>
+                                                </Rank>
+                                            );
+                                        })}
+                                    </RankingList>,
+                                2 : <DiyGalleryList galleryInfo={galleryInfo} imageSelect={imageSelect} />
+                            }[detailsType === 3 ? 2 : detailsType]}
+                        </>
+                        : 
+                            <DiyGalleryDetails imageInfo={galleryInfo[imageIndex]} opposite={opposite} />
                         }
-                    </GroupBar>
-                    <RankingList>
-                        {groupRanking.length > 0 && groupRanking.map((value, index) => {
-                            return(
-                                <Rank key={index} result={value[2]/maxResult} rank={value[3]}>
-                                    <div>
-                                        <img src={value[1]} alt="" />
-                                        <span>{value[0]}</span>
-                                    </div>
-                                    <span>{value[2]}</span>
-                                </Rank>
-                            );
-                        })}
-                    </RankingList>
-                </RankingArea>
+                </InfoArea>
             </Wrapper>
         );
     }
@@ -144,18 +208,30 @@ const Title = styled.div`
         font-weight: 500;
         color: white;
         cursor: default;
+
+        & > span {
+            font-size: 10px;
+            font-weight: 300;
+        }
     }
 
-    & > svg {
+    & > .back {
         position: absolute;
         left: 45px;
+        color: white;
+        cursor: pointer;
+    }
+
+    & > .gallery {
+        position: absolute;
+        right: 45px;
         color: white;
         cursor: pointer;
     }
 `;
 
 // 본문 영역. 스크롤되는 영역
-const RankingArea = styled.div`
+const InfoArea = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;

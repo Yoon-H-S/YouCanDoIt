@@ -13,7 +13,7 @@ function GodChallengeDetail(props) {
 	useEffect(() => {
 		axios.get('/api/challenge-api/godlife-challenge-detail', {
 			params: {
-				subject:props.subject
+				subject:props.challengeType
 			}
 		}).then(function (response) {
 			setGodChallenge(response.data);

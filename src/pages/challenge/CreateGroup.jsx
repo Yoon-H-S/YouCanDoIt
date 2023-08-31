@@ -5,9 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { ko } from 'date-fns/esm/locale';
-import * as S from 'styles/DatePickerStyle';
-
+import SelectedCalender from './SelectedCalender';
 import Button from 'components/ui/Button';
 
 function CreateGroup(props) {
@@ -23,10 +21,11 @@ function CreateGroup(props) {
         groupName: "", // 그룹이름
         groupSubject: "", // 그룹주제
         groupContents: "", // 그룹내용
+		groupType: "", // 그룹구분(갓생, diy)
 		category: "" // 카테고리
     });
     // 비구조화 할당
-    const {groupName, groupSubject, groupContents, category} = values;
+    const {groupName, groupSubject, groupContents, groupType, category} = values;
 
 	// 갓생챌린지 정보, 친구목록 불러오기
 	useEffect(() => {
@@ -36,20 +35,28 @@ function CreateGroup(props) {
         }).catch(
             (error) => console.log(error)
         );
-		axios.get('/api/challenge-api/godlife-challenge-detail', {
-			params: {
-				subject:props.subject
-			}
-		}).then(function (response) {
+		if(props.challengeType !== null) {
+			axios.get('/api/challenge-api/godlife-challenge-detail', {
+				params: {
+					subject:props.challengeType
+				}
+			}).then(function (response) {
+				setValues({
+					...values,
+					["groupSubject"]: response.data["challengeSubject"],
+					["groupContents"]: response.data["challengeContents"],
+					["groupType"]: "1",
+					["category"]: response.data["challengeCategory"],
+				});
+			}).catch(
+				(error) => console.log(error)
+			);
+		} else {
 			setValues({
 				...values,
-				["groupSubject"]: response.data["challengeSubject"],
-				["groupContents"]: response.data["challengeContents"],
-				["category"]: response.data["challengeCategory"],
+				["groupType"]: "2",
 			});
-        }).catch(
-            (error) => console.log(error)
-        );
+		}
     },[]);
 
 	// input값이 변경되면 state에 저장
@@ -81,7 +88,19 @@ function CreateGroup(props) {
 		}
 	}
 
-	// 가입하기(스프링부트에 post값 전달)
+	/** 시작날짜 설정 */
+	const startDateChange = (date) => {
+		setStartDate(date);
+		if(date > endDate)
+			setEndDate(date);
+	}
+
+	/** 종료날짜 설정 */
+	const endDateChange = (date) => {
+		setEndDate(date);
+	}
+
+	// 그룹생성
     const Create = () => {
 		console.log(withFriends);
         axios.post('/api/challenge-api/challenge-create', {
@@ -91,7 +110,7 @@ function CreateGroup(props) {
             "groupContents":groupContents, 
             "groupStartdate":startDate, 
             "groupEnddate":endDate,
-            "groupClass":"1"
+            "groupClass":groupType
 		}, {
 			params : {
                 members:withFriends
@@ -129,7 +148,7 @@ function CreateGroup(props) {
 		<Wrapper>
 			<Title>
 				<FontAwesomeIcon icon={faChevronLeft} onClick={props.close} />
-				<span>갓생 챌린지 - 그룹 생성하기</span>
+				<span>{groupType === 1 ? "갓생" : "D.I.Y"} 챌린지 - 그룹 생성하기</span>
 			</Title>
 			<FormArea>
 				<Form>
@@ -164,134 +183,64 @@ function CreateGroup(props) {
 									setVisible(!visible);
 								}}
 							/>
+							{visible && (
+								<CheckboxGroup>
+									{friends.length > 0 && friends.map((value, index) => {
+										return(
+											<Checkbox key={index} >
+												<input 
+													type="checkbox" 
+													value={value["memId"]} 
+													onChange={checkChange} 
+													checked={withFriends.includes(value["memId"])} 
+												/>
+												<label>{value["nickname"]}</label>
+											</Checkbox>
+										);
+									})}
+									<Button
+										title="확인"
+										width="39px"
+										height="20px"
+										color="#0077e4"
+										type="button"
+										onClick={() => {
+											setVisible(!visible);
+										}}
+									/>
+								</CheckboxGroup>
+							)}
 						</InputRow>
-						<InputRow>
-							<label>카테고리:</label>
-							<Button
-								title={category}
-								width="70px"
-								height="24px"
-								type="button"
-							/>
-						</InputRow>
+						{groupType === 1 && 
+							<InputRow>
+								<label>카테고리:</label>
+								<Button
+									title={category}
+									width="70px"
+									height="24px"
+									type="button"
+								/>
+							</InputRow>
+						}
 						<InputRow>
 							<label>기간 설정:</label>
-							<S.Calender>
-								<S.CustomDatePicker
-									showIcon
-									showPopperArrow={false}
-									fixedHeight
-									dateFormat="yyyy - MM - dd"
-									minDate={today}
-									locale={ko}
-									closeOnScroll={true}
-									selected={startDate}
-									onChange={(date) => (
-										date >= endDate 
-										? (setStartDate(date), setEndDate(date))
-										: setStartDate(date)
-									)}
-									selectsStart
-									startDate={startDate}
-									endDate={endDate}
-									renderCustomHeader={({
-										date,
-										decreaseMonth,
-										increaseMonth,
-										prevMonthButtonDisabled,
-										nextMonthButtonDisabled,
-									}) => (
-										<S.CustomHeader>
-											<button
-												onClick={decreaseMonth}
-												disabled={prevMonthButtonDisabled}
-												type="button">
-												{'<'}
-											</button>
-											<div>
-												{date.getFullYear()}년 {date.getMonth() + 1}월
-											</div>
-											<button
-												onClick={increaseMonth}
-												disabled={nextMonthButtonDisabled}
-												type="button">
-												{'>'}
-											</button>
-										</S.CustomHeader>
-									)}
-								/>
-							</S.Calender>
+							<SelectedCalender 
+								startDate={startDate} 
+								endDate={endDate}
+								selectDate={startDate} 
+								dateChange={startDateChange} 
+								type={2} 
+							/>
 							<span className="tilde">~</span>
-							<S.Calender>
-								<S.CustomDatePicker
-									showIcon
-									showPopperArrow={false}
-									fixedHeight
-									dateFormat="yyyy - MM - dd"
-									minDate={startDate}
-									locale={ko}
-									closeOnScroll={true}
-									selected={endDate}
-									onChange={(date) => setEndDate(date)}
-									selectsEnd
-									startDate={startDate}
-									endDate={endDate}
-									renderCustomHeader={({
-										date,
-										decreaseMonth,
-										increaseMonth,
-										prevMonthButtonDisabled,
-										nextMonthButtonDisabled,
-									}) => (
-										<S.CustomHeader>
-											<button
-												onClick={decreaseMonth}
-												disabled={prevMonthButtonDisabled}
-												type="button">
-												{'<'}
-											</button>
-											<div>
-												{date.getFullYear()}년 {date.getMonth() + 1}월
-											</div>
-											<button
-												onClick={increaseMonth}
-												disabled={nextMonthButtonDisabled}
-												type="button">
-												{'>'}
-											</button>
-										</S.CustomHeader>
-									)}
-								/>
-							</S.Calender>
+							<SelectedCalender 
+								startDate={startDate} 
+								endDate={endDate}
+								selectDate={endDate} 
+								dateChange={endDateChange} 
+								type={3} 
+							/>
 						</InputRow>
 					</Inputs>
-					{visible && (
-						<CheckboxGroup>
-							{friends.length > 0 && friends.map((value, index) => {
-								return(
-									<Checkbox key={index} >
-										<input 
-											type="checkbox" 
-											value={value["memId"]} 
-											onChange={checkChange} 
-											checked={withFriends.includes(value["memId"])} 
-										/>
-										<label>{value["nickname"]}</label>
-									</Checkbox>
-								);
-							})}
-							<Button
-								title="확인"
-								width="39px"
-								height="20px"
-								color="#0077e4"
-								type="button"
-								onClick={() => {
-									setVisible(!visible);
-								}}
-							/>
-						</CheckboxGroup>
-					)}
 				</Form>
 				<Button
 					title="등록하기"
@@ -367,7 +316,7 @@ const Form = styled.div`
 	flex-direction: column;
 	align-items: center;
 	width: 465px;
-	height: 400px;
+	/* height: 400px; */
 	padding: 0 20px 15px 20px;
 	overflow: hidden;
 	border: 1px solid #b1b1b1;
@@ -406,10 +355,11 @@ const Inputs = styled.div`
 	flex-direction: column;
 	align-items: center;
 	border-top: 1px solid #b1b1b1;
-	padding: 13px 0;
+	padding: 13px 0 0 0;
 `;
 
 const InputRow = styled.div`
+	position: relative;
 	width: 435px;
 	height: auto;
 	display: flex;
@@ -443,6 +393,10 @@ const InputRow = styled.div`
 	& > .tilde {
 		margin: 0 7px;
 	}
+
+	:last-child {
+		margin-bottom: 0px;
+	}
 `;
 
 const CheckboxGroup = styled.div`
@@ -453,9 +407,9 @@ const CheckboxGroup = styled.div`
 	border-radius: 5px;
 	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.25);
 	z-index: 3;
-	position: relative;
-	top: -320px;
-	left: -25px;
+	position: absolute;
+	bottom: 30px;
+	left: 77px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

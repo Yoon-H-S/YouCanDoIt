@@ -87,7 +87,7 @@ function Login(props) {
             </StyledInput>
             <StyledInput>
                 <img src={pwIcon} alt="pwImg"/>
-                <input type="password" placeholder="비밀번호를 입력해주세요." onChange={pwChange} onKeyPress={handleOnKeyPress} />
+                <form><input type="password" placeholder="비밀번호를 입력해주세요." autoComplete="off" onChange={pwChange} onKeyPress={handleOnKeyPress} /></form>
             </StyledInput>
             <RememberId>
                 <input type="checkbox" id="rememberId" onChange={checkChange} checked={isRememberId} />
