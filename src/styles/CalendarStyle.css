@@ -1,0 +1,80 @@
+.react-calendar {
+	border: none;
+	width: 555.5px;
+	height: auto;
+	z-index: 1;
+}
+.react-calendar__navigation {
+	background-color: #dca600;
+	margin-bottom: 15px;
+}
+
+.react-calendar__navigation__label > span {
+	/* 달력 상단 년/월 글씨 커스텀*/
+	font-size: 16px;
+	font-weight: 700;
+	color: white;
+}
+
+.react-calendar__month-view__weekdays {
+	border-bottom: 1px solid #eeeeee;
+}
+.react-calendar__month-view__weekdays abbr {
+	font-weight: 500;
+	text-decoration: none;
+	font-size: 13px;
+	position: relative;
+	left: -13px;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+	color: #00000035;
+}
+
+.react-calendar__month-view__days__day--weekend {
+	/* 주말은 빨간색 */
+	color: FF0000;
+}
+
+.react-calendar__month-view__days__day:not(.react-calendar__month-view__days__day--weekend)
+	+ .react-calendar__month-view__days__day--weekend:not(.react-calendar__month-view__days__day--neighboringMonth) {
+	/* 토요일 파란색 */
+	color: blue !important;
+}
+
+/* 일(각 타일) */
+.react-calendar__tile {
+	text-align: center;
+	height: 55px;
+}
+.react-calendar__tile abbr {
+	position: relative;
+	top: -15px;
+	left: -15px;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+	/* hover 했을 때 색상 변경 */
+	border: 2.5px solid #dca600;
+	background-color: white;
+}
+
+.react-calendar__tile--active {
+	border: 2.5px solid #dca600;
+	background: rgb(176, 170, 171);
+	color: black;
+	background-color: white;
+}
+
+.react-calendar__tile--now {
+	background: #dca50067;
+	border: 1px solid #dca600;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+	/* background: #ffffa9; */
+	background: #ffffff;
+	border: 2.5px solid #dca600;
+}
