@@ -26,23 +26,6 @@ const CustomCalendar = () => {
 	// 일기 작성 날짜 리스트
 	const dayList = ['2023-09-10', '2023-09-21', '2023-10-02', '2023-09-14', '2023-10-27'];
 
-	// 각 날짜 타일에 컨텐츠 추가
-	const addContent = ({ value }) => {
-		// 해당 날짜(하루)에 추가할 컨텐츠의 배열
-		const contents = [];
-
-		// date(각 날짜)가  리스트의 날짜와 일치하면 해당 컨텐츠(이모티콘) 추가
-		if (dayList.find((day) => day === moment(value).format('YYYY-MM-DD'))) {
-			contents.push(
-				<>
-					{/* <div className="dot"></div> */}
-					<Todo />
-				</>
-			);
-		}
-		return <div>{contents}</div>; // 각 날짜마다 해당 요소가 들어감
-	};
-
 	return (
 		<Wrap>
 			<Calendar
@@ -55,6 +38,19 @@ const CustomCalendar = () => {
 				showFixedNumberOfWeeks
 				formatDay={(locale, date) => moment(date).format('DD')}
 				onActiveStartDateChange={({ activeStartDate }) => getActiveMonth(activeStartDate)}
+				tileContent={({ date, view }) => {
+					// 각 날짜 타일에 컨텐츠 추가
+					if (dayList.find((x) => x === moment(date).format('YYYY-MM-DD'))) {
+						return (
+							<>
+								<div>
+									<Todo />
+									<Todo />
+								</div>
+							</>
+						);
+					}
+				}}
 			/>
 		</Wrap>
 	);
@@ -65,7 +61,10 @@ export default CustomCalendar;
 const Wrap = styled.div``;
 
 const Todo = styled.div`
-	width: 10px;
-	height: 5px;
-	background-color: #cb7300;
+	width: 65px;
+	height: 11px;
+	background-color: #608cff;
+	opacity: 30%;
+	margin-bottom: 1px;
+	border-radius: 1px;
 `;
