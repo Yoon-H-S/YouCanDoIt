@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
-
-import Reminder from 'assets/reminder.png';
-import ReminderMain from './remind/ReminderMain';
+import { useNavigate } from 'react-router-dom';
 
 function Page(props) {
    const navigate = useNavigate();
-   const location = useLocation();
-   const [path, setPath] = useState(0);
-   const [visible, setVisible] = useState(false); // 보이기 안보이기
-
    // 페이지가 마운트 되었을 때
    useEffect(() => {
       axios
@@ -26,14 +19,6 @@ function Page(props) {
             }
          })
          .catch((error) => console.log(error));
-
-      if (location.pathname.startsWith('/challenge')) {
-         setPath(1);
-      } else if (location.pathname.startsWith('/schedule')) {
-         setPath(2);
-      } else if (location.pathname.startsWith('/friend')) {
-         setPath(3);
-      }
    }, []);
 
    const Logout = () => {
@@ -56,38 +41,11 @@ function Page(props) {
                      {sessionStorage.getItem('loginName')}
                      <span onClick={Logout}>로그아웃</span>
                   </div>
-                     <img
-                        src={Reminder}
-                        onClick={() => {
-                           setVisible(!visible)
-                        }}
-                     />
-                     {visible && (
-                        <ReminderMain />
-							)}
                </UserService>
-               <Inside>{props.children}</Inside>
+               <Inside>
+                  {props.children}
+               </Inside>
             </Outside>
-            <MenuList>
-               <Menu
-                  id={1}
-                  path={path}
-                  onClick={() => navigate('/challenge')}>
-                  챌린지
-               </Menu>
-               <Menu
-                  id={2}
-                  path={path}
-                  onClick={() => navigate('/schedule')}>
-                  스케줄러
-               </Menu>
-               <Menu
-                  id={3}
-                  path={path}
-                  onClick={() => navigate('/friend')}>
-                  친구
-               </Menu>
-            </MenuList>
          </MainContainer>
       </Wrapper>
    );
@@ -124,56 +82,24 @@ const MainContainer = styled.div`
 
 // 다이어리
 const Outside = styled.div`
-   width: 1363px;
-   height: 603px;
-   background-color: #efefef;
    position: relative;
    display: flex;
    flex-direction: column;
    align-items: center;
    justify-content: center;
+   width: 1363px;
+   height: 603px;
+   background-color: #efefef;
 `;
 
 // 실제 콘텐츠가 삽입되는 영역
 export const Inside = styled.div`
-   width: 1283px;
-   height: 508px;
-   background-color: #d9d9d9;
    display: flex;
    align-items: center;
    justify-content: center;
-`;
-
-// 주메뉴
-const MenuList = styled.div`
-   position: relative;
-   display: flex;
-   flex-direction: column;
-   margin-top: 50px;
-`;
-
-// 각 메뉴 개체
-const Menu = styled.div`
-   position: absolute;
-   top: ${(props) => props.id * 70 - 70}px;
-   width: 87px;
-   height: 50px;
-   font-size: 18px;
-   line-height: 50px;
-   text-align: center;
-   background-color: var(--primary-color);
-   border-radius: 0 10px 10px 0;
-   cursor: pointer;
-
-   ${(props) =>
-      props.id === props.path &&
-      `
-            left: -20px;
-            width: 107px;
-            background-color: #DCA600;
-            font-weight: bold;
-            color: white;
-        `}
+   width: 1283px;
+   height: 508px;
+   background-color: #FFFFFF;
 `;
 
 // 닉네임, 로그아웃, 리마인더가 표시되는 영역
@@ -198,12 +124,5 @@ const UserService = styled.div`
          font-weight: 400;
          cursor: pointer;
       }
-   }
-
-   img {
-      width: 16px;
-      height: 16px;
-      margin-right: 4px;
-      cursor: pointer;
    }
 `;
