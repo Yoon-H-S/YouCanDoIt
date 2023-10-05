@@ -16,6 +16,7 @@ import GroupInvite from 'pages/main/GroupInvite';
 import ChallengePage from 'pages/challenge/ChallengePage';
 import FriendPage from 'pages/friend/FriendPage';
 import SchedulePage from 'pages/schedule/SchedulePage';
+
 import GuideMain from 'pages/guide/GuideMain';
 import GuideGodLife from 'pages/guide/GuideGodLife';
 import GuideDIY from 'pages/guide/GuideDIY';
@@ -109,6 +110,7 @@ function App(props) {
 			</Wrapper>
 		</BrowserRouter>
 	);
+
 }
 
 export default App;

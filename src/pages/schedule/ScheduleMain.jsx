@@ -7,24 +7,29 @@ function ScheduleMain(props) {
         <TimeToSoon>
             <TimeTable>
                 <TimeTableTitle>
+
                     <span> 타임 테이블 </span>
                 </TimeTableTitle>
                 <TTable>
 
                 </TTable>
+
             </TimeTable>
             <MiddleLine />
             <ToSoonSchedule>
                 <TodayTitle>
+
                     <span> 오늘의 일정 </span>
                 </TodayTitle>
                 <ToTable>
 
                 </ToTable>
+
                 <ScheMiddleLine />
                 <SoonTitle>
                     <span> 다가오는 일정 </span>
                 </SoonTitle>
+
                 <SoonTable>
                     <SoonOne>
                         <span> 4/5</span>
@@ -35,6 +40,7 @@ function ScheduleMain(props) {
                         <span> 4/9 </span>
                     </SoonTwo>
                 </SoonTable>
+
             </ToSoonSchedule>
         </TimeToSoon>
     );
@@ -134,6 +140,7 @@ const SoonTitle = styled.div`
 `;
 
 const SoonTable = styled.div`
+
     display: flex;
     flex-direction: column;
     height: 131px;
@@ -182,4 +189,5 @@ const SoonTwo = styled.div`
         margin-left: 12px;
         background-color: pink;
     }
+
 `;
