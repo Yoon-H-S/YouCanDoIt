@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import Reminder from 'assets/reminder.png';
+
 import ReminderMain from './remind/ReminderMain';
 
 function Page(props) {
@@ -91,18 +92,19 @@ function Page(props) {
 			</MainContainer>
 		</Wrapper>
 	);
+
 }
 
 export default Page;
 
 // 기본 틀
 export const Wrapper = styled.div`
-	display: flex;
-	flex-direction: column;
+
 `;
 
 // 상단 서비스명
 const Logo = styled.div`
+
 	height: 55px;
 	width: 194px;
 	position: relative;
@@ -114,46 +116,32 @@ const Logo = styled.div`
 	background-color: #f8ba00;
 	border-radius: 10px 10px 0 0;
 	cursor: default;
+
 `;
 
 // 다이어리와 주메뉴 영역
 const MainContainer = styled.div`
-	display: flex;
-	flex-direction: row;
+
 `;
 
 // 다이어리
 const Outside = styled.div`
-	width: 1363px;
-	height: 603px;
-	background-color: #efefef;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+
 `;
 
 // 실제 콘텐츠가 삽입되는 영역
 export const Inside = styled.div`
-	width: 1283px;
-	height: 508px;
-	background-color: #d9d9d9;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+
 `;
 
 // 주메뉴
 const MenuList = styled.div`
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	margin-top: 50px;
+
 `;
 
 // 각 메뉴 개체
 const Menu = styled.div`
+
 	position: absolute;
 	top: ${(props) => props.id * 70 - 70}px;
 	width: 87px;
@@ -168,6 +156,8 @@ const Menu = styled.div`
 	${(props) =>
 		props.id === props.path &&
 		`
+    
+    
             left: -20px;
             width: 107px;
             background-color: #DCA600;
@@ -178,6 +168,7 @@ const Menu = styled.div`
 
 // 닉네임, 로그아웃, 리마인더가 표시되는 영역
 const UserService = styled.div`
+
 	position: absolute;
 	display: flex;
 	align-items: center;
@@ -206,3 +197,4 @@ const UserService = styled.div`
 		margin-right: 4px;
 	}
 `;
+
