@@ -7,12 +7,6 @@ export const Calender = styled.div`
 	height: 24px;
 
 	// 날짜의 클래스들
-	// 캘린더 아이콘
-	svg {
-		height: 10px;
-		padding: 0 !important;
-		left: 4px;
-	}
 
 	// 날짜 영역
 	.react-datepicker-wrapper,

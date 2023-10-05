@@ -7,28 +7,46 @@ function ScheduleMain(props) {
         <TimeToSoon>
             <TimeTable>
                 <TimeTableTitle>
-                    <span> 타임 테이블 </span> 
+
+                    <span> 타임 테이블 </span>
                 </TimeTableTitle>
-                <TTable />
+                <TTable>
+
+                </TTable>
+
             </TimeTable>
             <MiddleLine />
             <ToSoonSchedule>
                 <TodayTitle>
-                    <span> 오늘의 일정 </span> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <big><big><big><strong><td>+</td></strong></big></big></big>
+
+                    <span> 오늘의 일정 </span>
                 </TodayTitle>
-                <ToTable />
+                <ToTable>
+
+                </ToTable>
+
                 <ScheMiddleLine />
                 <SoonTitle>
                     <span> 다가오는 일정 </span>
                 </SoonTitle>
-                <SoonTable />
+
+                <SoonTable>
+                    <SoonOne>
+                        <span> 4/5</span>
+                        <OneTable />
+                    </SoonOne>
+                    <SoonMiddleLine />
+                    <SoonTwo>
+                        <span> 4/9 </span>
+                    </SoonTwo>
+                </SoonTable>
+
             </ToSoonSchedule>
         </TimeToSoon>
     );
 }
 
 export default ScheduleMain;
-
 
 const TimeToSoon = styled.div`
     position: relative;
@@ -122,7 +140,54 @@ const SoonTitle = styled.div`
 `;
 
 const SoonTable = styled.div`
+
+    display: flex;
+    flex-direction: column;
     height: 131px;
     border: 1.6px solid #B1B1B1;
+    // padding-top: 12px;
     background-color: #FFFBDA;
+`;
+
+const SoonOne = styled.div`
+    display: flex;
+    width: 250px;
+    height: 92px;
+    background-color: orange;
+    // border-bottom: 1px dashed #B1B1B1;
+
+    & > span {
+        height: 0px;
+        font-size: 11px;
+        margin-right: 6px;
+        margin-left: 12px;
+    }
+`;
+
+const OneTable = styled.div`
+    width: 180px;
+    height: 70px;
+    border: 0.5px solid #B1B1B1;
+    background-color: #FFFDF6;
+`;
+
+const SoonMiddleLine = styled.div`
+    width: 220px;
+    height: 0px;
+    border-top: 1px dashed #B1B1B1;
+`;
+
+const SoonTwo = styled.div`
+    width: 250px;
+    height: 92px;
+    background-color: pink;
+
+    & > span {
+        height: 0px;
+        font-size: 11px;
+        margin-right: 6px;
+        margin-left: 12px;
+        background-color: pink;
+    }
+
 `;
