@@ -1,14 +1,15 @@
 import React from 'react';
+import './Todo.css';
 
 const ToDoListItem = ({ todoItem, todoList, setTodoList }) => (
-	<li className="todoapp__item">
-		{/* 아이템 완료 체크 / 체크 해제를 위한 체크박스 */}
+	<li className="todoapp__list-li">
 		<input
-			type="checkbox"
-			className="todoapp__item-checkbox"
+			className="check_box"
+			checked={todoItem.checked}
+			type="radio"
+			disabled
 		/>
-		{/* 아이템 내용 */}
-		<span className="todoapp__item-ctx">{todoItem.text}</span>
+		<span className={`item-text ${todoItem.checked ? 'checked' : ''}`}>{todoItem.text}</span>
 	</li>
 );
 

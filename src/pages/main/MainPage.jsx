@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import ToDaySchedule from './ToDaySchedule';
 import MiniCalendar from '../schedule/MiniCalendar';
 
-// https://devbirdfeet.tistory.com/177
-
 function MainPage(props) {
 	return (
 		<Page>
@@ -25,20 +23,13 @@ export default MainPage;
 // 좌측 페이지 영역
 const LeftContent = styled.div`
 	position: relative;
-	top: -24px;
+	/* top: -24px; */
 	width: 243px;
 	height: 422px;
-`;
-
-// 일정 이미지
-const ScheduleImg = styled.img`
-	display: block;
-`;
-
-// 미니캘린더 이미지
-const CalenderImg = styled.img`
-	display: block;
-	margin-top: 33px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
 `;
 
 // 중간 라인
