@@ -1,0 +1,30 @@
+.checked {
+	color: grey;
+	text-decoration-line: line-through;
+}
+
+.todoapp__list {
+	/* background-color: aquamarine; */
+}
+
+.todoapp__list-ul {
+	/* background-color: brown; */
+	list-style-type: none;
+}
+
+.todoapp__list-li {
+	margin: 9px 0 9px 0;
+	display: flex;
+	align-items: center;
+}
+
+.check_box:disabled {
+	margin-right: 5px;
+	width: 18px;
+	height: 18px;
+}
+
+.item-text {
+	font-size: 13px;
+	font-weight: 500;
+}
