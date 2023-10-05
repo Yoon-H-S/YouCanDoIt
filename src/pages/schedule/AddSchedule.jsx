@@ -24,24 +24,25 @@ function AddSchedule(props) {
             </Wrapper>
             
             
-            <p align="left"> 제목: &nbsp; </p>
+            <big><p align="left"> 제목: &nbsp; </p></big>
             {/* <input type = "text"></input>  */}
             <hr color="gray" size="0.1px"></hr>
             
-            <br></br> <p> &emsp; &emsp; 🕒&nbsp; &nbsp;  4월 5일(수) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong><big>→</big></strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4월 5일(수) </p> 
-            <p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 08:00 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 09:00 </p><br></br>
+            <br></br> <p> &emsp; &emsp; &emsp; &emsp; &emsp; 🕒&nbsp; &nbsp;  4월 5일(수) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong><big>→</big></strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4월 5일(수) </p> 
+            <p> &nbsp; &nbsp; &nbsp; &nbsp; &emsp; &emsp; &emsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 08:00 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 09:00 </p><br></br>
             <hr color="gray" size="0.1px"></hr>
             
-            
+            <br></br>
             <p>⏰ 알림 </p> 
-        
+            <br></br>
             &emsp;&emsp;&ensp;&nbsp;<input type="checkbox" name="일정 시작 시간"  ></input> 일정 시작 시간 <br></br> 
             &emsp;&emsp;&ensp;&nbsp;<input type="checkbox" name="1일 전"  ></input> 1일 전 <br></br>
             &emsp;&emsp;&ensp;&nbsp;<input type="checkbox" name="1시간 전"  ></input> 1시간 전 <br></br>
             &emsp;&emsp;&ensp;&nbsp;<input type="checkbox" name="10분 전"  ></input> 10분 전 <br></br>
             &emsp;&emsp;&ensp;&nbsp;<input type="checkbox" name="5분 전"  ></input> 사용자 지정 시간 &ensp;
             {/* <label>  &nbsp; <input type="text"></input></label> */}
-            <input type = "time"></input>
+            <input type = "time"></input> <br></br>
+            <br></br>
             <hr color="gray" size="0.1px"></hr>
             
            
@@ -50,6 +51,7 @@ function AddSchedule(props) {
             <p>🔄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 반복 안함</p>
             <br></br>
             <hr color="gray" size="0.1px"></hr>
+            <br></br>
             
 
 
@@ -58,7 +60,7 @@ function AddSchedule(props) {
 
             {/* 저장,취소 버튼 */}
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp; 
-            <button type="button" class="button" backgroundColor="0a0a23">취소</button>
+            &emsp; &emsp; <button type="button" class="button" backgroundColor="0a0a23">취소</button>
             {/* <input type = "reset" value = "취소"> </input>   */}
             &emsp; 
             <input type = "submit" value = "저장" color = "blue"></input>
@@ -93,7 +95,7 @@ export default AddSchedule;
 
 
 
-//이전버튼
+//이전
 const Title = styled.div`
     height: 0px;
     width: 394px;
