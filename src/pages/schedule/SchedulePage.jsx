@@ -1,11 +1,15 @@
+import React, { useState } from 'react';
 import Page from 'pages/Page';
 import styled from 'styled-components';
 import CalendarMain from './CalendarMain';
+import ScheduleMain from './ScheduleMain';
 
 function SchedulePage(props) {
 	return (
 		<Page>
-			<LeftContent></LeftContent>
+			<LeftContent>
+				<ScheduleMain />
+			</LeftContent>
 			<MiddleLine />
 			<RightContent>
 				<CalendarMain />
