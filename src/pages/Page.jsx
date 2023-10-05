@@ -12,9 +12,11 @@ function Page(props) {
 	const location = useLocation();
 	const [path, setPath] = useState(0);
 	const [visible, setVisible] = useState(false); // 보이기 안보이기
+	const [reminderList, setReminderList] = useState([]);
 	
 	// 페이지가 마운트 되었을 때
 	useEffect(() => {
+		// 로그인 여부 확인
 		axios
 			.get('/api/member-api/is-login')
 			.then(function (response) {
@@ -28,6 +30,14 @@ function Page(props) {
 			})
 			.catch((error) => console.log(error));
 
+		// 알림 목록
+		axios.get('/api/reminder-api/reminder-list')
+		.then(function (response) {
+			setReminderList(response.data);
+		})
+		.catch((error) => console.log(error));
+
+		// 내비게이션 표시
 		if (location.pathname.startsWith('/challenge')) {
 			setPath(1);
 		} else if (location.pathname.startsWith('/schedule')) {
@@ -57,15 +67,17 @@ function Page(props) {
 							{sessionStorage.getItem('loginName')}
 							<span onClick={Logout}>로그아웃</span>
 						</div>
-						<img
-							src={Reminder}
-							onClick={() => {
-								setVisible(!visible)
-							}}
-						/>
-						{visible && (
-                        <ReminderMain />
-					)}
+						<ReminderWrap>
+							<img
+								src={Reminder}
+								onClick={() => {
+									setVisible(!visible)
+								}}
+							/>
+							{visible && (
+							<ReminderMain reminderList={reminderList} />
+							)}
+						</ReminderWrap>
 					</UserService>
 					<Inside>{props.children}</Inside>
 				</Outside>
@@ -99,12 +111,12 @@ export default Page;
 
 // 기본 틀
 export const Wrapper = styled.div`
-
+	display: flex;
+	flex-direction: column;
 `;
 
 // 상단 서비스명
 const Logo = styled.div`
-
 	height: 55px;
 	width: 194px;
 	position: relative;
@@ -116,32 +128,46 @@ const Logo = styled.div`
 	background-color: #f8ba00;
 	border-radius: 10px 10px 0 0;
 	cursor: default;
-
 `;
 
 // 다이어리와 주메뉴 영역
 const MainContainer = styled.div`
-
+	display: flex;
+	flex-direction: row;
 `;
 
 // 다이어리
 const Outside = styled.div`
-
+	width: 1363px;
+	height: 603px;
+	background-color: #efefef;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 `;
 
 // 실제 콘텐츠가 삽입되는 영역
 export const Inside = styled.div`
-
+	width: 1283px;
+	height: 508px;
+	background-color: #d9d9d9;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
 
 // 주메뉴
 const MenuList = styled.div`
-
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	margin-top: 50px;
 `;
 
 // 각 메뉴 개체
 const Menu = styled.div`
-
 	position: absolute;
 	top: ${(props) => props.id * 70 - 70}px;
 	width: 87px;
@@ -156,8 +182,6 @@ const Menu = styled.div`
 	${(props) =>
 		props.id === props.path &&
 		`
-    
-    
             left: -20px;
             width: 107px;
             background-color: #DCA600;
@@ -179,17 +203,21 @@ const UserService = styled.div`
 	font-size: 16px;
 	font-weight: bold;
 
-	div {
+	& > div {
 		display: flex;
 		align-items: center;
 
-		span {
+		& > span {
 			margin-left: 25px;
 			font-size: 13px;
 			font-weight: 400;
 			cursor: pointer;
 		}
 	}
+`;
+
+const ReminderWrap = styled.div`
+	position: relative;
 
 	img {
 		width: 16px;
