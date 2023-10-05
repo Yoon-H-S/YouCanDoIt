@@ -19,7 +19,7 @@ export const MiniCalender = styled.div`
 	/* 달력 상단 */
 	.react-calendar__navigation {
 		background-color: #ffffff;
-		height: 15px;
+		height: 12px;
 		margin-bottom: 15px;
 		border-radius: 5px;
 		border: none;
@@ -102,7 +102,8 @@ export const MiniCalender = styled.div`
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		height: 26px;
+		height: 25.5px;
+		/* background-color: #f0f0f0; */
 	}
 	.react-calendar__month-view__days__day abbr {
 		display: block;
@@ -111,10 +112,15 @@ export const MiniCalender = styled.div`
 		font-size: 11px;
 	}
 
+	.react-calendar__tile abbr {
+		position: relative;
+		top: -7px;
+	}
+
 	/* YearView 각 월 타일 */
 	.react-calendar__year-view__months__month {
 		border: 2px solid white !important;
-		font-size: 10px;
+		font-size: 5px;
 	}
 
 	.react-calendar__tile--hasActive {
@@ -170,6 +176,15 @@ export const MiniCalender = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
+	.default:not(.react-calendar__year-view__months__month) > abbr {
+		background-color: #ffffff99;
+		width: 13px;
+		height: 13px;
+		border-radius: 1px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 `;
 
 export const CustomCalendar = styled(Calendar)`
@@ -180,26 +195,3 @@ export const CustomCalendar = styled(Calendar)`
 	border-radius: 5px;
 	padding: 10px;
 `;
-
-// export const CustomHeader = styled.div`
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: center;
-// 	padding-bottom: 8px;
-
-// 	& > div {
-// 		font-size: 12px;
-// 		margin: 0 30px;
-// 	}
-
-// 	& > button {
-// 		background-color: white;
-// 		border: none;
-// 		font-size: 16px;
-// 		cursor: pointer;
-
-// 		&:disabled {
-// 			cursor: default;
-// 		}
-// 	}
-// `;

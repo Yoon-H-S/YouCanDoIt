@@ -4,8 +4,6 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import * as S from 'styles/ReactCalendarStyle';
 
-// https://velog.io/@pikadev1771/react-calendar-%EC%BB%A4%EC%8A%A4%ED%85%80%ED%95%98%EA%B8%B0-%EB%82%A0%EC%A7%9C-%EB%B3%80%ED%99%98-%ED%98%84%EC%9E%AC-%EB%8B%AC-%EA%B5%AC%ED%95%98%EA%B8%B0-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%B6%94%EA%B0%80%ED%95%98%EA%B8%B0
-
 const CustomCalendar = () => {
 	//기본적으로 캘린더가 선택할 수 있게 넣어줄 value이다.
 	//value 값만 표시하게 할 게 아니라면 나중에 수정해주거나 지워주자.

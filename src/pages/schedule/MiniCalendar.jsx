@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import moment from 'moment';
 import * as S from 'styles/MiniCalendarStyle';
@@ -63,7 +62,7 @@ const CustomCalendar = () => {
 							return 'yellow';
 						} else if (stickers.find((x) => x.date === moment(date).format('YYYY-MM-DD') && x.success === '0')) {
 							return 'red';
-						}
+						} else return 'default';
 					}}
 				/>
 			</S.MiniCalender>
@@ -82,11 +81,13 @@ const TodoList = styled.div`
 
 const Todo = styled.div`
 	width: 65px;
-	height: 11px;
+	height: 4px;
 	background-color: #608cff;
 	opacity: 30%;
 	margin-bottom: 1px;
 	border-radius: 1px;
+	position: relative;
+	top: -5px;
 `;
 
 const dayList = [
