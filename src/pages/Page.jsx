@@ -4,11 +4,14 @@ import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import Reminder from 'assets/reminder.png';
+import ReminderMain from './remind/ReminderMain';
 
 function Page(props) {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [path, setPath] = useState(0);
+	const [visible, setVisible] = useState(false); // 보이기 안보이기
+	
 	// 페이지가 마운트 되었을 때
 	useEffect(() => {
 		axios
@@ -55,8 +58,13 @@ function Page(props) {
 						</div>
 						<img
 							src={Reminder}
-							alt=""
+							onClick={() => {
+								setVisible(!visible)
+							}}
 						/>
+						{visible && (
+                        <ReminderMain />
+					)}
 					</UserService>
 					<Inside>{props.children}</Inside>
 				</Outside>

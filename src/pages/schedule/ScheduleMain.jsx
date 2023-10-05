@@ -156,7 +156,7 @@ const Schedule = styled.div`
     height: 100%;
 `;
 
-// 타임 테이블 (제목 + 타임 테이블) 틀
+ // 타임 테이블 (제목 + 타임 테이블) 틀
 const TimeTable = styled.div`
     display: flex;
     flex-direction: column;
@@ -184,7 +184,7 @@ const TTable = styled.div`
     background-color: #FFFBDA;
 `;
 
-const TTable_Time = styled.div`
+ const TTable_Time = styled.div`
     width: 28px;
     height: 326px;
     border-right: 1.6px solid #B1B1B1;
@@ -410,12 +410,3 @@ const SoonMiddleLine = styled.div`
     border-top: 1px dashed #B1B1B1;
     margin-left: 18px;
 `;
-
-// const label = styled.div`
-//     width: 50px;
-//     height: 50px;
-//     border: 5px solid #000000;
-//     border-radius: 5px;
-//     display: inline-block;
-//     cursor: pointer;
-// `;
