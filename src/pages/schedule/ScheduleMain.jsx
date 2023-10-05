@@ -17,15 +17,18 @@ function ScheduleMain(props) {
         <Schedule>
             <TimeTable>
                 <TimeTable_Title>
+
                     <span> 타임 테이블 </span>
                 </TimeTable_Title>
                 <TTable>
                     <TTable_Time />
                 </TTable>
+
             </TimeTable>
             <MiddleLine />
             <ToSoon_Schedule>
                 <TodayTitle>
+
                     <span> 오늘의 일정 </span>
                     <FontAwesomeIcon icon={faPlus} onClick={() => handleChange(null)} />
                 </TodayTitle>
@@ -88,10 +91,12 @@ function ScheduleMain(props) {
                     </ToDetail>
                     {/* <ToMiddleLine /> */}
                 </ToTable>
+
                 <ScheMiddleLine />
                 <SoonTitle>
                     <span> 다가오는 일정 </span>
                 </SoonTitle>
+
                 <SoonTable>
                     <Soon_Detail>
                         <span> 4/5 </span>
@@ -141,6 +146,7 @@ function ScheduleMain(props) {
                 </SoonTable>
             </ToSoon_Schedule>
         </Schedule>
+
     );
 }
 
@@ -316,6 +322,7 @@ const SoonTitle = styled.div`
 
 // 다가오는 일정 (날짜, 시간, 구분선, 일정 제목) 틀
 const SoonTable = styled.div`
+
     display: flex;
     flex-direction: column;
     height: 136px;

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import * as S from 'styles/ReactCalendarStyle';
+import * as S from 'styles/MiniCalendarStyle';
 
 const CustomCalendar = () => {
 	//기본적으로 캘린더가 선택할 수 있게 넣어줄 value이다.
@@ -28,7 +27,7 @@ const CustomCalendar = () => {
 
 	return (
 		<Wrap>
-			<S.MainCalender>
+			<S.MiniCalender>
 				<S.CustomCalendar
 					onChange={dateChange}
 					value={value}
@@ -63,10 +62,10 @@ const CustomCalendar = () => {
 							return 'yellow';
 						} else if (stickers.find((x) => x.date === moment(date).format('YYYY-MM-DD') && x.success === '0')) {
 							return 'red';
-						}
+						} else return 'default';
 					}}
 				/>
-			</S.MainCalender>
+			</S.MiniCalender>
 		</Wrap>
 	);
 };
@@ -82,11 +81,13 @@ const TodoList = styled.div`
 
 const Todo = styled.div`
 	width: 65px;
-	height: 11px;
+	height: 4px;
 	background-color: #608cff;
 	opacity: 30%;
 	margin-bottom: 1px;
 	border-radius: 1px;
+	position: relative;
+	top: -5px;
 `;
 
 const dayList = [
