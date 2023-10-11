@@ -13,9 +13,12 @@ function ScheduleMain(props) {
 		console.log(!isChecked);
 	};
 
+	let tt_start_time; //타임테이블 첫 시작 시각.
+
 	//타임테이블의 시간을 반복문을 통하여 출력
 	//a,b는 오늘의 일정에서 첫 시간(a)과 끝 시간을 받아옴.
 	function repeatTime(a, b) {
+		tt_start_time = a; //타임테이블 첫 시작 시각.
 		let arr = [];
 		for (let i = a; i < b + 1; i++) {
 			arr.push(
@@ -31,20 +34,18 @@ function ScheduleMain(props) {
 	//타임테이블에 표시되는 일정시간을 반복문을 통하여 출력
 	//a,b는 오늘의 일정에서 첫 시간(a)과 끝 시간을 받아옴.
 
-	function repeatScheduleTime(a, b, c) {
+	function repeatScheduleTime(a, b) {
 		let arr = [];
+		console.log('a: ' + a + ',b: ' + b);
 		for (let i = a; i < b + 1; i++) {
 			arr.push(
 				<Range>
-					{/* <Time_range time={c} /> */}
-					{/* <Time_range time={c}> */}
 					<Time_unit></Time_unit>
 					<Time_unit></Time_unit>
 					<Time_unit></Time_unit>
 					<Time_unit></Time_unit>
 					<Time_unit></Time_unit>
 					<Time_unit></Time_unit>
-					{/* </Time_range> */}
 				</Range>
 			);
 			a++;
@@ -57,51 +58,97 @@ function ScheduleMain(props) {
 	//start_time: 타임테이블에서 표시할 시작시간(ex 8:20분부터 = 20)
 	function MarkTime(props) {
 		console.log(props.start_time);
-		let x_position; // start_time에 따라 css에서 left값을 지정함(좌표같은 개념)
+		let x_position, y_position;
+
+		// 타임테이블의 몇번 째 줄인지 구하는 규칙 : hour - tt_start_time +1
+		// y좌표 구하는 규칙 : 7 + 28 * (몇번째 - 1 )
+
+		y_position = 7 + 28 * (props.hour - tt_start_time);
+		console.log('y_position:' + y_position);
+
+		// start_time에 따라 css에서 left값을 지정함(좌표같은 개념)
 		switch (props.start_time) {
 			case 0:
-				x_position = -158;
+				x_position = 28;
 				break;
 			case 10:
-				x_position = -132;
+				x_position = 54.2;
 				break;
 			case 20:
-				x_position = -106;
+				x_position = 80.6;
 				break;
 			case 30:
-				x_position = -80;
+				x_position = 106.3;
 				break;
 			case 40:
-				x_position = -53;
+				x_position = 132.6;
 				break;
 			case 50:
-				x_position = -27;
+				x_position = 158.6;
 				break;
 			default:
-				x_position = -158;
+				x_position = 28;
 		}
-		console.log(x_position);
+		console.log('x_position: ' + x_position);
 		return (
 			<div>
 				<Time_range
+					hour={props.hour}
 					minute={props.minute}
-					x_position={x_position}></Time_range>
+					x_position={x_position}
+					y_position={y_position}></Time_range>
 			</div>
 		);
 	}
 
 	return (
 		<Schedule>
+			{/* 
+			
+				<타임 테이블>
+				1. 타임 테이블의 시작 시간 , 끝시간 설정 하는 법 ex)5시 부터 24시까지 보여주기 
+					- repeateTime(), repeateScheduleTime() 함수 인자 둘다 수정!
+				2. 일정 시간 타임테이블에 표시하는 법
+					- <MarkTime> 컴포넌트 속성에 hour, minute, start_time 설정
+					* minute: 타임테이블에 표시해야 하는 일정 시간 길이(ex 30분 = 30)
+					* start_time: 타임테이블에서 표시할 시작시간(ex 8:20분부터 = 20)
+			
+			*/}
 			<TimeTable>
 				<TimeTable_Title>
 					<span> 타임 테이블 </span>
 				</TimeTable_Title>
 				<TTable>
-					<TTable_Times>{repeatTime(7, 19)}</TTable_Times>
-					<TTable_range>{repeatScheduleTime(7, 19, 3)}</TTable_range>
+					<TTable_Times>{repeatTime(5, 24)}</TTable_Times>
+					<TTable_range>{repeatScheduleTime(5, 24)}</TTable_range>
+
+					{/*  08:30~ 10:30 */}
 					<MarkTime
+						hour={8}
+						minute={60}
+						start_time={30}
+					/>
+					<MarkTime
+						hour={9}
+						minute={60}
+						start_time={0}
+					/>
+					<MarkTime
+						hour={10}
 						minute={30}
-						start_time={20}
+						start_time={0}
+					/>
+
+					{/* 16:00  ~ 17:30*/}
+					<MarkTime
+						hour={16}
+						minute={60}
+						start_time={0}
+					/>
+					<MarkTime
+						hour={17}
+						minute={30}
+						start_time={0}
 					/>
 				</TTable>
 			</TimeTable>
@@ -287,11 +334,12 @@ const TTable = styled.div`
 		display: none; /* Chrome, Safari, Opera*/
 	}
 	overflow-x: hidden;
+	position: relative;
 `;
 
 const TTable_Times = styled.div`
 	width: 28px;
-	height: auto;
+	height: 560px;
 	border-right: 1.6px solid #b1b1b1;
 	background-color: white;
 	padding-bottom: 1px;
@@ -335,9 +383,11 @@ const Time_range = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: relative;
+	position: absolute;
+	/* left: 106.3px; */
 	left: ${(props) => `${props.x_position}px`};
-	top: 200px;
+	/* top: 35px; */
+	top: ${(props) => `${props.y_position}px`};
 `;
 
 const Time_unit = styled.div`
