@@ -66,30 +66,38 @@ function ScheduleMain(props) {
 					/>
 				</TodayTitle>
 				<ToTable>
-					{todaySchedule.length > 0 && todaySchedule?.map((value, index) => {
-						return (
-							<TodayScheduleItem
-								value={value}
-								index={index}
-								onClickCheck={onClickCheck}
-							/>
-						);
-					})}
+					{todaySchedule.length > 0 ? 
+						todaySchedule?.map((value, index) => {
+							return (
+								<TodayScheduleItem
+									value={value}
+									index={index}
+									onClickCheck={onClickCheck}
+								/>
+							);
+						})
+					:
+						<None>일정을 추가해주세요.</None>
+					}
 				</ToTable>
 				<ScheMiddleLine />
 				<SoonTitle>
 					<span> 다가오는 일정 </span>
 				</SoonTitle>
 				<SoonTable>
-					{onComingSchedule.length > 0 && onComingSchedule?.map((dayList, index) => {
-						return(
-							<SoonScheduleItem
-								dayList={dayList}
-								index={index}
-								scheduleLength={onComingSchedule.length}
-							/>
-						);
-					})}
+					{onComingSchedule.length > 0 ?
+						onComingSchedule?.map((dayList, index) => {
+							return(
+								<SoonScheduleItem
+									dayList={dayList}
+									index={index}
+									scheduleLength={onComingSchedule.length}
+								/>
+							);
+						})
+					:
+						<None>다가오는 일정이 없습니다.</None>
+					}
 				</SoonTable>
 			</ToSoon_Schedule>
 		</Schedule>
@@ -237,4 +245,16 @@ const SoonTable = styled.div`
     ::-webkit-scrollbar {
         width: 0px;
     }
+`;
+
+// 일정이 없을 때
+const None = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    color: #A4A4A4;
 `;

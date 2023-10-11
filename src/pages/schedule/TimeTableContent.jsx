@@ -4,11 +4,23 @@ import axios from 'axios';
 
 function TimeTableContent(props) {
     const [content, setContent] = useState([]);
+	const [ttStartTime,setTtStartTime] = useState(9); //타임테이블 시작 시각.
+	const [ttEndTime, setTtEndTime] = useState(24); // 타임테이블 마지막 시간
 
     useEffect(() => {
         axios.get('/api/schedule-api/time-table')
 		.then(function (response) {
-			setContent(response.data);
+			if(response.data !== null) {
+				setContent(response.data);
+				setTtStartTime(response.data[0]?.hour);
+				if(response.data[0]?.hour + 12 > response.data[response.data.length - 1]?.hour) {
+					setTtEndTime(response.data[0]?.hour + 12);
+				} else {
+					setTtEndTime(response.data[response.data.length - 1]?.hour);
+				}
+				
+			}
+			
 		}).catch(
 			(error) => console.log(error)
 		);
@@ -26,20 +38,16 @@ function TimeTableContent(props) {
 	
 	*/
 
-    let tt_start_time; //타임테이블 첫 시작 시각.
-
 	//타임테이블의 시간을 반복문을 통하여 출력
 	//a,b는 오늘의 일정에서 첫 시간(a)과 끝 시간을 받아옴.
-	function repeatTime(a, b) {
-		tt_start_time = a; //타임테이블 첫 시작 시각.
+	function repeatTime() {
 		let arr = [];
-		for (let i = a; i < b + 1; i++) {
+		for (let i = ttStartTime; i <= ttEndTime; i++) {
 			arr.push(
 				<Time>
-					<span>{a}</span>
+					<span>{i}</span>
 				</Time>
 			);
-			a++;
 		}
 		return arr;
 	}
@@ -47,10 +55,9 @@ function TimeTableContent(props) {
 	//타임테이블에 표시되는 일정시간을 반복문을 통하여 출력
 	//a,b는 오늘의 일정에서 첫 시간(a)과 끝 시간을 받아옴.
 
-	function repeatScheduleTime(a, b) {
+	function repeatScheduleTime() {
 		let arr = [];
-		console.log('a: ' + a + ',b: ' + b);
-		for (let i = a; i < b + 1; i++) {
+		for (let i = ttStartTime; i <= ttEndTime; i++) {
 			arr.push(
 				<Range>
 					<Time_unit></Time_unit>
@@ -61,7 +68,6 @@ function TimeTableContent(props) {
 					<Time_unit></Time_unit>
 				</Range>
 			);
-			a++;
 		}
 		return arr;
 	}
@@ -76,7 +82,7 @@ function TimeTableContent(props) {
 		// 타임테이블의 몇번 째 줄인지 구하는 규칙 : hour - tt_start_time +1
 		// y좌표 구하는 규칙 : 7 + 28 * (몇번째 - 1 )
 
-		y_position = 7 + 28 * (props.hour - tt_start_time);
+		y_position = 7 + 28 * (props.hour - ttStartTime);
 		console.log('y_position:' + y_position);
 
 		// start_time에 따라 css에서 left값을 지정함(좌표같은 개념)
@@ -116,8 +122,8 @@ function TimeTableContent(props) {
 
     return(
         <>
-            <TTable_Times>{repeatTime(5, 24)}</TTable_Times>
-			<TTable_range>{repeatScheduleTime(5, 24)}</TTable_range>
+            <TTable_Times>{repeatTime()}</TTable_Times>
+			<TTable_range>{repeatScheduleTime()}</TTable_range>
             {content.length > 0 && content?.map((value, index) => {
                 return(
                     <MarkTime
@@ -136,9 +142,6 @@ export default TimeTableContent;
 
 const TTable_Times = styled.div`
 	width: 28px;
-	height: 560px;
-	border-right: 1.6px solid #b1b1b1;
-	background-color: white;
 	padding-bottom: 1px;
 `;
 
@@ -146,6 +149,8 @@ const Time = styled.div`
 	width: 28px;
 	height: 28px;
 	border-top: 1px dotted #cacaca;
+	border-right: 1.6px solid #b1b1b1;
+	background-color: white;
 	display: flex;
 	justify-content: center;
 	align-items: center;

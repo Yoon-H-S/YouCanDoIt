@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -7,6 +8,7 @@ import axios from 'axios';
 import ToDoList from './TodoList';
 
 function ToDaySchedule(props) {
+	const navigate = useNavigate();
 	const [todoList, setTodoList] = useState([]);
 
 	useEffect(() => {
@@ -19,7 +21,7 @@ function ToDaySchedule(props) {
 	},[]);
 
 	return (
-		<TodoTemplete>
+		<TodoTemplete onClick={() => navigate('/schedule')}>
 			<FontAwesomeIcon icon={faThumbtack} />
 			<Header>
 				<span>오늘의 일정</span>
@@ -40,6 +42,7 @@ const TodoTemplete = styled.div`
 	background-color: #feffd6;
 	border-bottom-left-radius: 50px;
 	padding: 20px 28px 20px 28px;
+	cursor: pointer;
 	& > svg {
 		position: absolute;
 		left: 219px;
