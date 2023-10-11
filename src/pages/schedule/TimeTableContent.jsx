@@ -10,7 +10,7 @@ function TimeTableContent(props) {
     useEffect(() => {
         axios.get('/api/schedule-api/time-table')
 		.then(function (response) {
-			if(response.data !== null) {
+			if(response.data.length > 0) {
 				setContent(response.data);
 				setTtStartTime(response.data[0]?.hour);
 				if(response.data[0]?.hour + 12 > response.data[response.data.length - 1]?.hour) {

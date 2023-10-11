@@ -36,6 +36,7 @@ function FriendSearch(props) {
         }).then(function (response) {
             alert("친구추가가 완료되었습니다.");
             setIsSearch(false);
+            setSearchId('');
         }).catch(
             (error) => console.log(error)
         );
