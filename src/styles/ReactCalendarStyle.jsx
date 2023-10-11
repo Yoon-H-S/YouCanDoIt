@@ -76,6 +76,10 @@ export const MainCalender = styled.div`
 	/* 이번달이 아닌 날짜는 연하게 */
 	.react-calendar__month-view__days__day--neighboringMonth {
 		color: #00000035;
+
+		& > div > div {
+			opacity: 20% !important
+		}
 	}
 
 	/* 주말 색 지정 */
@@ -143,14 +147,26 @@ export const MainCalender = styled.div`
 		border: 2.5px solid #dca600;
 	}
 
-	/* 스티커 */
-	.green:not(.react-calendar__year-view__months__month) > abbr {
+	/* 선택한 달이 아닌 날짜의 스티커 */
+	.react-calendar__month-view__days__day--neighboringMonth.green > abbr {
+		background-color: #00ca084D;
+	}
+	 
+	.react-calendar__month-view__days__day--neighboringMonth.yellow > abbr {	
+		background-color: #ffe5004D;
+	}
+	.react-calendar__month-view__days__day--neighboringMonth.red > abbr {
+		background-color: #ff60604D;
+	}
+
+	/* 선택한 달의 스티커 */
+	.green > abbr {
 		background-color: #00ca0899;
 	}
-	.yellow:not(.react-calendar__year-view__months__month) > abbr {
+	.yellow > abbr {	
 		background-color: #ffe50099;
 	}
-	.red:not(.react-calendar__year-view__months__month) > abbr {
+	.red > abbr {
 		background-color: #ff606099;
 	}
 `;
