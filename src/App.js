@@ -17,12 +17,7 @@ import ChallengePage from 'pages/challenge/ChallengePage';
 import FriendPage from 'pages/friend/FriendPage';
 import SchedulePage from 'pages/schedule/SchedulePage';
 
-import GuideMain from 'pages/guide/GuideMain';
-import GuideGodLife from 'pages/guide/GuideGodLife';
-import GuideDIY from 'pages/guide/GuideDIY';
-import GuideDIYPhoto from 'pages/guide/GuideDIYPhoto';
-import GuideScheduler from 'pages/guide/GuideScheduler';
-import ReminderMain from 'pages/remind/ReminderMain';
+import Guide from 'pages/guide/GuidePage';
 
 function App(props) {
 	return (
@@ -84,27 +79,7 @@ function App(props) {
 					/>
 					<Route
 						path="/guide"
-						element={<GuideMain />}
-					/>
-					<Route
-						path="/god"
-						element={<GuideGodLife />}
-					/>
-					<Route
-						path="/diy"
-						element={<GuideDIY />}
-					/>
-					<Route
-						path="/diyphoto"
-						element={<GuideDIYPhoto />} 
-					/>
-					<Route
-						path="/guidescheduler"
-						element={<GuideScheduler />}
-					/>
-					<Route
-						path="/remind"
-						element={<ReminderMain />}
+						element={<Guide />}
 					/>
 				</Routes>
 			</Wrapper>

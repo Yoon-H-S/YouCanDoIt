@@ -1,8 +1,7 @@
 import React from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 
-import thumbsDown from 'assets/thumbs-down.png';
+import thumbsDown from 'assets/challenge/thumbs-down.png';
 
 function DiyGalleryDetails(props) {
     const {imageInfo, opposite} = props;

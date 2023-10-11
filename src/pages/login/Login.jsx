@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 // 내부 import
 import Page from 'pages/login/LoginPage';
 import { Title } from 'styles/login/LoginStyled';
-import idIcon from 'assets/id.png';
-import pwIcon from 'assets/pw.png';
-import naverIcon from 'assets/naver.png';
-import googleIcon from 'assets/google.png';
-import kakaoIcon from 'assets/kakao.png';
+import idIcon from 'assets/login/id.png';
+import pwIcon from 'assets/login/pw.png';
+import naverIcon from 'assets/login/naver.png';
+import googleIcon from 'assets/login/google.png';
+import kakaoIcon from 'assets/login/kakao.png';
 
 function Login(props) {
     const navigate = useNavigate();

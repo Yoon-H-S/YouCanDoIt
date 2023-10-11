@@ -13,7 +13,9 @@ function MainPage(props) {
 				<MiniCalendar />
 			</LeftContent>
 			<MiddleLine />
-			<RightContent>{props.children}</RightContent>
+			<RightContent>
+				{props.children}
+			</RightContent>
 		</Page>
 	);
 }
