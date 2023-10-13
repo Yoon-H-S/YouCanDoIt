@@ -1,41 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage(props) {
     const navigate = useNavigate();
+    const [show, setShow] = useState(false);
     // 페이지가 마운트 되었을 때
-    useEffect(() => {
+    useLayoutEffect(() => {
         axios.get('/api/member-api/is-login')
         .then(function (response) {
             if(!(response.data === "")) {
                 sessionStorage.setItem("loginName", response.data["nickname"]);
                 sessionStorage.setItem("loginId", response.data["memId"]);
                 navigate("/", {replace: true});
-            }  
+            } else {
+                setShow(true);
+            }
         }).catch(
             (error) => console.log(error)
         );
     }, []);
 
-    return(
-        <Wrapper>
-            <Logo>유캔두잇</Logo>
-            <MainContainer>
-                <Outside>
-                    <Inside>
-                        {props.children}
-                    </Inside>
-                </Outside>
-                <MenuList>
-                    <Menu></Menu>
-                    <Menu></Menu>
-                    <Menu></Menu>
-                </MenuList>
-            </MainContainer>
-        </Wrapper>
-    );
+    if(show) {
+        return(
+            <Wrapper>
+                <Logo>유캔두잇</Logo>
+                <MainContainer>
+                    <Outside>
+                        <Inside>
+                            {props.children}
+                        </Inside>
+                    </Outside>
+                    <MenuList>
+                        <Menu></Menu>
+                        <Menu></Menu>
+                        <Menu></Menu>
+                    </MenuList>
+                </MainContainer>
+            </Wrapper>
+        );
+    }
 }
 
 export default LoginPage;

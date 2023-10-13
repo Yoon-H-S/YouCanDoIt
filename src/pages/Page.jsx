@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -10,48 +10,48 @@ import ReminderMain from './remind/ReminderMain';
 function Page(props) {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const [show, setShow] = useState(false);
 	const [path, setPath] = useState(0);
 	const [visible, setVisible] = useState(false); // 보이기 안보이기
 	const [reminderList, setReminderList] = useState([]);
-	
-	// 페이지가 마운트 되었을 때
-	useEffect(() => {
+
+	// painting 되기전 실행
+	useLayoutEffect(() => {
 		// 로그인 여부 확인
-		axios
-			.get('/api/member-api/is-login')
-			.then(function (response) {
-				if (response.data === '') {
-					sessionStorage.clear();
-					const isGuide = localStorage.getItem('guide');
-					if(isGuide === null) {
-						navigate('/guide', { replace: true }); // history를 남기지 않는다.
-					} else {
-						navigate('/login', { replace: true }); // history를 남기지 않는다.
-					}
-					
-				} else if (sessionStorage.getItem('loginName') === '') {
-					sessionStorage.setItem('loginName', response.data['nickname']);
-					sessionStorage.setItem('loginId', response.data['memId']);
+		axios.get('/api/member-api/is-login')
+		.then(function (response) {
+			if (response.data === '') {
+				sessionStorage.clear();
+				const isGuide = localStorage.getItem('guide');
+				if(isGuide === null) {
+					navigate('/guide', { replace: true }); // history를 남기지 않는다.
+				} else {
+					navigate('/login', { replace: true }); // history를 남기지 않는다.
 				}
+				
+			} else if (sessionStorage.getItem('loginName') === '') {
+				sessionStorage.setItem('loginName', response.data['nickname']);
+				sessionStorage.setItem('loginId', response.data['memId']);
+			}
+			// 내비게이션 표시
+			if (location.pathname.startsWith('/challenge')) {
+				setPath(1);
+			} else if (location.pathname.startsWith('/schedule')) {
+				setPath(2);
+			} else if (location.pathname.startsWith('/friend')) {
+				setPath(3);
+			}
+
+			// 알림 목록
+			axios.get('/api/reminder-api/reminder-list')
+			.then(function (response) {
+				setReminderList(response.data);
+				setShow(true);
 			})
 			.catch((error) => console.log(error));
-
-		// 알림 목록
-		axios.get('/api/reminder-api/reminder-list')
-		.then(function (response) {
-			setReminderList(response.data);
 		})
 		.catch((error) => console.log(error));
-
-		// 내비게이션 표시
-		if (location.pathname.startsWith('/challenge')) {
-			setPath(1);
-		} else if (location.pathname.startsWith('/schedule')) {
-			setPath(2);
-		} else if (location.pathname.startsWith('/friend')) {
-			setPath(3);
-		}
-	}, []);
+	},[]);
 
 	const Logout = () => {
 		axios
@@ -63,54 +63,55 @@ function Page(props) {
 			.catch((error) => console.log(error));
 	};
 
-	return (
-		<Wrapper>
-			<Logo onClick={() => navigate('/')}>유캔두잇</Logo>
-			<MainContainer>
-				<Outside>
-					<UserService>
-						<div>
-							{sessionStorage.getItem('loginName')}
-							<span onClick={Logout}>로그아웃</span>
-						</div>
-						<ReminderWrap>
-							<img
-								src={Reminder}
-								onClick={() => {
-									setVisible(!visible)
-								}}
-							/>
-							{visible && (
-							<ReminderMain reminderList={reminderList} />
-							)}
-						</ReminderWrap>
-					</UserService>
-					<Inside>{props.children}</Inside>
-				</Outside>
-				<MenuList>
-					<Menu
-						id={1}
-						path={path}
-						onClick={() => navigate('/challenge')}>
-						챌린지
-					</Menu>
-					<Menu
-						id={2}
-						path={path}
-						onClick={() => navigate('/schedule')}>
-						스케줄러
-					</Menu>
-					<Menu
-						id={3}
-						path={path}
-						onClick={() => navigate('/friend')}>
-						친구
-					</Menu>
-				</MenuList>
-			</MainContainer>
-		</Wrapper>
-	);
-
+	if(show) {
+		return (
+			<Wrapper>
+				<Logo onClick={() => navigate('/')}>유캔두잇</Logo>
+				<MainContainer>
+					<Outside>
+						<UserService>
+							<div>
+								{sessionStorage.getItem('loginName')}
+								<span onClick={Logout}>로그아웃</span>
+							</div>
+							<ReminderWrap>
+								<img
+									src={Reminder}
+									onClick={() => {
+										setVisible(!visible)
+									}}
+								/>
+								{visible && (
+								<ReminderMain reminderList={reminderList} />
+								)}
+							</ReminderWrap>
+						</UserService>
+						<Inside>{props.children}</Inside>
+					</Outside>
+					<MenuList>
+						<Menu
+							id={1}
+							path={path}
+							onClick={() => navigate('/challenge')}>
+							챌린지
+						</Menu>
+						<Menu
+							id={2}
+							path={path}
+							onClick={() => navigate('/schedule')}>
+							스케줄러
+						</Menu>
+						<Menu
+							id={3}
+							path={path}
+							onClick={() => navigate('/friend')}>
+							친구
+						</Menu>
+					</MenuList>
+				</MainContainer>
+			</Wrapper>
+		);
+	}
 }
 
 export default Page;
