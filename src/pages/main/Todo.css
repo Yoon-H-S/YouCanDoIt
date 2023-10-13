@@ -5,6 +5,8 @@
 
 .todoapp__list {
 	/* background-color: aquamarine; */
+
+	z-index: 1;
 }
 
 .todoapp__list-ul {
