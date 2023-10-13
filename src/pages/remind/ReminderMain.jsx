@@ -39,6 +39,7 @@ const Wrapper = styled.div`
     border-radius: 5px;
     box-shadow: 5px 5px 10px #CECECE;
     background-color: white;
+    z-index: 1;
 `;
 
 const Title = styled.div`

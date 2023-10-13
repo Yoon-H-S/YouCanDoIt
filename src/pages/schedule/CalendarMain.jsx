@@ -6,7 +6,7 @@ function CalendarMain(props) {
 	return (
 		<Wrapper>
 			<InfoArea>
-				<CustomCalendar />
+				<CustomCalendar changeDate={props.changeDate} isAdd={props.isAdd} />
 			</InfoArea>
 		</Wrapper>
 	);

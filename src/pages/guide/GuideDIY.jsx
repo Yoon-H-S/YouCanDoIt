@@ -1,55 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import GuidePage from 'pages/guide/GuidePage';
+import React from 'react';
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-import DIYCreate from 'assets/diycreate.png';
-import DIYRank from 'assets/diyrank.png';
+import DIYCreate from 'assets/guide/diycreate.png';
+import DIYRank from 'assets/guide/diyrank.png';
 
 function GuideDIY(props) {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [path, setPath] = useState(0);
-
-    useEffect(() => {
-        if (location.pathname.startsWith('/god')) {
-            setPath(1);
-         } else if (location.pathname.startsWith('/diyphoto')) {
-            setPath(2);
-         }
-    }, []);
     return (
-        <GuidePage>
-            <Wrapper>
-                <Current>
-                    <Count> 2. D.I.Y 챌린지 </Count>
-                    <BackArrow>
-                        <FontAwesomeIcon icon={faChevronLeft} id={1} path={path} onClick={() => navigate('/god')} />
-                    </BackArrow>
-                    <CurrentPage> 3 / 5 </CurrentPage>
-                    <NextArrow>
-                        <FontAwesomeIcon icon={faChevronRight} id={2} path={path} onClick={() => navigate('/diyphoto')} />
-                    </NextArrow>
-                </Current>
-                <GuideGodGreetings>
-                    <LeftContent>
-                        <img src={DIYCreate} />
-                    </LeftContent>
-                    <MiddleLine />
-                    <RightContent>
-                        <img src={DIYRank} />
-                    </RightContent>
-                </GuideGodGreetings>
-                <DetailGreeting>
-                    <span> 내가 직접 &nbsp; </span>
-                    <div> D.I.Y 챌린지 </div>
-                    <span> 를 만들어서 지인과 함께 겨루어 볼 수도 있어요! </span>
-                </DetailGreeting>
-            </Wrapper>
-        </GuidePage>
+        <Wrapper>
+            <Current>
+                <Count> 2. D.I.Y 챌린지 </Count>
+                <BackArrow>
+                    <FontAwesomeIcon icon={faChevronLeft} onClick={() => props.setNumber(2)} />
+                </BackArrow>
+                <CurrentPage> 3 / 5 </CurrentPage>
+                <NextArrow>
+                    <FontAwesomeIcon icon={faChevronRight} onClick={() => props.setNumber(4)} />
+                </NextArrow>
+            </Current>
+            <GuideGodGreetings>
+                <LeftContent>
+                    <img src={DIYCreate} />
+                </LeftContent>
+                <MiddleLine />
+                <RightContent>
+                    <img src={DIYRank} />
+                </RightContent>
+            </GuideGodGreetings>
+            <DetailGreeting>
+                <span> 내가 직접 &nbsp; </span>
+                <div> D.I.Y 챌린지 </div>
+                <span> 를 만들어서 지인과 함께 겨루어 볼 수도 있어요! </span>
+            </DetailGreeting>
+        </Wrapper>
     );
 }
 
@@ -80,12 +65,7 @@ const Count = styled.div`
 const BackArrow = styled.div`
     position: absolute;
     cursor: pointer;
-
-    ${(props) =>
-        props.id === props.path &&
-        `
-              right: 188px;
-          `}
+    right: 188px;
 `;
 
 const CurrentPage = styled.div`
@@ -97,12 +77,7 @@ const CurrentPage = styled.div`
 const NextArrow = styled.div`
     position: absolute;
     cursor: pointer;
-
-    ${(props) =>
-        props.id === props.path &&
-        `
-              right: 95px;
-          `}
+    right: 95px;
 `;
 
 const GuideGodGreetings = styled.div`

@@ -1,54 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import GuidePage from 'pages/guide/GuidePage';
+import React from 'react';
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-import Scheduler from 'assets/scheduler.png';
-import Calendar from 'assets/calendar.png';
+import Scheduler from 'assets/guide/scheduler.png';
+import Calendar from 'assets/guide/calendar.png';
 
 function GuideScheduler(props) {
     const navigate = useNavigate();
-    const location = useLocation();
-    const [path, setPath] = useState(0);
 
-    useEffect(() => {
-        if (location.pathname.startsWith('/diyphoto')) {
-            setPath(1);
-         } else if (location.pathname.startsWith('/login')) {
-            setPath(2);
-         }
-    }, []);
+    const completeGuide = () => {
+        localStorage.setItem('guide', 'complete');
+        navigate('/login');
+    }
+
     return (
-        <GuidePage>
-            <Wrapper>
-                <Current>
-                    <Count> 3. 스케줄러 </Count>
-                    <BackArrow>
-                        <FontAwesomeIcon icon={faChevronLeft} id={1} path={path} onClick={() => navigate('/diyphoto')} />
-                    </BackArrow>
-                    <CurrentPage> 5 / 5 </CurrentPage>
-                    <NextArrow>
-                        <FontAwesomeIcon icon={faChevronRight} id={2} path={path} onClick={() => navigate('/login')} />
-                    </NextArrow>
-                </Current>
-                <GuideGodGreetings>
-                    <LeftContent>
-                        <img src={Scheduler} />
-                    </LeftContent>
-                    <MiddleLine />
-                    <RightContent>
-                        <img src={Calendar} />
-                    </RightContent>
-                </GuideGodGreetings>
-                <DetailGreeting>
-                    <div> 스케줄러 </div>
-                    <span> 를 통해 나의 일정들을 쉽게 관리할 수 있어요! </span>
-                </DetailGreeting>
-            </Wrapper>
-        </GuidePage>
+        <Wrapper>
+            <Current>
+                <Count> 3. 스케줄러 </Count>
+                <BackArrow>
+                    <FontAwesomeIcon icon={faChevronLeft} onClick={() => props.setNumber(4)} />
+                </BackArrow>
+                <CurrentPage> 5 / 5 </CurrentPage>
+                <NextArrow>
+                    <FontAwesomeIcon icon={faChevronRight} onClick={completeGuide} />
+                </NextArrow>
+            </Current>
+            <GuideGodGreetings>
+                <LeftContent>
+                    <img src={Scheduler} />
+                </LeftContent>
+                <MiddleLine />
+                <RightContent>
+                    <img src={Calendar} />
+                </RightContent>
+            </GuideGodGreetings>
+            <DetailGreeting>
+                <div> 스케줄러 </div>
+                <span> 를 통해 나의 일정들을 쉽게 관리할 수 있어요! </span>
+            </DetailGreeting>
+        </Wrapper>
     );
 }
 
@@ -79,12 +72,7 @@ const Count = styled.div`
 const BackArrow = styled.div`
     position: absolute;
     cursor: pointer;
-
-    ${(props) =>
-        props.id === props.path &&
-        `
-              right: 188px;
-          `}
+    right: 188px;
 `;
 
 const CurrentPage = styled.div`
@@ -96,12 +84,7 @@ const CurrentPage = styled.div`
 const NextArrow = styled.div`
     position: absolute;
     cursor: pointer;
-
-    ${(props) =>
-        props.id === props.path &&
-        `
-              right: 95px;
-          `}
+    right: 95px;
 `;
 
 const GuideGodGreetings = styled.div`

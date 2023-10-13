@@ -17,6 +17,7 @@ function CreateGroup(props) {
 	const [imgFile, setImgFile] = useState(null); // 그룹이미지
 	const [friends, setFriends] = useState([]); // 친구 목록
 	const [withFriends, setWithFriends] = useState([]); // 함께할 친구목록
+	const title = props.challengeType !== null ? "갓생" : "D.I.Y";
 	const [values, setValues] = useState({
         groupName: "", // 그룹이름
         groupSubject: "", // 그룹주제
@@ -148,7 +149,7 @@ function CreateGroup(props) {
 		<Wrapper>
 			<Title>
 				<FontAwesomeIcon icon={faChevronLeft} onClick={props.close} />
-				<span>{groupType === 1 ? "갓생" : "D.I.Y"} 챌린지 - 그룹 생성하기</span>
+				<span>{title} 챌린지 - 그룹 생성하기</span>
 			</Title>
 			<FormArea>
 				<Form>

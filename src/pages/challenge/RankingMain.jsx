@@ -56,7 +56,7 @@ function RankingMain(props) {
                         return(
                             <RankingWrap key={index}>
                                 <One onClick={() => handleChange(value[0])}>
-                                    <Title> {value[1]} </Title>
+                                    <Title>{value[1]}</Title>
                                     <Graph>
                                         {value[2].map((result, index) => {
                                             return(
@@ -224,10 +224,14 @@ const One = styled.div`
 
 // 랭킹 제목
 const Title = styled.div`
-    display: flex;
-    justify-content: center;
+    text-align: center;
     font-size: 10px;
     padding-top: 12px;
+    margin: 0 15px;
+    width: 103px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
 
 // 그래프 틀

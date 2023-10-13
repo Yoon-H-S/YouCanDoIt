@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import MainPage from 'pages/main/MainPage';
-import PersonImg from 'assets/id.png';
-import FootImg from 'assets/foot.png';
+import PersonImg from 'assets/login/id.png';
+import FootImg from 'assets/main/foot.png';
 
 function GroupInvite(props) {
     const [isOpen, setIsOpen] = useState(false);

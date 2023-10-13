@@ -19,14 +19,17 @@ export const MiniCalender = styled.div`
 	/* 달력 상단 */
 	.react-calendar__navigation {
 		background-color: #ffffff;
-		height: 12px;
-		margin-bottom: 15px;
+		height: 23px;
+		margin-bottom: 5px;
 		border-radius: 5px;
 		border: none;
 	}
 
 	/* 달력 상단 버튼 최소 크기 */
 	.react-calendar__navigation button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		min-width: 50px;
 	}
 
@@ -48,9 +51,12 @@ export const MiniCalender = styled.div`
 	}
 
 	/* 달력 상단 년/월 글씨, 화살표 커스텀*/
-	.react-calendar__navigation__label > span,
-	.react-calendar__navigation__arrow {
+	.react-calendar__navigation__label > span {
 		font-size: 10px;
+		color: #000000;
+	}
+	.react-calendar__navigation__arrow {
+		font-size: 16px;
 		color: #000000;
 	}
 
@@ -62,7 +68,7 @@ export const MiniCalender = styled.div`
 
 	/* 요일 커스텀 */
 	.react-calendar__month-view__weekdays__weekday {
-		padding: 3px 5px;
+		padding: 3px;
 		text-align: left;
 	}
 	.react-calendar__month-view__weekdays abbr {
@@ -70,7 +76,7 @@ export const MiniCalender = styled.div`
 		font-weight: 500;
 		text-decoration: none;
 		font-size: 10px;
-		width: 19px;
+		width: 13px;
 		text-align: center;
 	}
 
@@ -81,6 +87,10 @@ export const MiniCalender = styled.div`
 	/* 이번달이 아닌 날짜는 연하게 */
 	.react-calendar__month-view__days__day--neighboringMonth {
 		color: #00000035;
+
+		& > div {
+			opacity: 20% !important
+		}
 	}
 
 	/* 주말 색 지정 */
@@ -102,25 +112,25 @@ export const MiniCalender = styled.div`
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		padding: 1px;
 		height: 25.5px;
 		/* background-color: #f0f0f0; */
 	}
 	.react-calendar__month-view__days__day abbr {
-		display: block;
-		width: 19px;
-		height: 19px;
-		font-size: 11px;
-	}
-
-	.react-calendar__tile abbr {
-		position: relative;
-		top: -7px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 13px;
+		height: 13px;
+		border-radius: 1px;
+		font-size: 10px;
 	}
 
 	/* YearView 각 월 타일 */
 	.react-calendar__year-view__months__month {
 		border: 2px solid white !important;
-		font-size: 5px;
+		font-size: 10px;
+		padding: 10px 5px;
 	}
 
 	.react-calendar__tile--hasActive {
@@ -140,6 +150,7 @@ export const MiniCalender = styled.div`
 
 	/* 오늘 날짜(YearView 포함) */
 	.react-calendar__tile--now {
+		background: #ffffff;
 	}
 
 	/* 오늘 날짜(YearView 포함) hover */
@@ -148,42 +159,27 @@ export const MiniCalender = styled.div`
 		background: #ffffff;
 	}
 
-	/* 스티커 */
-	.green:not(.react-calendar__year-view__months__month) > abbr {
+	/* 선택한 달이 아닌 날짜의 스티커 */
+	.react-calendar__month-view__days__day--neighboringMonth.green > abbr {
+		background-color: #00ca084D;
+	}
+	 
+	.react-calendar__month-view__days__day--neighboringMonth.yellow > abbr {	
+		background-color: #ffe5004D;
+	}
+	.react-calendar__month-view__days__day--neighboringMonth.red > abbr {
+		background-color: #ff60604D;
+	}
+
+	/* 선택한 달의 스티커 */
+	.green > abbr {
 		background-color: #00ca0899;
-		width: 13px;
-		height: 13px;
-		border-radius: 1px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
 	}
-	.yellow:not(.react-calendar__year-view__months__month) > abbr {
+	.yellow > abbr {	
 		background-color: #ffe50099;
-		width: 13px;
-		height: 13px;
-		border-radius: 1px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
 	}
-	.red:not(.react-calendar__year-view__months__month) > abbr {
+	.red > abbr {
 		background-color: #ff606099;
-		width: 13px;
-		height: 13px;
-		border-radius: 1px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.default:not(.react-calendar__year-view__months__month) > abbr {
-		background-color: #ffffff99;
-		width: 13px;
-		height: 13px;
-		border-radius: 1px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
 	}
 `;
 

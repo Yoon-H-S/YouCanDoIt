@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 // 내부 import
 import Page from 'pages/login/LoginPage';
 import { Title } from 'styles/login/LoginStyled';
-import idIcon from 'assets/id.png';
-import pwIcon from 'assets/pw.png';
-import naverIcon from 'assets/naver.png';
-import googleIcon from 'assets/google.png';
-import kakaoIcon from 'assets/kakao.png';
+import idIcon from 'assets/login/id.png';
+import pwIcon from 'assets/login/pw.png';
+import naverIcon from 'assets/login/naver.png';
+import googleIcon from 'assets/login/google.png';
+import kakaoIcon from 'assets/login/kakao.png';
 
 function Login(props) {
     const navigate = useNavigate();
@@ -83,11 +83,11 @@ function Login(props) {
             <Title>로그인</Title>
             <StyledInput>
                 <img src={idIcon} alt="idImg"/>
-                <input type="text" placeholder="아이디를 입력해주세요." value={memId} onChange={idChange} onKeyPress={handleOnKeyPress} />
+                <input type="text" placeholder="아이디를 입력해주세요." value={memId} onChange={idChange} onKeyDown={handleOnKeyPress} />
             </StyledInput>
             <StyledInput>
                 <img src={pwIcon} alt="pwImg"/>
-                <form><input type="password" placeholder="비밀번호를 입력해주세요." autoComplete="off" onChange={pwChange} onKeyPress={handleOnKeyPress} /></form>
+                <input type="password" placeholder="비밀번호를 입력해주세요." autoComplete="off" onChange={pwChange} onKeyDown={handleOnKeyPress} />
             </StyledInput>
             <RememberId>
                 <input type="checkbox" id="rememberId" onChange={checkChange} checked={isRememberId} />

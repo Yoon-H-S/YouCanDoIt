@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import thumbsDown from 'assets/thumbs-down.png';
+import thumbsDown from 'assets/challenge/thumbs-down.png';
 
 function DiyGalleryList(props) {
     const {galleryInfo, imageSelect} = props;

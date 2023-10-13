@@ -13,6 +13,7 @@ const StyledButton = styled.button`
 	width: ${(props) => props.width};
 	height: ${(props) => props.height};
 	background-color: ${(props) => props.color || 'white'};
+	cursor: pointer;
 	& > span {
 		font-size: 10px;
 		position: relative;

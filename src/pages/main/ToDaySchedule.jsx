@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 import ToDoList from './TodoList';
 
 function ToDaySchedule(props) {
-	const [todoList, setTodoList] = useState([
-		{
-			id: 1,
-			text: '리액트 기초 알아보기',
-			checked: true,
-		},
-		{
-			id: 2,
-			text: '컴포넌트 스타일링 하기',
-			checked: true,
-		},
-		{
-			id: 3,
-			text: '투두리스트 만들기',
-			checked: false,
-		},
-	]);
+	const navigate = useNavigate();
+	const [todoList, setTodoList] = useState([]);
+
+	useEffect(() => {
+		axios.get('api/schedule-api/daily-schedule'
+		).then(function (response) {
+			setTodoList(response.data);
+		}).catch(
+			(error) => console.log(error)
+		);
+	},[]);
+
 	return (
-		<TodoTemplete>
+		<TodoTemplete onClick={() => navigate('/schedule')}>
 			<FontAwesomeIcon icon={faThumbtack} />
 			<Header>
 				<span>오늘의 일정</span>
@@ -32,7 +29,6 @@ function ToDaySchedule(props) {
 			{/* 할 일 Item 리스트 */}
 			<ToDoList // (1)
 				todoList={todoList}
-				setTodoList={setTodoList}
 			/>
 		</TodoTemplete>
 	);
@@ -46,6 +42,7 @@ const TodoTemplete = styled.div`
 	background-color: #feffd6;
 	border-bottom-left-radius: 50px;
 	padding: 20px 28px 20px 28px;
+	cursor: pointer;
 	& > svg {
 		position: absolute;
 		left: 219px;
