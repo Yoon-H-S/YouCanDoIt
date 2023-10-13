@@ -10,6 +10,7 @@ const ToDoListItem = ({ todoItem }) => (
 			disabled
 		/>
 		<span className={`item-text ${todoItem.success === '1' ? 'checked' : ''}`}>{todoItem.title}</span>
+		{/* <span className={`item-text ${todoItem.success === '1' ? 'checked' : ''}`}>jsp 단원 풀기</span> */}
 	</li>
 );
 

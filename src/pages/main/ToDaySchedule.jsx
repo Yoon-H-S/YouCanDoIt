@@ -12,13 +12,47 @@ function ToDaySchedule(props) {
 	const [todoList, setTodoList] = useState([]);
 
 	useEffect(() => {
-		axios.get('api/schedule-api/daily-schedule'
-		).then(function (response) {
-			setTodoList(response.data);
-		}).catch(
-			(error) => console.log(error)
-		);
-	},[]);
+		axios
+			.get('api/schedule-api/daily-schedule')
+			.then(function (response) {
+				setTodoList(response.data);
+			})
+			.catch((error) => console.log(error));
+	}, []);
+
+	// 샘플데이터
+	// const [todoList, setTodoList] = useState([
+	// 	{
+	// 		id: 1,
+	// 		text: '리액트 기초 알아보기',
+	// 		checked: true,
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		text: '컴포넌트 스타일링 하기',
+	// 		checked: true,
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		text: '투두리스트 만들기',
+	// 		checked: false,
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		text: '투두리스트 만들기',
+	// 		checked: false,
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		text: '투두리스트 만들기',
+	// 		checked: false,
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		text: '투두리스트 만들기',
+	// 		checked: false,
+	// 	},
+	// ]);
 
 	return (
 		<TodoTemplete onClick={() => navigate('/schedule')}>
@@ -27,9 +61,11 @@ function ToDaySchedule(props) {
 				<span>오늘의 일정</span>
 			</Header>
 			{/* 할 일 Item 리스트 */}
-			<ToDoList // (1)
-				todoList={todoList}
-			/>
+			<ToDoList_wrapper>
+				<ToDoList // (1)
+					todoList={todoList}
+				/>
+			</ToDoList_wrapper>
 		</TodoTemplete>
 	);
 }
@@ -41,8 +77,9 @@ const TodoTemplete = styled.div`
 	height: 190px;
 	background-color: #feffd6;
 	border-bottom-left-radius: 50px;
-	padding: 20px 28px 20px 28px;
+	padding: 0 28px 0px 28px;
 	cursor: pointer;
+
 	& > svg {
 		position: absolute;
 		left: 219px;
@@ -55,9 +92,27 @@ const TodoTemplete = styled.div`
 
 const Header = styled.div`
 	width: 186px;
-	height: 30px;
+	height: 50px;
+	display: flex;
+	align-items: center;
 	border-bottom: 1px solid black;
 	font-size: 13px;
-	margin-bottom: 6px;
+	margin-bottom: 10px;
 	font-weight: 500;
+	position: fixed;
+	background-color: #feffd6;
+	z-index: 2;
+`;
+
+const ToDoList_wrapper = styled.div`
+	width: 186px;
+	height: 106px;
+	/* background-color: red; */
+	position: relative;
+	top: 50px;
+	overflow: auto;
+	//스크롤바 숨기기
+	::-webkit-scrollbar {
+		display: none; /* Chrome, Safari, Opera*/
+	}
 `;
