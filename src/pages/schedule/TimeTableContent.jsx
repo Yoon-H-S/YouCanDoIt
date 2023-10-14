@@ -5,20 +5,16 @@ import axios from 'axios';
 function TimeTableContent(props) {
     const [content, setContent] = useState([]);
 	const [ttStartTime,setTtStartTime] = useState(9); //타임테이블 시작 시각.
-	const [ttEndTime, setTtEndTime] = useState(24); // 타임테이블 마지막 시간
+	const ttEndTime = 24; // 타임테이블 마지막 시간
 
     useEffect(() => {
         axios.get('/api/schedule-api/time-table')
 		.then(function (response) {
 			if(response.data.length > 0) {
 				setContent(response.data);
-				setTtStartTime(response.data[0]?.hour);
-				if(response.data[0]?.hour + 12 > response.data[response.data.length - 1]?.hour) {
-					setTtEndTime(response.data[0]?.hour + 12);
-				} else {
-					setTtEndTime(response.data[response.data.length - 1]?.hour);
+				if(response.data[0]?.hour < 9) {
+					setTtStartTime(response.data[0]?.hour);
 				}
-				
 			}
 			
 		}).catch(

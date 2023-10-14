@@ -10,7 +10,7 @@ import ReminderMain from './remind/ReminderMain';
 function Page(props) {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const [show, setShow] = useState(false);
+	const [show, setShow] = useState(location.pathname.endsWith('/') ? false : true);
 	const [path, setPath] = useState(0);
 	const [visible, setVisible] = useState(false); // 보이기 안보이기
 	const [reminderList, setReminderList] = useState([]);
@@ -28,7 +28,7 @@ function Page(props) {
 				} else {
 					navigate('/login', { replace: true }); // history를 남기지 않는다.
 				}
-				
+
 			} else if (sessionStorage.getItem('loginName') === '') {
 				sessionStorage.setItem('loginName', response.data['nickname']);
 				sessionStorage.setItem('loginId', response.data['memId']);
