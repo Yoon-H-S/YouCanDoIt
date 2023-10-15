@@ -42,14 +42,14 @@ function Main(props) {
                         {rankList.length > 0 ? rankList.map((value, index) => {
                             return(
                                 <MyRank x={myRankX} key={index}>
-                                    <MyRankImage rank={value[4]}>
-                                        <img src={value[2]} alt="" />
-                                        <div>{value[4]}</div>
-                                        <span>D - {value[3]}</span>
+                                    <MyRankImage rank={value.ranking}>
+                                        <img src={value.groupImage} alt="" />
+                                        <div>{value.ranking}</div>
+                                        <span>D - {value.subDate}</span>
                                     </MyRankImage>
                                     <MyRankInfo>
-                                        <span>{value[1]}</span>
-                                        <div>{value[0]}</div>
+                                        <span>{value.groupSubject}</span>
+                                        <div>{value.groupName}</div>
                                     </MyRankInfo>
                                 </MyRank>
                             );

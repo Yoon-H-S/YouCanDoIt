@@ -219,12 +219,14 @@ const ChallengeTItle = styled.div`
 // 예약된 챌린지 그룹 이름 
 const GroupName = styled.div`
     position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    overflow: hidden;
+    text-align: center;
+    white-space: nowrap; // 줄바꿈 방지
+    text-overflow: ellipsis; // 오버플로우가 발생하면 ...처리
     width: 60px;
     height: 20px;
     font-size: 10px;
+    padding: 0 5px;
     border: 1px solid #ffffff;
     border-radius: 5px;
     background-color: #FFCB65;
